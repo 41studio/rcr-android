@@ -1,0 +1,100 @@
+<resources>
+    <!--7"-->
+    <dimen name="f_8sp">11sp</dimen>
+    <dimen name="f_10sp">14sp</dimen>
+    <dimen name="f_11sp">15sp</dimen>
+    <dimen name="f_12sp">17sp</dimen>
+    <dimen name="f_14sp">20sp</dimen>
+    <dimen name="f_16sp">22sp</dimen>
+    <dimen name="f_18sp">25sp</dimen>
+    <dimen name="f_20sp">28sp</dimen>
+    <dimen name="f_24sp">32sp</dimen>
+    <dimen name="f_30sp">40sp</dimen>
+    <dimen name="f_36sp">50sp</dimen>
+    <dimen name="f_40sp">53sp</dimen>
+    <dimen name="f_42sp">56sp</dimen>
+    <dimen name="f_44sp">59sp</dimen>
+    <dimen name="f_64sp">48sp</dimen>
+
+    <dimen name="line_height">0.8dp</dimen>
+    <dimen name="line_height_005">0.07dp</dimen>
+    <dimen name="line_height_003">0.04dp</dimen>
+    <dimen name="padding_edittext">21dp</dimen>
+    <dimen name="padding_dialog">48dp</dimen>
+
+    <dimen name="height_item_album">217dp</dimen>
+    <dimen name="height_item_event">295dp</dimen>
+    <dimen name="size_img_dj">160dp</dimen>
+    <dimen name="height_tab">64dp</dimen>
+    <dimen name="height_double_tab">144dp</dimen>
+    <dimen name="height_toolbar_custom">74.7dp</dimen>
+    <dimen name="height_toolbar_custom_0.8">74.7dp</dimen>
+    <dimen name="margin_top_menu">0dp</dimen>
+    <dimen name="margin_top_menu_0.8">0dp</dimen>
+    <dimen name="margin_text_top_menu">9dp</dimen>
+    <dimen name="margin_text_top_menu_2">7dp</dimen>
+    <dimen name="pulse_left">32dp</dimen>
+    <dimen name="pulse_top">12dp</dimen>
+
+    <dimen name="_1dp">1.3dp</dimen>
+    <dimen name="_2dp">2.7dp</dimen>
+    <dimen name="_3dp">4dp</dimen>
+    <dimen name="_4dp">6dp</dimen>
+    <dimen name="_6dp">8dp</dimen>
+    <dimen name="_8dp">10.7dp</dimen>
+    <dimen name="_10dp">13.3dp</dimen>
+    <dimen name="_12dp">16dp</dimen>
+    <dimen name="_14dp">19dp</dimen>
+    <dimen name="_16dp">21.3dp</dimen>
+    <dimen name="_18dp">24dp</dimen>
+    <dimen name="_20dp">26.7dp</dimen>
+    <dimen name="_24dp">32dp</dimen>
+    <dimen name="_30dp">40dp</dimen>
+    <dimen name="_32dp">42.7dp</dimen>
+    <dimen name="_36dp">48dp</dimen>
+    <dimen name="_40dp">53.3dp</dimen>
+    <dimen name="_45dp">60dp</dimen>
+    <dimen name="_48dp">64dp</dimen>
+    <dimen name="_54dp">72dp</dimen>
+    <dimen name="_56dp">74.7dp</dimen>
+    <dimen name="_60dp">80dp</dimen>
+    <dimen name="_64dp">85.3dp</dimen>
+    <dimen name="_71dp">94.7dp</dimen>
+    <dimen name="_72dp">96dp</dimen>
+    <dimen name="_80dp">106.7dp</dimen>
+    <dimen name="_88dp">117.3dp</dimen>
+    <dimen name="_90dp">120dp</dimen>
+    <dimen name="_92dp">122.7dp</dimen>
+    <dimen name="_96dp">128dp</dimen>
+    <dimen name="_100dp">133.3dp</dimen>
+    <dimen name="_104dp">138.7dp</dimen>
+    <dimen name="_120dp">160dp</dimen>
+    <dimen name="_130dp">173.3dp</dimen>
+    <dimen name="_144dp">192dp</dimen>
+    <dimen name="_150dp">200dp</dimen>
+    <dimen name="_240dp">320dp</dimen>
+    <dimen name="_280dp">373.3dp</dimen>
+    <dimen name="_300dp">400dp</dimen>
+    <dimen name="_320dp">426.7dp</dimen>
+    <dimen name="_360dp">480dp</dimen>
+
+    <dimen name="min0_3dp">-0.04dp</dimen>
+    <dimen name="min2dp">-2.7dp</dimen>
+    <dimen name="min4dp">-5.3dp</dimen>
+    <dimen name="min8dp">-10.7dp</dimen>
+    <dimen name="min10dp">-13dp</dimen>
+    <dimen name="min12dp">-16dp</dimen>
+    <dimen name="min14dp">-18.7dp</dimen>
+    <dimen name="min16dp">-21.3dp</dimen>
+    <dimen name="min18dp">-24dp</dimen>
+    <dimen name="min24dp">-32dp</dimen>
+    <dimen name="min48dp">-64dp</dimen>
+    <dimen name="min60dp">-80dp</dimen>
+    <dimen name="min64dp">-85.3dp</dimen>
+    <dimen name="min96dp">-128dp</dimen>
+    <dimen name="min144dp">-192dp</dimen>
+
+    <integer name="_16">22</integer>
+    <integer name="_24">32</integer>
+
+</resources>
