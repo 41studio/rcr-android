@@ -1,5 +1,6 @@
 package com.fourtyonestudio.rcr.ui.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import com.fourtyonestudio.rcr.R;
 import com.fourtyonestudio.rcr.models.LoginSession;
 import com.fourtyonestudio.rcr.preferences.DataPreferences;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,5 +37,10 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         }, 3000);
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 }

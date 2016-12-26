@@ -1,10 +1,15 @@
 package com.fourtyonestudio.rcr.ui.activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import com.fourtyonestudio.rcr.Constant;
@@ -16,7 +21,6 @@ import com.fourtyonestudio.rcr.networks.RestApi;
 import com.fourtyonestudio.rcr.preferences.DataPreferences;
 import com.fourtyonestudio.rcr.ui.adapter.AreaAdapter;
 import com.fourtyonestudio.rcr.utils.CommonUtils;
-import com.fourtyonestudio.rcr.utils.DateUtils;
 import com.fourtyonestudio.rcr.utils.Retrofit2Utils;
 import com.fourtyonestudio.rcr.utils.UIHelper;
 
@@ -25,9 +29,11 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class AreaListingActivity extends AppCompatActivity {
 
@@ -35,6 +41,8 @@ public class AreaListingActivity extends AppCompatActivity {
     TextView tvCurrentDate;
     @Bind(R.id.rvArea)
     RecyclerView rvArea;
+    @Bind(R.id.fab_add)
+    FloatingActionButton fabAdd;
     private List<Area> areas;
     private AreaAdapter adapter;
 
@@ -55,7 +63,19 @@ public class AreaListingActivity extends AppCompatActivity {
         adapter = new AreaAdapter(AreaListingActivity.this, areas);
         adapter.notifyDataSetChanged();
         rvArea.setAdapter(adapter);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         getAreas();
+    }
+
+    @OnClick(R.id.fab_add)
+    public void onClick(View view) {
+        Intent intent = new Intent(AreaListingActivity.this, AddAreaActivity.class);
+        startActivity(intent);
     }
 
     private void getAreas() {
@@ -68,8 +88,11 @@ public class AreaListingActivity extends AppCompatActivity {
                 public void onResponse(Call<AreaResponse> call, Response<AreaResponse> response) {
                     UIHelper.dismissDialog(pDialog);
                     if (response.isSuccessful()) {
+                        areas.clear();
                         areas.addAll(response.body().getAreas());
                         adapter.notifyDataSetChanged();
+
+
                     } else {
                         UIHelper.showSnackbar(getCurrentFocus(), Retrofit2Utils.getMessageError(response));
                     }
@@ -84,5 +107,10 @@ public class AreaListingActivity extends AppCompatActivity {
         } else {
             UIHelper.showSnackbar(getCurrentFocus(), Constant.MESSAGE.NO_INET);
         }
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 }

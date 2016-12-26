@@ -1,5 +1,7 @@
 package com.fourtyonestudio.rcr.utils;
 
+import android.util.Log;
+
 import com.fourtyonestudio.rcr.Constant;
 
 import org.json.JSONArray;
@@ -23,6 +25,7 @@ public class Retrofit2Utils {
 
     public static String getMessageError(Response response) {
         String newMessage = Constant.MESSAGE.ERROR_GET;
+        Log.d("response", newMessage);
         if (response != null) {
             if (response.code() == 522) {
                 newMessage = Constant.MESSAGE._522;

@@ -1,10 +1,18 @@
 package com.fourtyonestudio.rcr.networks;
 
+import com.fourtyonestudio.rcr.models.AreaData;
 import com.fourtyonestudio.rcr.models.AreaDetailResponse;
 import com.fourtyonestudio.rcr.models.AreaResponse;
+import com.fourtyonestudio.rcr.models.Indicators;
 import com.fourtyonestudio.rcr.models.LoginSession;
+import com.fourtyonestudio.rcr.models.Roles;
+import com.fourtyonestudio.rcr.models.request.ItemTimesAttribute;
+import com.fourtyonestudio.rcr.models.request.RegisterUserRequest;
+
+import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -17,15 +25,35 @@ import retrofit2.http.Path;
  */
 
 public interface ApiInterface {
+
+    @POST("register_user")
+    Call<LoginSession> register(@Body RegisterUserRequest registerUserRequest);
+
+    @FormUrlEncoded
+    @POST("areas")
+    Call<AreaData> postArea(@Header("Authorization") String auth, @Field("area[name]") String name);
+
+    @FormUrlEncoded
+    @POST("areas/{id}/items")
+    Call<AreaData> postAreaItems(@Header("Authorization") String auth, @Path("id") int id, @Field("item[name]") String name, @Field("item[item_times_attributes][][time]") List<String> time_attributes);
+
     @FormUrlEncoded
     @POST("auth_user")
     Call<LoginSession> login(@Field("email") String email,
                              @Field("password") String password);
 
+    @GET("areas")
+    Call<AreaResponse> getArea(@Header("Authorization") String auth);
+
+    @GET("indicators")
+    Call<Indicators> getIndicators(@Header("Authorization") String auth);
+
+    @GET("roles")
+    Call<Roles> getRoles();
+
     @GET("areas/{id}")
     Call<AreaDetailResponse> getAreaDetail(@Header("Authorization") String auth,
                                            @Path("id") int id);
 
-    @GET("areas")
-    Call<AreaResponse> getArea(@Header("Authorization") String auth);
+
 }

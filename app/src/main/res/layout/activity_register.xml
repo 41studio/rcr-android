@@ -23,15 +23,6 @@
             android:orientation="vertical"
             android:padding="@dimen/_24dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="@dimen/_16dp"
-                android:gravity="center"
-                android:text="Room Cleanliness Ratings"
-                android:textColor="@color/colorWhite"
-                android:textSize="@dimen/f_24sp" />
 
             <EditText
                 android:id="@+id/etUsername"
@@ -57,30 +48,44 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/f_16sp" />
 
-            <Button
-                android:id="@+id/btnLogin"
-                style="@style/ButtonStyle.Ok"
-                android:layout_marginTop="@dimen/_24dp"
-                android:gravity="center"
-                android:text="LOGIN" />
-
-            <Button
-                android:id="@+id/btnRegister"
-                style="@style/ButtonStyle.Ok"
-                android:layout_marginTop="@dimen/_10dp"
-                android:gravity="center"
-                android:text="REGISTER" />
-
-            <TextView
-                android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/etPasswordConfirmation"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/_10dp"
+                android:background="@drawable/layer_edittext"
+                android:hint="Password Confirmation"
+                android:inputType="textPassword"
+                android:padding="@dimen/_10dp"
+                android:textColor="@color/black"
+                android:textSize="@dimen/f_16sp" />
+
+            <Spinner
+                android:id="@+id/spRole"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10dp" />
+
+            <EditText
+                android:id="@+id/etCompany"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10dp"
+                android:background="@drawable/layer_edittext"
+                android:hint="Company"
+                android:inputType="text"
+                android:padding="@dimen/_10dp"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textSize="@dimen/f_16sp" />
+
+
+            <Button
+                android:id="@+id/btnRegisterNow"
+                style="@style/ButtonStyle.Ok"
                 android:layout_marginTop="@dimen/_24dp"
-                android:text="Forgot Password?"
-                android:textColor="@color/white"
-                android:textSize="@dimen/f_16sp"
-                android:textStyle="italic"
-                android:visibility="gone" />
+                android:gravity="center"
+                android:text="REGISTER NOW" />
 
         </LinearLayout>
 

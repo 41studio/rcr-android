@@ -1,6 +1,7 @@
 package com.fourtyonestudio.rcr.ui.activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +26,7 @@ import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -44,6 +46,14 @@ public class LoginActivity extends AppCompatActivity {
     public void onClick(View view) {
         KeyboardUtils.hideSoftKeyboard(LoginActivity.this, view);
         attemptLogin();
+    }
+
+    @OnClick(R.id.btnRegister)
+    public void onClickRegister(View view) {
+        KeyboardUtils.hideSoftKeyboard(LoginActivity.this, view);
+        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void attemptLogin() {
@@ -86,5 +96,12 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             UIHelper.showSnackbar(getCurrentFocus(), Constant.MESSAGE.NO_INET);
         }
+    }
+
+
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 }

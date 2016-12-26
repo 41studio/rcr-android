@@ -3,7 +3,9 @@ package com.fourtyonestudio.rcr.preferences;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.fourtyonestudio.rcr.models.Indicators;
 import com.fourtyonestudio.rcr.models.LoginSession;
+import com.fourtyonestudio.rcr.models.Roles;
 import com.google.gson.Gson;
 
 /**
@@ -13,6 +15,8 @@ import com.google.gson.Gson;
 public class DataPreferences {
 
     private static final String KEY_LOG_SES = "rcr_log_ses";
+    private static final String KEY_INDICATOR = "rcr_indicator";
+    private static final String KEY_ROLE = "rcr_role";
     private static final String PREF_NAME = "rcr_pref";
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
@@ -34,6 +38,32 @@ public class DataPreferences {
         Gson gson = new Gson();
         String s = gson.toJson(loginSession);
         editor.putString(KEY_LOG_SES, s);
+        editor.apply();
+    }
+
+    public Indicators getIndicator() {
+        String s = pref.getString(KEY_INDICATOR, null);
+        Gson gson = new Gson();
+        return gson.fromJson(s, Indicators.class);
+    }
+
+    public void setIndicators(Indicators indicators) {
+        Gson gson = new Gson();
+        String s = gson.toJson(indicators);
+        editor.putString(KEY_INDICATOR, s);
+        editor.apply();
+    }
+
+    public Roles getRoles() {
+        String s = pref.getString(KEY_ROLE, null);
+        Gson gson = new Gson();
+        return gson.fromJson(s, Roles.class);
+    }
+
+    public void setRoles(Roles indicators) {
+        Gson gson = new Gson();
+        String s = gson.toJson(indicators);
+        editor.putString(KEY_ROLE, s);
         editor.apply();
     }
 

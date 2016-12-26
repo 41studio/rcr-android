@@ -1,9 +1,12 @@
 package com.fourtyonestudio.rcr.ui.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.TextView;
 
 import com.fourtyonestudio.rcr.Constant;
@@ -18,6 +21,8 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ItemListingActivity extends AppCompatActivity {
 
@@ -25,8 +30,9 @@ public class ItemListingActivity extends AppCompatActivity {
     TextView tvCurrentDate;
     @Bind(R.id.rvItem)
     RecyclerView rvItem;
-    private List<Item> itemList;
+
     private Area area;
+    private List<Item> itemList;
     private ItemAdapter adapter;
 
     @Override
@@ -47,11 +53,30 @@ public class ItemListingActivity extends AppCompatActivity {
         getAreaDetails();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getAreaDetails();
+    }
+
     private void getAreaDetails() {
         if (getIntent().hasExtra(Constant.EXTRAS.AREA)) {
             area = (Area) getIntent().getExtras().get(Constant.EXTRAS.AREA);
+            itemList.clear();
             itemList.addAll(area.getAttributes().getItemList());
             adapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    @OnClick(R.id.fab_add)
+    public void onClick(View view) {
+        Intent intent = new Intent(this, AddAreaItemActivity.class);
+        intent.putExtra("id", area.getId());
+        startActivity(intent);
     }
 }
