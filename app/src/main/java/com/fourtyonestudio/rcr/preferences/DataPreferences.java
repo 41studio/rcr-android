@@ -18,6 +18,9 @@ public class DataPreferences {
     private static final String KEY_INDICATOR = "rcr_indicator";
     private static final String KEY_ROLE = "rcr_role";
     private static final String PREF_NAME = "rcr_pref";
+
+    private static final String IS_LOAD_AREA = "rcr_load_area";
+    private static final String IS_LOAD_AREA_ITEM = "rcr_load_area_item";
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
     private Context _context;
@@ -39,6 +42,24 @@ public class DataPreferences {
         String s = gson.toJson(loginSession);
         editor.putString(KEY_LOG_SES, s);
         editor.apply();
+    }
+
+    public boolean isLoadArea() {
+        return pref.getBoolean(IS_LOAD_AREA, false);
+    }
+
+    public void setLoadArea(boolean result) {
+        editor.putBoolean(IS_LOAD_AREA, result);
+        editor.commit();
+    }
+
+    public boolean isLoadAreaItem() {
+        return pref.getBoolean(IS_LOAD_AREA_ITEM, false);
+    }
+
+    public void setLoadAreaItem(boolean result) {
+        editor.putBoolean(IS_LOAD_AREA_ITEM, result);
+        editor.commit();
     }
 
     public Indicators getIndicator() {

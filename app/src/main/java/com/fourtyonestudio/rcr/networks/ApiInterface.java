@@ -6,7 +6,6 @@ import com.fourtyonestudio.rcr.models.AreaResponse;
 import com.fourtyonestudio.rcr.models.Indicators;
 import com.fourtyonestudio.rcr.models.LoginSession;
 import com.fourtyonestudio.rcr.models.Roles;
-import com.fourtyonestudio.rcr.models.request.ItemTimesAttribute;
 import com.fourtyonestudio.rcr.models.request.RegisterUserRequest;
 
 import java.util.List;
@@ -33,6 +32,12 @@ public interface ApiInterface {
     @POST("areas")
     Call<AreaData> postArea(@Header("Authorization") String auth, @Field("area[name]") String name);
 
+    @GET("areas")
+    Call<AreaResponse> getArea(@Header("Authorization") String auth);
+
+    @GET("areas/{id}/items")
+    Call<AreaResponse> getAreaItems(@Header("Authorization") String auth, @Path("id") int id);
+
     @FormUrlEncoded
     @POST("areas/{id}/items")
     Call<AreaData> postAreaItems(@Header("Authorization") String auth, @Path("id") int id, @Field("item[name]") String name, @Field("item[item_times_attributes][][time]") List<String> time_attributes);
@@ -42,8 +47,7 @@ public interface ApiInterface {
     Call<LoginSession> login(@Field("email") String email,
                              @Field("password") String password);
 
-    @GET("areas")
-    Call<AreaResponse> getArea(@Header("Authorization") String auth);
+
 
     @GET("indicators")
     Call<Indicators> getIndicators(@Header("Authorization") String auth);

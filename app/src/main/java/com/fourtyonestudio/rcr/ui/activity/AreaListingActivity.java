@@ -8,7 +8,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -64,12 +63,19 @@ public class AreaListingActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
         rvArea.setAdapter(adapter);
 
+        getAreas();
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        getAreas();
+
+        boolean isLoadArea = new DataPreferences(this).isLoadArea();
+        if (isLoadArea) {
+            getAreas();
+            new DataPreferences(this).setLoadArea(false);
+        }
     }
 
     @OnClick(R.id.fab_add)

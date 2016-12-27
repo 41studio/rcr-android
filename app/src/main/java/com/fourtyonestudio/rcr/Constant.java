@@ -17,5 +17,6 @@ public class Constant {
 
     public static abstract class EXTRAS {
         public static final String AREA = "area";
+        public static final String ID_AREA = "id_area";
     }
 }

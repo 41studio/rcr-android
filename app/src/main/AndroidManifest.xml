@@ -25,6 +25,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="DATABASE"
+            android:value="rcr.db" />
+        <meta-data
+            android:name="VERSION"
+            android:value="1" />
+
+        <meta-data
+            android:name="DOMAIN_PACKAGE_NAME"
+            android:value="com.fourtyonestudio.rcr.tables" />
+
         <activity
             android:name=".ui.activity.LoginActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -34,7 +46,7 @@
             android:name=".ui.activity.AreaListingActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.ItemListingActivity"
+            android:name=".ui.activity.AreaItemListingActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".ui.activity.RegisterActivity" />
         <activity android:name=".ui.activity.AddAreaActivity" />

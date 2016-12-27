@@ -4,7 +4,7 @@
     android:id="@+id/activity_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_gradient"
+    android:background="@color/bg_default"
     android:orientation="vertical"
     tools:context="com.fourtyonestudio.rcr.ui.activity.LoginActivity">
 
@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/layer_edittext"
                 android:hint="Name Area"
-                android:inputType="text"
+                android:inputType="textCapSentences"
                 android:padding="@dimen/_10dp"
                 android:singleLine="true"
                 android:textColor="@color/black"

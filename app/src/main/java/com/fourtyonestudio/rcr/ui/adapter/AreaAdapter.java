@@ -17,7 +17,7 @@ import com.fourtyonestudio.rcr.models.AreaDetailResponse;
 import com.fourtyonestudio.rcr.models.LoginSession;
 import com.fourtyonestudio.rcr.networks.RestApi;
 import com.fourtyonestudio.rcr.preferences.DataPreferences;
-import com.fourtyonestudio.rcr.ui.activity.ItemListingActivity;
+import com.fourtyonestudio.rcr.ui.activity.AreaItemListingActivity;
 import com.fourtyonestudio.rcr.utils.CommonUtils;
 import com.fourtyonestudio.rcr.utils.Retrofit2Utils;
 import com.fourtyonestudio.rcr.utils.UIHelper;
@@ -61,7 +61,13 @@ public class AreaAdapter extends RecyclerView.Adapter<AreaAdapter.ViewHolder> {
 //                Intent intent = new Intent(context, ItemListingActivity.class);
 //                intent.putExtra(Constant.EXTRAS.AREA, area);
 //                context.startActivity(intent);
-                getAreas(area.getId());
+
+                //getAreas(area.getId());
+
+                Intent intent = new Intent(context, AreaItemListingActivity.class);
+                intent.putExtra(Constant.EXTRAS.ID_AREA, area.getId());
+                //intent.putExtra(Constant.EXTRAS.AREA, response.body().getAreas());
+                context.startActivity(intent);
             }
         });
     }
@@ -81,32 +87,33 @@ public class AreaAdapter extends RecyclerView.Adapter<AreaAdapter.ViewHolder> {
         }
     }
 
-    private void getAreas(int id) {
-        if (CommonUtils.isNetworkAvailable(context)) {
-            final ProgressDialog pDialog = UIHelper.showProgressDialog((Activity) context);
-            DataPreferences dataPreferences = new DataPreferences(context);
-            LoginSession loginSession = dataPreferences.getLoginSession();
-            new RestApi().getApi().getAreaDetail(loginSession.getAuth_token(), id).enqueue(new Callback<AreaDetailResponse>() {
-                @Override
-                public void onResponse(Call<AreaDetailResponse> call, Response<AreaDetailResponse> response) {
-                    UIHelper.dismissDialog(pDialog);
-                    if (response.isSuccessful()) {
-                        Intent intent = new Intent(context, ItemListingActivity.class);
-                        intent.putExtra(Constant.EXTRAS.AREA, response.body().getAreas());
-                        context.startActivity(intent);
-                    } else {
-                        UIHelper.showSnackbar(((Activity) context).getCurrentFocus(), Retrofit2Utils.getMessageError(response));
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<AreaDetailResponse> call, Throwable t) {
-                    UIHelper.dismissDialog(pDialog);
-                    UIHelper.showSnackbar(((Activity) context).getCurrentFocus(), Constant.MESSAGE.ERROR_GET);
-                }
-            });
-        } else {
-            UIHelper.showSnackbar(((Activity) context).getCurrentFocus(), Constant.MESSAGE.NO_INET);
-        }
-    }
+//    private void getAreas(int id) {
+//        if (CommonUtils.isNetworkAvailable(context)) {
+//            final ProgressDialog pDialog = UIHelper.showProgressDialog((Activity) context);
+//            DataPreferences dataPreferences = new DataPreferences(context);
+//            LoginSession loginSession = dataPreferences.getLoginSession();
+//            new RestApi().getApi().getAreaDetail(loginSession.getAuth_token(), id).enqueue(new Callback<AreaDetailResponse>() {
+//                @Override
+//                public void onResponse(Call<AreaDetailResponse> call, Response<AreaDetailResponse> response) {
+//                    UIHelper.dismissDialog(pDialog);
+//                    if (response.isSuccessful()) {
+//                        Intent intent = new Intent(context, AreaItemListingActivity.class);
+//                        intent.putExtra(Constant.EXTRAS.ID_AREA, area.getId());
+//                        //intent.putExtra(Constant.EXTRAS.AREA, response.body().getAreas());
+//                        context.startActivity(intent);
+//                    } else {
+//                        UIHelper.showSnackbar(((Activity) context).getCurrentFocus(), Retrofit2Utils.getMessageError(response));
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(Call<AreaDetailResponse> call, Throwable t) {
+//                    UIHelper.dismissDialog(pDialog);
+//                    UIHelper.showSnackbar(((Activity) context).getCurrentFocus(), Constant.MESSAGE.ERROR_GET);
+//                }
+//            });
+//        } else {
+//            UIHelper.showSnackbar(((Activity) context).getCurrentFocus(), Constant.MESSAGE.NO_INET);
+//        }
+//    }
 }

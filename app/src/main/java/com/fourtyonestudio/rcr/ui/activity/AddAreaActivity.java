@@ -14,6 +14,7 @@ import com.fourtyonestudio.rcr.models.LoginSession;
 import com.fourtyonestudio.rcr.networks.RestApi;
 import com.fourtyonestudio.rcr.preferences.DataPreferences;
 import com.fourtyonestudio.rcr.utils.CommonUtils;
+import com.fourtyonestudio.rcr.utils.KeyboardUtils;
 import com.fourtyonestudio.rcr.utils.Retrofit2Utils;
 import com.fourtyonestudio.rcr.utils.UIHelper;
 
@@ -52,11 +53,13 @@ public class AddAreaActivity extends AppCompatActivity {
 
     @OnClick(R.id.btnAdd)
     public void onClick(View view) {
+        KeyboardUtils.hideSoftKeyboard(this, view);
         attemptAdd();
 
     }
 
     private void addArea() {
+        new DataPreferences(this).setLoadArea(true);
         if (CommonUtils.isNetworkAvailable(this)) {
             final ProgressDialog pDialog = UIHelper.showProgressDialog(this);
             DataPreferences dataPreferences = new DataPreferences(this);

@@ -16,15 +16,24 @@ public class AreaAttributes implements Serializable {
     @SerializedName("name")
     @Expose
     private String name;
-    @SerializedName("item-list")
+    @SerializedName("times")
     @Expose
-    private List<Item> itemList;
+    private List<AreaTime> times = null;
 
     public String getName() {
         return name;
     }
 
-    public List<Item> getItemList() {
-        return itemList;
+    public void setName(String name) {
+        this.name = name;
     }
+
+    public List<AreaTime> getTimes() {
+        return times;
+    }
+
+    public void setTimes(List<AreaTime> times) {
+        this.times = times;
+    }
+
 }

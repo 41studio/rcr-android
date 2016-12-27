@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_default"
-    tools:context="com.fourtyonestudio.rcr.ui.activity.ItemListingActivity">
+    tools:context="com.fourtyonestudio.rcr.ui.activity.AreaItemListingActivity">
 
     <TextView
         android:id="@+id/tvCurrentDate"
