@@ -1,6 +1,7 @@
 package com.fourtyonestudio.rcr.ui.adapter;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.widget.RecyclerView;
@@ -17,8 +18,13 @@ import com.fourtyonestudio.rcr.Constant;
 import com.fourtyonestudio.rcr.R;
 import com.fourtyonestudio.rcr.models.Area;
 import com.fourtyonestudio.rcr.models.Indicators;
+import com.fourtyonestudio.rcr.models.Roles;
+import com.fourtyonestudio.rcr.networks.RestApi;
 import com.fourtyonestudio.rcr.preferences.DataPreferences;
 import com.fourtyonestudio.rcr.tables.ItemAreaTable;
+import com.fourtyonestudio.rcr.utils.CommonUtils;
+import com.fourtyonestudio.rcr.utils.Retrofit2Utils;
+import com.fourtyonestudio.rcr.utils.UIHelper;
 import com.orm.SugarRecord;
 
 import java.util.ArrayList;
@@ -26,6 +32,9 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by mohamadsodiq on 12/13/16.
@@ -54,7 +63,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         holder.tvName.setText(area.getAttributes().getName());
 
         String role = new DataPreferences(context).getLoginSession().getUser().getRole();
-        if(role.equals(Constant.EXTRAS.MANAGER)){
+        if (role.equals(Constant.EXTRAS.MANAGER)) {
             for (int j = 0; j < area.getAttributes().getTimes().size(); j++) {
 
                 final List<ItemAreaTable> itemAreaTables = SugarRecord.find(ItemAreaTable.class, "idtimes = ?", Integer.toString(area.getAttributes().getTimes().get(j).getId()));
@@ -109,7 +118,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                 });
                 holder.parent.addView(view);
             }
-        }else if(role.equals(Constant.EXTRAS.HELPER)){
+        } else if (role.equals(Constant.EXTRAS.HELPER)) {
             for (int j = 0; j < area.getAttributes().getTimes().size(); j++) {
 
                 final List<ItemAreaTable> itemAreaTables = SugarRecord.find(ItemAreaTable.class, "idtimes = ?", Integer.toString(area.getAttributes().getTimes().get(j).getId()));
@@ -126,6 +135,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                     @Override
                     public void onClick(View v) {
                         if (((CheckBox) v).isChecked()) {
+                            //getRoles();
                             Toast.makeText(context,
                                     "Checked" + area.getAttributes().getTimes().get(finalJ).getTime(), Toast.LENGTH_LONG).show();
                         }
@@ -134,11 +144,9 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                 });
 
 
-
                 holder.parent.addView(view);
             }
         }
-
 
 
         holder.setIsRecyclable(false);
@@ -160,6 +168,36 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+        }
+    }
+
+    private void getRoles() {
+        if (CommonUtils.isNetworkAvailable(context)) {
+            final ProgressDialog pDialog = UIHelper.showProgressDialog(context);
+            new RestApi().getApi().getRoles().enqueue(new Callback<Roles>() {
+                @Override
+                public void onResponse(Call<Roles> call, final Response<Roles> response) {
+                    UIHelper.dismissDialog(pDialog);
+                    if (response.isSuccessful()) {
+
+                        Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        Toast.makeText(context, Retrofit2Utils.getMessageError(response), Toast.LENGTH_SHORT).show();
+//                        UIHelper.showSnackbar(context.getCurrentFocus(), Retrofit2Utils.getMessageError(response));
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Roles> call, Throwable t) {
+                    UIHelper.dismissDialog(pDialog);
+                    Toast.makeText(context, Constant.MESSAGE.ERROR_POST, Toast.LENGTH_SHORT).show();
+//                    UIHelper.showSnackbar(getCurrentFocus(), Constant.MESSAGE.ERROR_POST);
+                }
+            });
+        } else {
+            Toast.makeText(context, Constant.MESSAGE.NO_INET, Toast.LENGTH_SHORT).show();
+//            UIHelper.showSnackbar(getCurrentFocus(), Constant.MESSAGE.NO_INET);
         }
     }
 

@@ -36,6 +36,13 @@ public class UIHelper {
         return pDialog;
     }
 
+    public static ProgressDialog showProgressDialog(Context context) {
+        ProgressDialog pDialog = ProgressDialog.show(context, null, null, true, false);
+        pDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        pDialog.setContentView(R.layout.progress_dialog_default);
+        return pDialog;
+    }
+
     public static void dismissDialog(ProgressDialog pDialog) {
         if (pDialog != null && pDialog.isShowing()) {
             pDialog.dismiss();
