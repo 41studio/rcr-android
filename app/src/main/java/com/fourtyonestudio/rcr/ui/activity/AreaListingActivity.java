@@ -18,10 +18,12 @@ import com.fourtyonestudio.rcr.models.AreaResponse;
 import com.fourtyonestudio.rcr.models.LoginSession;
 import com.fourtyonestudio.rcr.networks.RestApi;
 import com.fourtyonestudio.rcr.preferences.DataPreferences;
+import com.fourtyonestudio.rcr.tables.ItemAreaTable;
 import com.fourtyonestudio.rcr.ui.adapter.AreaAdapter;
 import com.fourtyonestudio.rcr.utils.CommonUtils;
 import com.fourtyonestudio.rcr.utils.Retrofit2Utils;
 import com.fourtyonestudio.rcr.utils.UIHelper;
+import com.orm.SugarRecord;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,6 +91,15 @@ public class AreaListingActivity extends AppCompatActivity {
     public void onClick(View view) {
         Intent intent = new Intent(AreaListingActivity.this, AddAreaActivity.class);
         startActivity(intent);
+    }
+
+    @OnClick(R.id.btnLogout)
+    public void clickLogout(View view) {
+        SugarRecord.deleteAll(ItemAreaTable.class);
+        new DataPreferences(this).clear();
+        Intent intent = new Intent(AreaListingActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void getAreas() {
