@@ -21,6 +21,10 @@ public class RegisterUserRequest {
         this.user = user;
     }
 
+    public RegisterUserRequest(UserRequest user) {
+        this.company = company;
+    }
+
     public UserRequest getUser() {
         return user;
     }

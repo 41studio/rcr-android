@@ -93,14 +93,7 @@ public class AreaListingActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    @OnClick(R.id.btnLogout)
-    public void clickLogout(View view) {
-        SugarRecord.deleteAll(ItemAreaTable.class);
-        new DataPreferences(this).clear();
-        Intent intent = new Intent(AreaListingActivity.this, LoginActivity.class);
-        startActivity(intent);
-        finish();
-    }
+
 
     private void getAreas() {
         if (CommonUtils.isNetworkAvailable(AreaListingActivity.this)) {

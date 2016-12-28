@@ -55,10 +55,8 @@
             android:name="io.fabric.ApiKey"
             android:value="d0aafaa4afad9534799b993084e8e770322ad69f" />
 
-        <activity
-            android:name=".ui.activity.Main2Activity"
-            android:label="@string/title_activity_main2"
-            android:theme="@style/AppTheme"></activity>
+        <activity android:name=".ui.activity.MenuActivity" />
+        <activity android:name=".ui.activity.AddUserActivity"></activity>
     </application>
 
 </manifest>

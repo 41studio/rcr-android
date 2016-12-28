@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_menu"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_default"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.fourtyonestudio.rcr.ui.activity.MenuActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/_30dp"
+            android:text="MENU"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/f_30sp" />
+
+        <Button
+            android:id="@+id/btnArea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/_4dp"
+            android:background="@color/colorPrimary"
+            android:padding="@dimen/_16dp"
+            android:text="AREA"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/f_24sp" />
+
+        <Button
+            android:id="@+id/btnAddUser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/_4dp"
+            android:background="@color/colorPrimary"
+            android:padding="@dimen/_16dp"
+            android:text="ADD USER"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/f_24sp" />
+
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/_4dp"
+            android:background="@color/red"
+            android:padding="@dimen/_16dp"
+            android:text="LOGOUT"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/f_24sp" />
+
+    </LinearLayout>
+
+</RelativeLayout>

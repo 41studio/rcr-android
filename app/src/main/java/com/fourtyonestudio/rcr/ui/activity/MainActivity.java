@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         LoginSession loginSession = new DataPreferences(MainActivity.this).getLoginSession();
         if (loginSession != null) {
-            Intent intent = new Intent(MainActivity.this, AreaListingActivity.class);
+            Intent intent = new Intent(MainActivity.this, MenuActivity.class);
             startActivity(intent);
             finish();
         } else {

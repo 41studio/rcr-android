@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
                     UIHelper.dismissDialog(pDialog);
                     if (response.isSuccessful()) {
                         new DataPreferences(LoginActivity.this).setLoginSession(response.body());
-                        Intent intent = new Intent(LoginActivity.this, AreaListingActivity.class);
+                        Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
                         startActivity(intent);
                         etUsername.setText("");
                         etPassword.setText("");

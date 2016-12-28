@@ -19,6 +19,7 @@ import com.fourtyonestudio.rcr.R;
 import com.fourtyonestudio.rcr.models.LoginSession;
 import com.fourtyonestudio.rcr.models.Roles;
 import com.fourtyonestudio.rcr.models.RolesDatum;
+import com.fourtyonestudio.rcr.models.UserResponse;
 import com.fourtyonestudio.rcr.models.request.RegisterUserRequest;
 import com.fourtyonestudio.rcr.models.request.UserRequest;
 import com.fourtyonestudio.rcr.networks.RestApi;
@@ -39,7 +40,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class AddUserActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     @Bind(R.id.etUsername)
     EditText etUsername;
@@ -47,8 +48,6 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     EditText etPassword;
     @Bind(R.id.etPasswordConfirmation)
     EditText etPasswordConfirmation;
-    @Bind(R.id.etCompany)
-    EditText etCompany;
     @Bind(R.id.spRole)
     Spinner spRole;
 
@@ -59,7 +58,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_add_user);
         ButterKnife.bind(this);
 
         getRoles();
@@ -83,7 +82,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
     @OnClick(R.id.btnRegisterNow)
     public void onClick(View view) {
-        KeyboardUtils.hideSoftKeyboard(RegisterActivity.this, view);
+        KeyboardUtils.hideSoftKeyboard(this, view);
         attemptRegister();
     }
 
@@ -101,40 +100,37 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
             etPasswordConfirmation.requestFocus();
         } else if (idRole.equals("")) {
             UIHelper.showSnackbar(getCurrentFocus(), "Please input role id");
-        } else if (TextUtils.isEmpty(etCompany.getText().toString())) {
-            UIHelper.showSnackbar(getCurrentFocus(), "Please input company");
-            etCompany.requestFocus();
         } else {
-            register();
+            addUser();
         }
     }
 
 
-    private void register() {
-        if (CommonUtils.isNetworkAvailable(RegisterActivity.this)) {
-            final ProgressDialog pDialog = UIHelper.showProgressDialog(RegisterActivity.this);
-
-            new RestApi().getApi().register(new RegisterUserRequest(etCompany.getText().toString(), new UserRequest(etUsername.getText().toString(), etPassword.getText().toString(), etPasswordConfirmation.getText().toString(), idRole))).enqueue(new Callback<LoginSession>() {
+    private void addUser() {
+        if (CommonUtils.isNetworkAvailable(this)) {
+            final ProgressDialog pDialog = UIHelper.showProgressDialog(this);
+            DataPreferences dataPreferences = new DataPreferences(this);
+            LoginSession loginSession = dataPreferences.getLoginSession();
+            new RestApi().getApi().createUser(loginSession.getAuthToken(), etUsername.getText().toString(), etPassword.getText().toString(), etPasswordConfirmation.getText().toString(), idRole).enqueue(new Callback<UserResponse>() {
                 @Override
-                public void onResponse(Call<LoginSession> call, Response<LoginSession> response) {
+                public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                     UIHelper.dismissDialog(pDialog);
                     if (response.isSuccessful()) {
-                        new DataPreferences(RegisterActivity.this).setLoginSession(response.body());
-                        Intent intent = new Intent(RegisterActivity.this, MenuActivity.class);
+                        Intent intent = new Intent(AddUserActivity.this, MenuActivity.class);
                         startActivity(intent);
+
                         etUsername.setText("");
                         etPassword.setText("");
                         etPasswordConfirmation.setText("");
                         spRole.setSelection(0);
-                        etCompany.setText("");
-                        finish();
+
                     } else {
                         UIHelper.showSnackbar(getCurrentFocus(), Retrofit2Utils.getMessageError(response));
                     }
                 }
 
                 @Override
-                public void onFailure(Call<LoginSession> call, Throwable t) {
+                public void onFailure(Call<UserResponse> call, Throwable t) {
                     UIHelper.dismissDialog(pDialog);
                     UIHelper.showSnackbar(getCurrentFocus(), Constant.MESSAGE.ERROR_POST);
                 }
@@ -145,8 +141,8 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     }
 
     private void getRoles() {
-        if (CommonUtils.isNetworkAvailable(RegisterActivity.this)) {
-            final ProgressDialog pDialog = UIHelper.showProgressDialog(RegisterActivity.this);
+        if (CommonUtils.isNetworkAvailable(AddUserActivity.this)) {
+            final ProgressDialog pDialog = UIHelper.showProgressDialog(AddUserActivity.this);
             new RestApi().getApi().getRoles().enqueue(new Callback<Roles>() {
                 @Override
                 public void onResponse(Call<Roles> call, final Response<Roles> response) {
@@ -154,7 +150,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                     if (response.isSuccessful()) {
                         listRole = response.body().getData();
 
-                        spRole.setOnItemSelectedListener(RegisterActivity.this);
+                        spRole.setOnItemSelectedListener(AddUserActivity.this);
 
                         List<String> listItems = new ArrayList<String>();
 
@@ -163,7 +159,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                         }
 
                         // Creating adapter for spinner
-                        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(RegisterActivity.this, android.R.layout.simple_spinner_item, listItems);
+                        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(AddUserActivity.this, android.R.layout.simple_spinner_item, listItems);
 
                         // Drop down layout style - list view with radio button
                         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -188,33 +184,6 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         }
     }
 
-
-//    private void getIndicators() {
-//        if (CommonUtils.isNetworkAvailable(RegisterActivity.this)) {
-//            final ProgressDialog pDialog = UIHelper.showProgressDialog(RegisterActivity.this);
-//            DataPreferences dataPreferences = new DataPreferences(RegisterActivity.this);
-//            LoginSession loginSession = dataPreferences.getLoginSession();
-//            new RestApi().getApi().getIndicators(loginSession.getAuth_token()).enqueue(new Callback<Indicators>() {
-//                @Override
-//                public void onResponse(Call<Indicators> call, Response<Indicators> response) {
-//                    UIHelper.dismissDialog(pDialog);
-//                    if (response.isSuccessful()) {
-//
-//                    } else {
-//                        UIHelper.showSnackbar(getCurrentFocus(), Retrofit2Utils.getMessageError(response));
-//                    }
-//                }
-//
-//                @Override
-//                public void onFailure(Call<Indicators> call, Throwable t) {
-//                    UIHelper.dismissDialog(pDialog);
-//                    UIHelper.showSnackbar(getCurrentFocus(), Constant.MESSAGE.ERROR_POST);
-//                }
-//            });
-//        } else {
-//            UIHelper.showSnackbar(getCurrentFocus(), Constant.MESSAGE.NO_INET);
-//        }
-//    }
 
     @Override
     protected void attachBaseContext(Context newBase) {

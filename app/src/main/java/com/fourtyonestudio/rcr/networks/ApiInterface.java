@@ -7,6 +7,7 @@ import com.fourtyonestudio.rcr.models.AreaResponse;
 import com.fourtyonestudio.rcr.models.Indicators;
 import com.fourtyonestudio.rcr.models.LoginSession;
 import com.fourtyonestudio.rcr.models.Roles;
+import com.fourtyonestudio.rcr.models.UserResponse;
 import com.fourtyonestudio.rcr.models.request.RegisterUserRequest;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 /**
@@ -28,6 +30,10 @@ public interface ApiInterface {
 
     @POST("register_user")
     Call<LoginSession> register(@Body RegisterUserRequest registerUserRequest);
+
+    @FormUrlEncoded
+    @POST("users")
+    Call<UserResponse> createUser(@Header("Authorization") String auth, @Field("user[email]") String email, @Field("user[password]") String password, @Field("user[password_confirmation]") String password_conf, @Field("user[role_id]") String role_id);
 
     @FormUrlEncoded
     @POST("areas")
@@ -45,7 +51,16 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("appraisals")
-    Call<AppraisalsResponse> postAppraisals(@Header("Authorization") String auth, @Field("appraisal[item_time_id]") String time_id, @Field("appraisal[indicator_id]") String indicator_id);
+    Call<AppraisalsResponse> postAppraisals(@Header("Authorization") String auth, @Field("appraisal[item_time_id]") int time_id);
+
+
+    @FormUrlEncoded
+    @PUT("appraisals/{id}")
+    Call<AppraisalsResponse> putAppraisals(@Header("Authorization") String auth, @Path("id") int time_id, @Field("appraisal[indicator_id]") String indicator_id);
+
+//    @FormUrlEncoded
+//    @POST("appraisals")
+//    Call<AppraisalsResponse> postAppraisals(@Header("Authorization") String auth, @Field("appraisal[item_time_id]") String time_id, @Field("appraisal[indicator_id]") String indicator_id);
 
     @FormUrlEncoded
     @POST("auth_user")

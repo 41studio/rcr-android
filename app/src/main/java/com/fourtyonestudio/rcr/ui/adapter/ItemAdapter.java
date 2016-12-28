@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,7 +101,9 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                                 if (item == indicators.getData().size()) {
                                     dialog.dismiss();
                                 } else {
-                                    postAppraisals(Integer.toString(area.getAttributes().getTimes().get(finalJ).getId()), indicators.getData().get(item).getId());
+
+                                    Log.d("id time"+area.getAttributes().getTimes().get(finalJ).getId(), "id indicator"+indicators.getData().get(item).getId());
+                                    putAppraisals(area.getAttributes().getTimes().get(finalJ).getId(), indicators.getData().get(item).getId());
 
                                     itemAreaTables.get(0).setIndicator(indicators.getData().get(item).getAttributes().getCode());
                                     itemAreaTables.get(0).save();
@@ -134,9 +137,9 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                     @Override
                     public void onClick(View v) {
                         if (((CheckBox) v).isChecked()) {
-
-                            Toast.makeText(context,
-                                    "Checked" + area.getAttributes().getTimes().get(finalJ).getTime(), Toast.LENGTH_LONG).show();
+                            postAppraisals(area.getAttributes().getTimes().get(finalJ).getId());
+//                            Toast.makeText(context,
+//                                    "Checked" + area.getAttributes().getTimes().get(finalJ).getTime(), Toast.LENGTH_LONG).show();
                         }
 
                     }
@@ -170,12 +173,44 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         }
     }
 
-    private void postAppraisals(String time_id, String indicator_id) {
+    private void putAppraisals(int time_id, String indicator_id) {
         if (CommonUtils.isNetworkAvailable(context)) {
             final ProgressDialog pDialog = UIHelper.showProgressDialog(context);
             DataPreferences dataPreferences = new DataPreferences(context);
             LoginSession loginSession = dataPreferences.getLoginSession();
-            new RestApi().getApi().postAppraisals(loginSession.getAuthToken(), time_id, indicator_id).enqueue(new Callback<AppraisalsResponse>() {
+            new RestApi().getApi().putAppraisals(loginSession.getAuthToken(), time_id, indicator_id).enqueue(new Callback<AppraisalsResponse>() {
+                @Override
+                public void onResponse(Call<AppraisalsResponse> call, final Response<AppraisalsResponse> response) {
+                    UIHelper.dismissDialog(pDialog);
+                    if (response.isSuccessful()) {
+
+                        Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        Toast.makeText(context, Retrofit2Utils.getMessageError(response), Toast.LENGTH_SHORT).show();
+//                        UIHelper.showSnackbar(context.getCurrentFocus(), Retrofit2Utils.getMessageError(response));
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<AppraisalsResponse> call, Throwable t) {
+                    UIHelper.dismissDialog(pDialog);
+                    Toast.makeText(context, Constant.MESSAGE.ERROR_POST, Toast.LENGTH_SHORT).show();
+//                    UIHelper.showSnackbar(getCurrentFocus(), Constant.MESSAGE.ERROR_POST);
+                }
+            });
+        } else {
+            Toast.makeText(context, Constant.MESSAGE.NO_INET, Toast.LENGTH_SHORT).show();
+//            UIHelper.showSnackbar(getCurrentFocus(), Constant.MESSAGE.NO_INET);
+        }
+    }
+
+    private void postAppraisals(int time_id) {
+        if (CommonUtils.isNetworkAvailable(context)) {
+            final ProgressDialog pDialog = UIHelper.showProgressDialog(context);
+            DataPreferences dataPreferences = new DataPreferences(context);
+            LoginSession loginSession = dataPreferences.getLoginSession();
+            new RestApi().getApi().postAppraisals(loginSession.getAuthToken(), time_id).enqueue(new Callback<AppraisalsResponse>() {
                 @Override
                 public void onResponse(Call<AppraisalsResponse> call, final Response<AppraisalsResponse> response) {
                     UIHelper.dismissDialog(pDialog);
