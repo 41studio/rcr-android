@@ -51,6 +51,9 @@
         <activity android:name=".ui.activity.RegisterActivity" />
         <activity android:name=".ui.activity.AddAreaActivity" />
         <activity android:name=".ui.activity.AddAreaItemActivity"></activity>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="d0aafaa4afad9534799b993084e8e770322ad69f" />
     </application>
 
 </manifest>
