@@ -32,7 +32,6 @@
         <meta-data
             android:name="VERSION"
             android:value="1" />
-
         <meta-data
             android:name="DOMAIN_PACKAGE_NAME"
             android:value="com.fourtyonestudio.rcr.tables" />
@@ -50,10 +49,16 @@
             android:screenOrientation="portrait" />
         <activity android:name=".ui.activity.RegisterActivity" />
         <activity android:name=".ui.activity.AddAreaActivity" />
-        <activity android:name=".ui.activity.AddAreaItemActivity"></activity>
+        <activity android:name=".ui.activity.AddAreaItemActivity" />
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="d0aafaa4afad9534799b993084e8e770322ad69f" />
+
+        <activity
+            android:name=".ui.activity.Main2Activity"
+            android:label="@string/title_activity_main2"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +15,10 @@ import android.widget.Toast;
 
 import com.fourtyonestudio.rcr.Constant;
 import com.fourtyonestudio.rcr.R;
+import com.fourtyonestudio.rcr.models.AppraisalsResponse;
 import com.fourtyonestudio.rcr.models.Area;
 import com.fourtyonestudio.rcr.models.Indicators;
-import com.fourtyonestudio.rcr.models.Roles;
+import com.fourtyonestudio.rcr.models.LoginSession;
 import com.fourtyonestudio.rcr.networks.RestApi;
 import com.fourtyonestudio.rcr.preferences.DataPreferences;
 import com.fourtyonestudio.rcr.tables.ItemAreaTable;
@@ -77,6 +77,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                 if (itemAreaTables.get(0).getIndicator() != null) {
                     tvRate.setText(itemAreaTables.get(0).getIndicator());
                 }
+                final int finalJ = j;
                 tvRate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -90,9 +91,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                         }
                         items[indicators.getData().size()] = "Cancel";
 
-                        Log.d("null", items.length + "");
-
-
                         AlertDialog.Builder builder = new AlertDialog.Builder(
                                 context);
                         builder.setItems(items, new DialogInterface.OnClickListener() {
@@ -102,6 +100,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                                 if (item == indicators.getData().size()) {
                                     dialog.dismiss();
                                 } else {
+                                    postAppraisals(Integer.toString(area.getAttributes().getTimes().get(finalJ).getId()), indicators.getData().get(item).getId());
 
                                     itemAreaTables.get(0).setIndicator(indicators.getData().get(item).getAttributes().getCode());
                                     itemAreaTables.get(0).save();
@@ -135,7 +134,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                     @Override
                     public void onClick(View v) {
                         if (((CheckBox) v).isChecked()) {
-                            //getRoles();
+
                             Toast.makeText(context,
                                     "Checked" + area.getAttributes().getTimes().get(finalJ).getTime(), Toast.LENGTH_LONG).show();
                         }
@@ -171,12 +170,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         }
     }
 
-    private void getRoles() {
+    private void postAppraisals(String time_id, String indicator_id) {
         if (CommonUtils.isNetworkAvailable(context)) {
             final ProgressDialog pDialog = UIHelper.showProgressDialog(context);
-            new RestApi().getApi().getRoles().enqueue(new Callback<Roles>() {
+            DataPreferences dataPreferences = new DataPreferences(context);
+            LoginSession loginSession = dataPreferences.getLoginSession();
+            new RestApi().getApi().postAppraisals(loginSession.getAuthToken(), time_id, indicator_id).enqueue(new Callback<AppraisalsResponse>() {
                 @Override
-                public void onResponse(Call<Roles> call, final Response<Roles> response) {
+                public void onResponse(Call<AppraisalsResponse> call, final Response<AppraisalsResponse> response) {
                     UIHelper.dismissDialog(pDialog);
                     if (response.isSuccessful()) {
 
@@ -189,7 +190,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                 }
 
                 @Override
-                public void onFailure(Call<Roles> call, Throwable t) {
+                public void onFailure(Call<AppraisalsResponse> call, Throwable t) {
                     UIHelper.dismissDialog(pDialog);
                     Toast.makeText(context, Constant.MESSAGE.ERROR_POST, Toast.LENGTH_SHORT).show();
 //                    UIHelper.showSnackbar(getCurrentFocus(), Constant.MESSAGE.ERROR_POST);

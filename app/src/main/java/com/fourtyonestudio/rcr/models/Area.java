@@ -34,45 +34,5 @@ public class Area implements Serializable {
         return attributes;
     }
 
-    //    private String name;
-//    private int company_id;
-//
-//    public Area(int id, String name, int company_id) {
-//        this.id = id;
-//        this.name = name;
-//        this.company_id = company_id;
-//    }
-//
-//    public int getId() {
-//        return id;
-//    }
-//
-//    public void setId(int id) {
-//        this.id = id;
-//    }
-//
-//    public String getTime() {
-//        return name;
-//    }
-//
-//    public void setTime(String name) {
-//        this.name = name;
-//    }
-//
-//    public int getCompany_id() {
-//        return company_id;
-//    }
-//
-//    public void setCompany_id(int company_id) {
-//        this.company_id = company_id;
-//    }
-//
-//    public static List<Area> getDummyAreas() {
-//        List<Area> list = new ArrayList<>();
-//        list.add(new Area(1, "Gedung A Laintai 1", 1));
-//        list.add(new Area(2, "Gedung A Laintai 2", 1));
-//        list.add(new Area(3, "Gedung B Laintai 1", 1));
-//        list.add(new Area(4, "Gedung B Laintai 2", 1));
-//        return list;
-//    }
+
 }

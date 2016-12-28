@@ -1,5 +1,6 @@
 package com.fourtyonestudio.rcr.networks;
 
+import com.fourtyonestudio.rcr.models.AppraisalsResponse;
 import com.fourtyonestudio.rcr.models.AreaData;
 import com.fourtyonestudio.rcr.models.AreaDetailResponse;
 import com.fourtyonestudio.rcr.models.AreaResponse;
@@ -43,11 +44,13 @@ public interface ApiInterface {
     Call<AreaData> postAreaItems(@Header("Authorization") String auth, @Path("id") int id, @Field("item[name]") String name, @Field("item[item_times_attributes][][time]") List<String> time_attributes);
 
     @FormUrlEncoded
+    @POST("appraisals")
+    Call<AppraisalsResponse> postAppraisals(@Header("Authorization") String auth, @Field("appraisal[item_time_id]") String time_id, @Field("appraisal[indicator_id]") String indicator_id);
+
+    @FormUrlEncoded
     @POST("auth_user")
     Call<LoginSession> login(@Field("email") String email,
                              @Field("password") String password);
-
-
 
     @GET("indicators")
     Call<Indicators> getIndicators(@Header("Authorization") String auth);
