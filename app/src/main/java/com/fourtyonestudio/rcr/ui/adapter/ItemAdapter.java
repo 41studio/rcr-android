@@ -8,9 +8,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.fourtyonestudio.rcr.Constant;
 import com.fourtyonestudio.rcr.R;
 import com.fourtyonestudio.rcr.models.Area;
 import com.fourtyonestudio.rcr.models.Indicators;
@@ -50,57 +53,93 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         final Area area = list.get(holder.getAdapterPosition());
         holder.tvName.setText(area.getAttributes().getName());
 
-        for (int j = 0; j < area.getAttributes().getTimes().size(); j++) {
+        String role = new DataPreferences(context).getLoginSession().getUser().getRole();
+        if(role.equals(Constant.EXTRAS.MANAGER)){
+            for (int j = 0; j < area.getAttributes().getTimes().size(); j++) {
 
-            final List<ItemAreaTable> itemAreaTables = SugarRecord.find(ItemAreaTable.class, "idtimes = ?", Integer.toString(area.getAttributes().getTimes().get(j).getId()));
+                final List<ItemAreaTable> itemAreaTables = SugarRecord.find(ItemAreaTable.class, "idtimes = ?", Integer.toString(area.getAttributes().getTimes().get(j).getId()));
+                LayoutInflater i = LayoutInflater.from(context);
+                View view = i.inflate(R.layout.child_manager, holder.parent, false);
+                TextView tvTime = (TextView) view.findViewById(R.id.tvTime);
+                tvTime.setText(area.getAttributes().getTimes().get(j).getTime());
 
+                final TextView tvRate = (TextView) view.findViewById(R.id.tvRate);
 
-            LayoutInflater i = LayoutInflater.from(context);
-            View view = i.inflate(R.layout.child, holder.parent, false);
-            TextView correctAnswer = (TextView) view.findViewById(R.id.tvTime);
-            correctAnswer.setText(area.getAttributes().getTimes().get(j).getTime());
-
-            final TextView tvRate = (TextView) view.findViewById(R.id.tvRate);
-
-            if (itemAreaTables.get(0).getIndicator() != null) {
-                tvRate.setText(itemAreaTables.get(0).getIndicator());
-            }
-            tvRate.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    DataPreferences dataPreferences = new DataPreferences(context);
-                    final Indicators indicators = dataPreferences.getIndicator();
-
-                    final CharSequence[] items = new CharSequence[indicators.getData().size() + 1];
-                    for (int i = 0; i < indicators.getData().size(); i++) {
-                        items[i] = indicators.getData().get(i).getAttributes().getCode() + " - " + indicators.getData().get(i).getAttributes().getDescription();
-                    }
-                    items[indicators.getData().size()] = "Cancel";
-
-                    Log.d("null", items.length + "");
-
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(
-                            context);
-                    builder.setItems(items, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int item) {
-
-                            itemAreaTables.get(0).setIndicator(indicators.getData().get(item).getAttributes().getCode());
-                            itemAreaTables.get(0).save();
-
-                            tvRate.setText(indicators.getData().get(item).getAttributes().getCode());
-
-                            dialog.dismiss();
-                        }
-                    });
-                    builder.show();
-
+                if (itemAreaTables.get(0).getIndicator() != null) {
+                    tvRate.setText(itemAreaTables.get(0).getIndicator());
                 }
-            });
-            holder.parent.addView(view);
+                tvRate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        DataPreferences dataPreferences = new DataPreferences(context);
+                        final Indicators indicators = dataPreferences.getIndicator();
+
+                        final CharSequence[] items = new CharSequence[indicators.getData().size() + 1];
+                        for (int i = 0; i < indicators.getData().size(); i++) {
+                            items[i] = indicators.getData().get(i).getAttributes().getCode() + " - " + indicators.getData().get(i).getAttributes().getDescription();
+                        }
+                        items[indicators.getData().size()] = "Cancel";
+
+                        Log.d("null", items.length + "");
+
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(
+                                context);
+                        builder.setItems(items, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int item) {
+
+                                if (item == indicators.getData().size()) {
+                                    dialog.dismiss();
+                                } else {
+
+                                    itemAreaTables.get(0).setIndicator(indicators.getData().get(item).getAttributes().getCode());
+                                    itemAreaTables.get(0).save();
+
+                                    tvRate.setText(indicators.getData().get(item).getAttributes().getCode());
+
+                                    dialog.dismiss();
+                                }
+                            }
+                        });
+                        builder.show();
+
+                    }
+                });
+                holder.parent.addView(view);
+            }
+        }else if(role.equals(Constant.EXTRAS.HELPER)){
+            for (int j = 0; j < area.getAttributes().getTimes().size(); j++) {
+
+                final List<ItemAreaTable> itemAreaTables = SugarRecord.find(ItemAreaTable.class, "idtimes = ?", Integer.toString(area.getAttributes().getTimes().get(j).getId()));
+                LayoutInflater i = LayoutInflater.from(context);
+                View view = i.inflate(R.layout.child_helper, holder.parent, false);
+                TextView tvTime = (TextView) view.findViewById(R.id.tvTime);
+                tvTime.setText(area.getAttributes().getTimes().get(j).getTime());
+
+                CheckBox chxTime = (CheckBox) view.findViewById(R.id.chx_time);
+
+                final int finalJ = j;
+                chxTime.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        if (((CheckBox) v).isChecked()) {
+                            Toast.makeText(context,
+                                    "Checked" + area.getAttributes().getTimes().get(finalJ).getTime(), Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                });
+
+
+
+                holder.parent.addView(view);
+            }
         }
+
+
 
         holder.setIsRecyclable(false);
 

@@ -18,6 +18,7 @@ public class DataPreferences {
     private static final String KEY_INDICATOR = "rcr_indicator";
     private static final String KEY_ROLE = "rcr_role";
     private static final String PREF_NAME = "rcr_pref";
+    private static final String ROLE = "role";
 
     private static final String IS_LOAD_AREA = "rcr_load_area";
     private static final String IS_LOAD_AREA_ITEM = "rcr_load_area_item";
@@ -42,6 +43,15 @@ public class DataPreferences {
         String s = gson.toJson(loginSession);
         editor.putString(KEY_LOG_SES, s);
         editor.apply();
+    }
+
+    public String getRole() {
+        return pref.getString(ROLE, "");
+    }
+
+    public void setRole(String result) {
+        editor.putString(ROLE, result);
+        editor.commit();
     }
 
     public boolean isLoadArea() {

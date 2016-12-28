@@ -18,6 +18,9 @@ public class User implements Serializable {
     @SerializedName("email")
     @Expose
     private String email;
+    @SerializedName("role")
+    @Expose
+    private String role;
 
     public int getId() {
         return id;
@@ -34,4 +37,15 @@ public class User implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
 }
+
+

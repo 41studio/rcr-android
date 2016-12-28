@@ -64,7 +64,7 @@ public class AddAreaActivity extends AppCompatActivity {
             final ProgressDialog pDialog = UIHelper.showProgressDialog(this);
             DataPreferences dataPreferences = new DataPreferences(this);
             LoginSession loginSession = dataPreferences.getLoginSession();
-            new RestApi().getApi().postArea(loginSession.getAuth_token(), etNameArea.getText().toString()).enqueue(new Callback<AreaData>() {
+            new RestApi().getApi().postArea(loginSession.getAuthToken(), etNameArea.getText().toString()).enqueue(new Callback<AreaData>() {
                 @Override
                 public void onResponse(Call<AreaData> call, Response<AreaData> response) {
                     UIHelper.dismissDialog(pDialog);

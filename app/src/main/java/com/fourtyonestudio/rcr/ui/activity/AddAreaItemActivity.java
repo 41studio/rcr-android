@@ -113,7 +113,7 @@ public class AddAreaItemActivity extends AppCompatActivity {
             DataPreferences dataPreferences = new DataPreferences(this);
             LoginSession loginSession = dataPreferences.getLoginSession();
 
-            new RestApi().getApi().postAreaItems(loginSession.getAuth_token(), id, etNameArea.getText().toString(), listItems).enqueue(new Callback<AreaData>() {
+            new RestApi().getApi().postAreaItems(loginSession.getAuthToken(), id, etNameArea.getText().toString(), listItems).enqueue(new Callback<AreaData>() {
                 @Override
                 public void onResponse(Call<AreaData> call, Response<AreaData> response) {
                     UIHelper.dismissDialog(pDialog);

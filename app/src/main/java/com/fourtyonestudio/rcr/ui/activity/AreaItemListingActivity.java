@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -43,6 +44,8 @@ public class AreaItemListingActivity extends AppCompatActivity {
     TextView tvCurrentDate;
     @Bind(R.id.rvItem)
     RecyclerView rvItem;
+    @Bind(R.id.fab_add)
+    FloatingActionButton fabAdd;
 
     //private Area area;
 //    private List<Item> itemList;
@@ -77,6 +80,13 @@ public class AreaItemListingActivity extends AppCompatActivity {
         rvItem.setAdapter(adapter);
 
         getAreas();
+
+        String role = new DataPreferences(this).getLoginSession().getUser().getRole();
+        if(role.equals(Constant.EXTRAS.MANAGER)){
+            fabAdd.setVisibility(View.VISIBLE);
+        }else if(role.equals(Constant.EXTRAS.HELPER)){
+            fabAdd.setVisibility(View.GONE);
+        }
 
     }
 
@@ -120,7 +130,7 @@ public class AreaItemListingActivity extends AppCompatActivity {
             final DataPreferences dataPreferences = new DataPreferences(this);
             final LoginSession loginSession = dataPreferences.getLoginSession();
 
-            new RestApi().getApi().getAreaItems(loginSession.getAuth_token(), idArea).enqueue(new Callback<AreaResponse>() {
+            new RestApi().getApi().getAreaItems(loginSession.getAuthToken(), idArea).enqueue(new Callback<AreaResponse>() {
                 @Override
                 public void onResponse(Call<AreaResponse> call, Response<AreaResponse> response) {
                     UIHelper.dismissDialog(pDialog);
@@ -150,7 +160,7 @@ public class AreaItemListingActivity extends AppCompatActivity {
                         Indicators indicators = dataPreferences.getIndicator();
                         if (indicators == null) {
                             getIndicator();
-                        }else{
+                        } else {
                             UIHelper.dismissDialog(pDialog);
                         }
 
@@ -177,7 +187,7 @@ public class AreaItemListingActivity extends AppCompatActivity {
             final ProgressDialog pDialog = UIHelper.showProgressDialog(this);
             DataPreferences dataPreferences = new DataPreferences(this);
             LoginSession loginSession = dataPreferences.getLoginSession();
-            new RestApi().getApi().getIndicators(loginSession.getAuth_token()).enqueue(new Callback<Indicators>() {
+            new RestApi().getApi().getIndicators(loginSession.getAuthToken()).enqueue(new Callback<Indicators>() {
                 @Override
                 public void onResponse(Call<Indicators> call, Response<Indicators> response) {
                     UIHelper.dismissDialog(pDialog);

@@ -12,19 +12,19 @@ import java.io.Serializable;
 public class LoginSession implements Serializable {
 
     private static final long serialVersionUID = 4529959188054323728L;
+    @SerializedName("auth_token")
+    @Expose
+    private String authToken;
     @SerializedName("user")
     @Expose
     private User user;
-    @SerializedName("auth_token")
-    @Expose
-    private String auth_token;
 
-    public String getAuth_token() {
-        return auth_token;
+    public String getAuthToken() {
+        return authToken;
     }
 
-    public void setAuth_token(String auth_token) {
-        this.auth_token = auth_token;
+    public void setAuthToken(String authToken) {
+        this.authToken = authToken;
     }
 
     public User getUser() {
@@ -34,4 +34,5 @@ public class LoginSession implements Serializable {
     public void setUser(User user) {
         this.user = user;
     }
+
 }

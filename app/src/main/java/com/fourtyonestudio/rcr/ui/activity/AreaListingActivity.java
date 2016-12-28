@@ -65,6 +65,13 @@ public class AreaListingActivity extends AppCompatActivity {
 
         getAreas();
 
+        String role = new DataPreferences(this).getLoginSession().getUser().getRole();
+        if(role.equals(Constant.EXTRAS.MANAGER)){
+            fabAdd.setVisibility(View.VISIBLE);
+        }else if(role.equals(Constant.EXTRAS.HELPER)){
+            fabAdd.setVisibility(View.GONE);
+        }
+
     }
 
     @Override
@@ -89,7 +96,7 @@ public class AreaListingActivity extends AppCompatActivity {
             final ProgressDialog pDialog = UIHelper.showProgressDialog(AreaListingActivity.this);
             DataPreferences dataPreferences = new DataPreferences(AreaListingActivity.this);
             LoginSession loginSession = dataPreferences.getLoginSession();
-            new RestApi().getApi().getArea(loginSession.getAuth_token()).enqueue(new Callback<AreaResponse>() {
+            new RestApi().getApi().getArea(loginSession.getAuthToken()).enqueue(new Callback<AreaResponse>() {
                 @Override
                 public void onResponse(Call<AreaResponse> call, Response<AreaResponse> response) {
                     UIHelper.dismissDialog(pDialog);
