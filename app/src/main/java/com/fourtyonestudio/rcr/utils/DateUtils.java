@@ -8,6 +8,7 @@ import java.util.Locale;
 
 public class DateUtils {
     public static final String FORMAT_DATE = "dd MMMM yyyy";
+    public static final String FORMAT_DATE1 = "yyyy-MM-dd";
 //    public static String formatDateDefault(String date) {
 //        String textNewDate = "";
 //        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
@@ -29,6 +30,10 @@ public class DateUtils {
 
     public static String getDateNow() {
         return getDateNow(FORMAT_DATE);
+    }
+
+    public static String getDateNow1() {
+        return getDateNow(FORMAT_DATE1);
     }
 
     public static String getDateNow(String format) {

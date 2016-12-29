@@ -9,7 +9,7 @@ import android.widget.EditText;
 
 import com.fourtyonestudio.rcr.Constant;
 import com.fourtyonestudio.rcr.R;
-import com.fourtyonestudio.rcr.models.AreaData;
+import com.fourtyonestudio.rcr.models.AreaItemResponse;
 import com.fourtyonestudio.rcr.models.LoginSession;
 import com.fourtyonestudio.rcr.networks.RestApi;
 import com.fourtyonestudio.rcr.preferences.DataPreferences;
@@ -18,9 +18,6 @@ import com.fourtyonestudio.rcr.utils.KeyboardUtils;
 import com.fourtyonestudio.rcr.utils.Retrofit2Utils;
 import com.fourtyonestudio.rcr.utils.UIHelper;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -28,16 +25,23 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AddAreaActivity extends AppCompatActivity {
+public class EditAreaActivity extends AppCompatActivity {
 
     @Bind(R.id.etNameArea)
     EditText etNameArea;
 
+    private int id;
+    private String name;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_area);
+        setContentView(R.layout.activity_edit_area);
         ButterKnife.bind(this);
+        name = getIntent().getStringExtra(Constant.EXTRAS.NAME_AREA);
+        id = getIntent().getIntExtra(Constant.EXTRAS.ID_AREA, 0);
+
+        etNameArea.setText(name);
     }
 
     private void attemptAdd() {
@@ -64,9 +68,9 @@ public class AddAreaActivity extends AppCompatActivity {
             final ProgressDialog pDialog = UIHelper.showProgressDialog(this);
             DataPreferences dataPreferences = new DataPreferences(this);
             LoginSession loginSession = dataPreferences.getLoginSession();
-            new RestApi().getApi().postArea(loginSession.getAuthToken(), etNameArea.getText().toString()).enqueue(new Callback<AreaData>() {
+            new RestApi().getApi().putArea(loginSession.getAuthToken(), id, etNameArea.getText().toString()).enqueue(new Callback<AreaItemResponse>() {
                 @Override
-                public void onResponse(Call<AreaData> call, Response<AreaData> response) {
+                public void onResponse(Call<AreaItemResponse> call, Response<AreaItemResponse> response) {
                     UIHelper.dismissDialog(pDialog);
                     if (response.isSuccessful()) {
 
@@ -78,7 +82,7 @@ public class AddAreaActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<AreaData> call, Throwable t) {
+                public void onFailure(Call<AreaItemResponse> call, Throwable t) {
                     UIHelper.dismissDialog(pDialog);
                     UIHelper.showSnackbar(getCurrentFocus(), Constant.MESSAGE.ERROR_POST);
                 }
@@ -89,6 +93,13 @@ public class AddAreaActivity extends AppCompatActivity {
     }
 
 
+//    private void getAreaDetails() {
+//        if (getIntent().hasExtra(Constant.EXTRAS.AREA)) {
+//            area = (Area) getIntent().getExtras().get(Constant.EXTRAS.AREA);
+//            itemList.addAll(area.getAttributes().getItemList());
+//            adapter.notifyDataSetChanged();
+//        }
+//    }
 
 
 }

@@ -3,8 +3,17 @@
     android:id="@+id/child"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="@dimen/_4dp"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:padding="@dimen/_10dp">
+
+    <CheckBox
+        android:id="@+id/chx"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:checked="true"
+        android:clickable="false"
+        android:textSize="23sp" />
 
     <TextView
         android:id="@+id/tvTime"
@@ -22,8 +31,9 @@
 
     <TextView
         android:id="@+id/tvRate"
+        android:layout_marginLeft="@dimen/_40dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/_20dp"
         android:layout_gravity="center"
         android:layout_weight="1"
         android:background="@drawable/layer_edittext"

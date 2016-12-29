@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_login"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_default"
+    android:orientation="vertical"
+    android:padding="@dimen/_24dp"
+    tools:context="com.fourtyonestudio.rcr.ui.activity.LoginActivity">
+
+
+    <LinearLayout
+        android:id="@+id/top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="@dimen/_10dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+
+        <EditText
+            android:id="@+id/etNameArea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_6dp"
+            android:background="@drawable/layer_edittext"
+            android:hint="Name Area"
+            android:inputType="textCapCharacters"
+            android:padding="@dimen/_10dp"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="@dimen/f_16sp" />
+
+        <EditText
+            android:id="@+id/etTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/layer_edittext"
+            android:hint="Time Area"
+            android:inputType="number"
+            android:padding="@dimen/_10dp"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="@dimen/f_16sp" />
+
+        <Button
+            android:id="@+id/addBtn"
+            style="@style/ButtonStyle.Ok"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10dp"
+            android:onClick="addItems"
+            android:text="ADD TIME" />
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnAddItem"
+        android:layout_below="@+id/top"
+        android:drawSelectorOnTop="false" />
+
+
+    <Button
+        android:id="@+id/btnAddItem"
+        style="@style/ButtonStyle.Ok"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="@dimen/_10dp"
+        android:gravity="center"
+        android:text="EDIT AREA ITEM" />
+
+
+</RelativeLayout>
+

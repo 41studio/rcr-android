@@ -18,6 +18,7 @@ import com.fourtyonestudio.rcr.models.LoginSession;
 import com.fourtyonestudio.rcr.networks.RestApi;
 import com.fourtyonestudio.rcr.preferences.DataPreferences;
 import com.fourtyonestudio.rcr.ui.activity.AreaItemListingActivity;
+import com.fourtyonestudio.rcr.ui.activity.EditAreaActivity;
 import com.fourtyonestudio.rcr.utils.CommonUtils;
 import com.fourtyonestudio.rcr.utils.Retrofit2Utils;
 import com.fourtyonestudio.rcr.utils.UIHelper;
@@ -68,6 +69,18 @@ public class AreaAdapter extends RecyclerView.Adapter<AreaAdapter.ViewHolder> {
                 intent.putExtra(Constant.EXTRAS.ID_AREA, area.getId());
                 //intent.putExtra(Constant.EXTRAS.AREA, response.body().getAreas());
                 context.startActivity(intent);
+            }
+        });
+
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                Intent intent = new Intent(context, EditAreaActivity.class);
+                intent.putExtra(Constant.EXTRAS.NAME_AREA, area.getAttributes().getName());
+                intent.putExtra(Constant.EXTRAS.ID_AREA, area.getId());
+                context.startActivity(intent);
+                return false;
             }
         });
     }

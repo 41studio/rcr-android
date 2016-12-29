@@ -43,7 +43,7 @@ public class MenuActivity extends AppCompatActivity {
 
     @OnClick(R.id.btnLogout)
     public void clickLogout(View view) {
-        SugarRecord.deleteAll(ItemAreaTable.class);
+        //SugarRecord.deleteAll(ItemAreaTable.class);
         new DataPreferences(this).clear();
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import com.fourtyonestudio.rcr.models.LoginSession;
 import com.fourtyonestudio.rcr.networks.RestApi;
 import com.fourtyonestudio.rcr.preferences.DataPreferences;
 import com.fourtyonestudio.rcr.tables.ItemAreaTable;
+import com.fourtyonestudio.rcr.ui.activity.EditAreaActivity;
 import com.fourtyonestudio.rcr.utils.CommonUtils;
 import com.fourtyonestudio.rcr.utils.Retrofit2Utils;
 import com.fourtyonestudio.rcr.utils.UIHelper;
@@ -63,6 +65,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         final Area area = list.get(holder.getAdapterPosition());
         holder.tvName.setText(area.getAttributes().getName());
 
+
+
+
+
         String role = new DataPreferences(context).getLoginSession().getUser().getRole();
         if (role.equals(Constant.EXTRAS.MANAGER)) {
             for (int j = 0; j < area.getAttributes().getTimes().size(); j++) {
@@ -102,7 +108,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                                     dialog.dismiss();
                                 } else {
 
-                                    Log.d("id time"+area.getAttributes().getTimes().get(finalJ).getId(), "id indicator"+indicators.getData().get(item).getId());
+                                    Log.d("id time" + area.getAttributes().getTimes().get(finalJ).getId(), "id indicator" + indicators.getData().get(item).getId());
                                     putAppraisals(area.getAttributes().getTimes().get(finalJ).getId(), indicators.getData().get(item).getId());
 
                                     itemAreaTables.get(0).setIndicator(indicators.getData().get(item).getAttributes().getCode());
