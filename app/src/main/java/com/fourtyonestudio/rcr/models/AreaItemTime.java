@@ -3,11 +3,15 @@ package com.fourtyonestudio.rcr.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by Riris.
  */
 
-public class AreaItemTime {
+public class AreaItemTime implements Serializable {
+
+    private static final long serialVersionUID = 3145204544872851134L;
     @SerializedName("id")
     @Expose
     private Integer id;

@@ -3,11 +3,15 @@ package com.fourtyonestudio.rcr.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by Riris.
  */
 
-public class AppraisalsResultDetail {
+public class AppraisalsResultDetail implements Serializable {
+
+    private static final long serialVersionUID = -4287278746023518674L;
     @SerializedName("indicator")
     @Expose
     private String indicator;

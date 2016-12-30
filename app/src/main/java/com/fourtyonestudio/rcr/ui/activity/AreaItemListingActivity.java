@@ -2,8 +2,10 @@ package com.fourtyonestudio.rcr.ui.activity;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -18,12 +20,10 @@ import com.fourtyonestudio.rcr.R;
 import com.fourtyonestudio.rcr.models.Area;
 import com.fourtyonestudio.rcr.models.AreaItemList;
 import com.fourtyonestudio.rcr.models.AreaItemResponse;
-import com.fourtyonestudio.rcr.models.AreaResponse;
 import com.fourtyonestudio.rcr.models.Indicators;
 import com.fourtyonestudio.rcr.models.LoginSession;
 import com.fourtyonestudio.rcr.networks.RestApi;
 import com.fourtyonestudio.rcr.preferences.DataPreferences;
-import com.fourtyonestudio.rcr.ui.adapter.ItemAdapter;
 import com.fourtyonestudio.rcr.ui.adapter.ItemsAdapter;
 import com.fourtyonestudio.rcr.utils.CommonUtils;
 import com.fourtyonestudio.rcr.utils.DateUtils;
@@ -57,7 +57,7 @@ public class AreaItemListingActivity extends AppCompatActivity {
 //    private List<Item> itemList;
     private List<Area> itemList;
     private List<AreaItemList> itemsList;
-    private ItemAdapter adapter;
+    //    private ItemAdapter adapter;
     private ItemsAdapter adapters;
 
     private int idArea;
@@ -125,6 +125,11 @@ public class AreaItemListingActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Constant.EXTRAS.RESUMEDATA);
+        registerReceiver(receiver, filter);
+
 
         boolean isLoadAreaItem = new DataPreferences(this).isLoadAreaItem();
         if (isLoadAreaItem) {
@@ -205,63 +210,63 @@ public class AreaItemListingActivity extends AppCompatActivity {
         }
     }
 
-    private void getAreas() {
-        if (CommonUtils.isNetworkAvailable(this)) {
-            final ProgressDialog pDialog = UIHelper.showProgressDialog(this);
-            final DataPreferences dataPreferences = new DataPreferences(this);
-            final LoginSession loginSession = dataPreferences.getLoginSession();
-
-            new RestApi().getApi().getAreaItems(loginSession.getAuthToken(), idArea).enqueue(new Callback<AreaResponse>() {
-                @Override
-                public void onResponse(Call<AreaResponse> call, Response<AreaResponse> response) {
-                    UIHelper.dismissDialog(pDialog);
-                    if (response.isSuccessful()) {
-
-                        List<Area> areaList = response.body().getAreas();
-
-//                        for (int i = 0; i < areaList.size(); i++) {
-//                            for (int j = 0; j < areaList.get(i).getAttributes().getTimes().size(); j++) {
+//    private void getAreas() {
+//        if (CommonUtils.isNetworkAvailable(this)) {
+//            final ProgressDialog pDialog = UIHelper.showProgressDialog(this);
+//            final DataPreferences dataPreferences = new DataPreferences(this);
+//            final LoginSession loginSession = dataPreferences.getLoginSession();
 //
-//                                List<ItemAreaTable> itemAreaTables = SugarRecord.find(ItemAreaTable.class, "idtimes = ?", Integer.toString(areaList.get(i).getAttributes().getTimes().get(j).getId()));
-//                                if (itemAreaTables.size() == 0) {
-//                                    ItemAreaTable itemAreaTable = new ItemAreaTable();
-//                                    itemAreaTable.setId_area(areaList.get(i).getId());
-//                                    itemAreaTable.setId_times(areaList.get(i).getAttributes().getTimes().get(j).getId());
-//                                    itemAreaTable.setTime(areaList.get(i).getAttributes().getTimes().get(j).getTime());
-//                                    itemAreaTable.save();
-//                                }
-//                            }
+//            new RestApi().getApi().getAreaItems(loginSession.getAuthToken(), idArea).enqueue(new Callback<AreaResponse>() {
+//                @Override
+//                public void onResponse(Call<AreaResponse> call, Response<AreaResponse> response) {
+//                    UIHelper.dismissDialog(pDialog);
+//                    if (response.isSuccessful()) {
+//
+//                        List<Area> areaList = response.body().getAreas();
+//
+////                        for (int i = 0; i < areaList.size(); i++) {
+////                            for (int j = 0; j < areaList.get(i).getAttributes().getTimes().size(); j++) {
+////
+////                                List<ItemAreaTable> itemAreaTables = SugarRecord.find(ItemAreaTable.class, "idtimes = ?", Integer.toString(areaList.get(i).getAttributes().getTimes().get(j).getId()));
+////                                if (itemAreaTables.size() == 0) {
+////                                    ItemAreaTable itemAreaTable = new ItemAreaTable();
+////                                    itemAreaTable.setId_area(areaList.get(i).getId());
+////                                    itemAreaTable.setId_times(areaList.get(i).getAttributes().getTimes().get(j).getId());
+////                                    itemAreaTable.setTime(areaList.get(i).getAttributes().getTimes().get(j).getTime());
+////                                    itemAreaTable.save();
+////                                }
+////                            }
+////                        }
+//
+//
+//                        itemList.clear();
+//                        itemList.addAll(areaList);
+//                        adapter.notifyDataSetChanged();
+//
+//                        Indicators indicators = dataPreferences.getIndicator();
+//                        if (indicators == null) {
+//                            getIndicator();
+//                        } else {
+//                            UIHelper.dismissDialog(pDialog);
 //                        }
-
-
-                        itemList.clear();
-                        itemList.addAll(areaList);
-                        adapter.notifyDataSetChanged();
-
-                        Indicators indicators = dataPreferences.getIndicator();
-                        if (indicators == null) {
-                            getIndicator();
-                        } else {
-                            UIHelper.dismissDialog(pDialog);
-                        }
-
-
-                    } else {
-                        UIHelper.dismissDialog(pDialog);
-                        UIHelper.showSnackbar(getCurrentFocus(), Retrofit2Utils.getMessageError(response));
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<AreaResponse> call, Throwable t) {
-                    UIHelper.dismissDialog(pDialog);
-                    UIHelper.showSnackbar(getCurrentFocus(), Constant.MESSAGE.ERROR_GET);
-                }
-            });
-        } else {
-            UIHelper.showSnackbar(getCurrentFocus(), Constant.MESSAGE.NO_INET);
-        }
-    }
+//
+//
+//                    } else {
+//                        UIHelper.dismissDialog(pDialog);
+//                        UIHelper.showSnackbar(getCurrentFocus(), Retrofit2Utils.getMessageError(response));
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(Call<AreaResponse> call, Throwable t) {
+//                    UIHelper.dismissDialog(pDialog);
+//                    UIHelper.showSnackbar(getCurrentFocus(), Constant.MESSAGE.ERROR_GET);
+//                }
+//            });
+//        } else {
+//            UIHelper.showSnackbar(getCurrentFocus(), Constant.MESSAGE.NO_INET);
+//        }
+//    }
 
     private void getIndicator() {
         if (CommonUtils.isNetworkAvailable(this)) {
@@ -294,4 +299,19 @@ public class AreaItemListingActivity extends AppCompatActivity {
             UIHelper.showSnackbar(getCurrentFocus(), Constant.MESSAGE.NO_INET);
         }
     }
+
+    @Override
+    protected void onPause() {
+        unregisterReceiver(receiver);
+        super.onPause();
+    }
+
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            getAreasItemDate(DateUtils.getDateNow1());
+            new DataPreferences(AreaItemListingActivity.this).setLoadAreaItem(false);
+        }
+    };
 }

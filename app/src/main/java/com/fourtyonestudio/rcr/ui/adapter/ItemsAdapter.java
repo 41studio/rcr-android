@@ -4,8 +4,10 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +15,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,10 +29,12 @@ import com.fourtyonestudio.rcr.models.Indicators;
 import com.fourtyonestudio.rcr.models.LoginSession;
 import com.fourtyonestudio.rcr.networks.RestApi;
 import com.fourtyonestudio.rcr.preferences.DataPreferences;
+import com.fourtyonestudio.rcr.ui.activity.EditAreaItemActivity;
 import com.fourtyonestudio.rcr.utils.CommonUtils;
 import com.fourtyonestudio.rcr.utils.Retrofit2Utils;
 import com.fourtyonestudio.rcr.utils.UIHelper;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,9 +73,10 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-//                Intent intent = new Intent(context, EditAreaItemActivity.class);
-//                intent.putExtra(Constant.EXTRAS.ID_AREA, area.getId());
-//                context.startActivity(intent);
+                Intent intent = new Intent(context, EditAreaItemActivity.class);
+                intent.putExtra(Constant.EXTRAS.AREA, (Serializable) area);
+                intent.putExtra(Constant.EXTRAS.ID_AREA, area.getId());
+                context.startActivity(intent);
                 return false;
             }
         });
@@ -106,8 +112,62 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
                         tvRate.setText(area.getTimes().get(j).getAppraisals().getIndicator());
                     }
 
+                    ImageView imgAdd = (ImageView) view.findViewById(R.id.add);
+                    ImageView imgCheck = (ImageView) view.findViewById(R.id.checkmark);
+
+                    if (area.getTimes().get(j).getAppraisals().getDescription() != null) {
+                        imgAdd.setVisibility(View.GONE);
+                        imgCheck.setVisibility(View.VISIBLE);
+                    } else {
+                        imgAdd.setVisibility(View.VISIBLE);
+                        imgCheck.setVisibility(View.GONE);
+                    }
 
                     final int finalJ = j;
+
+                    RelativeLayout addDesc = (RelativeLayout) view.findViewById(R.id.btnAddDesc);
+                    addDesc.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            // custom dialog
+                            final Dialog dialog = new Dialog(context);
+                            dialog.setContentView(R.layout.dialog_rate);
+                            dialog.setTitle("Description");
+
+                            final EditText text = (EditText) dialog.findViewById(R.id.etDescription);
+                            Button btnRate = (Button) dialog.findViewById(R.id.btnAddRate);
+
+                            if (area.getTimes().get(finalJ).getAppraisals().getDescription() != null) {
+                                text.setText(area.getTimes().get(finalJ).getAppraisals().getDescription());
+                            }
+
+                            btnRate.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    if (!TextUtils.isEmpty(text.getText().toString())) {
+                                        Log.d("id appriasal" + area.getTimes().get(finalJ).getAppraisals().getId(), text.getText().toString());
+                                        putAppraisalsDesc(area.getTimes().get(finalJ).getAppraisals().getId(), text.getText().toString());
+//                                    if (area.getTimes().get(finalJ).getAppraisals().getDescription() != null) {
+//                                        //update
+//                                    } else {
+//                                        //create new
+//                                    }
+                                    } else {
+                                        Toast.makeText(context, "Please fill the description first", Toast.LENGTH_SHORT).show();
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+
+                            dialog.show();
+
+
+                        }
+                    });
+
+
                     tvRate.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -145,34 +205,6 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
                             });
                             builder.show();
 
-//                            // custom dialog
-//                            final Dialog dialog = new Dialog(context);
-//                            dialog.setContentView(R.layout.dialog_rate);
-//                            dialog.setTitle("Rate Now");
-//
-//                            // set the custom dialog components - text, image and button
-//                            EditText text = (EditText) dialog.findViewById(R.id.etDescription);
-//                            LinearLayout lDesc = (LinearLayout) dialog.findViewById(R.id.lDesc);
-//                            Button btnRate = (Button) dialog.findViewById(R.id.btnAddRate);
-//
-//                            for (int i = 0; i < items.length; i++) {
-//
-//                                LayoutInflater in = LayoutInflater.from(context);
-//                                View viewDialog = in.inflate(R.layout.child_radio, holder.parent, false);
-//
-//                                RadioButton radio = (RadioButton) viewDialog.findViewById(R.id.radioRate);
-//                                radio.setText(items[i]);
-//                                lDesc.addView(viewDialog);
-//                            }
-//
-//                            btnRate.setOnClickListener(new View.OnClickListener() {
-//                                @Override
-//                                public void onClick(View v) {
-//                                    dialog.dismiss();
-//                                }
-//                            });
-//
-//                            dialog.show();
 
                         }
 
@@ -250,6 +282,41 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
                     if (response.isSuccessful()) {
 
                         Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        Toast.makeText(context, Retrofit2Utils.getMessageError(response), Toast.LENGTH_SHORT).show();
+//                        UIHelper.showSnackbar(context.getCurrentFocus(), Retrofit2Utils.getMessageError(response));
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<AppraisalsResponse> call, Throwable t) {
+                    UIHelper.dismissDialog(pDialog);
+                    Toast.makeText(context, Constant.MESSAGE.ERROR_POST, Toast.LENGTH_SHORT).show();
+//                    UIHelper.showSnackbar(getCurrentFocus(), Constant.MESSAGE.ERROR_POST);
+                }
+            });
+        } else {
+            Toast.makeText(context, Constant.MESSAGE.NO_INET, Toast.LENGTH_SHORT).show();
+//            UIHelper.showSnackbar(getCurrentFocus(), Constant.MESSAGE.NO_INET);
+        }
+    }
+
+    private void putAppraisalsDesc(int time_id, String description) {
+        if (CommonUtils.isNetworkAvailable(context)) {
+            final ProgressDialog pDialog = UIHelper.showProgressDialog(context);
+            DataPreferences dataPreferences = new DataPreferences(context);
+            LoginSession loginSession = dataPreferences.getLoginSession();
+            new RestApi().getApi().putAppraisalsDescription(loginSession.getAuthToken(), time_id, description).enqueue(new Callback<AppraisalsResponse>() {
+                @Override
+                public void onResponse(Call<AppraisalsResponse> call, final Response<AppraisalsResponse> response) {
+                    UIHelper.dismissDialog(pDialog);
+                    if (response.isSuccessful()) {
+
+                        Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
+
+                        Intent intent = new Intent(Constant.EXTRAS.RESUMEDATA);
+                        context.sendBroadcast(intent);
 
                     } else {
                         Toast.makeText(context, Retrofit2Utils.getMessageError(response), Toast.LENGTH_SHORT).show();

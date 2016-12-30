@@ -3,13 +3,16 @@ package com.fourtyonestudio.rcr.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Riris.
  */
 
-public class AreaItemList {
+public class AreaItemList implements Serializable {
+
+    private static final long serialVersionUID = 5909028905027457303L;
     @SerializedName("id")
     @Expose
     private Integer id;

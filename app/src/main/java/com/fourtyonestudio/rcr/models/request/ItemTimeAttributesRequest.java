@@ -1,29 +1,30 @@
-package com.fourtyonestudio.rcr.models;
+package com.fourtyonestudio.rcr.models.request;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
-import java.io.Serializable;
 
 /**
  * Created by Riris.
  */
 
-public class AreaTime implements Serializable {
-
-    private static final long serialVersionUID = 4002950828210454433L;
+public class ItemTimeAttributesRequest {
     @SerializedName("id")
     @Expose
-    private Integer id;
+    private String id;
     @SerializedName("time")
     @Expose
     private String time;
 
-    public Integer getId() {
+    public ItemTimeAttributesRequest(String id, String time) {
+        this.id = id;
+        this.time = time;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

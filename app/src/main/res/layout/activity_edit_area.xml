@@ -42,7 +42,18 @@
                 style="@style/ButtonStyle.Ok"
                 android:layout_marginTop="@dimen/_24dp"
                 android:gravity="center"
-                android:text="EDIT AREA" />
+                android:text="UPDATE AREA" />
+
+            <Button
+                android:id="@+id/btnDelete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10dp"
+                android:background="@drawable/btn_red"
+                android:gravity="center"
+                android:text="DELETE AREA"
+                android:textColor="@color/white"
+                android:textSize="@dimen/f_16sp" />
 
         </LinearLayout>
 

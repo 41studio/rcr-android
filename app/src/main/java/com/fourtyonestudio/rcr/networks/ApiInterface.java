@@ -8,15 +8,16 @@ import com.fourtyonestudio.rcr.models.AreaResponse;
 import com.fourtyonestudio.rcr.models.Indicators;
 import com.fourtyonestudio.rcr.models.LoginSession;
 import com.fourtyonestudio.rcr.models.Roles;
+import com.fourtyonestudio.rcr.models.UserListResponse;
 import com.fourtyonestudio.rcr.models.UserResponse;
+import com.fourtyonestudio.rcr.models.request.ItemAreaRequest;
 import com.fourtyonestudio.rcr.models.request.RegisterUserRequest;
-
-import org.json.JSONObject;
 
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -37,44 +38,58 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("users")
-    Call<UserResponse> createUser(@Header("Authorization") String auth, @Field("user[email]") String email, @Field("user[password]") String password, @Field("user[password_confirmation]") String password_conf, @Field("user[role_id]") String role_id);
+    Call<UserResponse> createUser(@Header("Authorization") String auth,
+                                  @Field("user[email]") String email,
+                                  @Field("user[password]") String password,
+                                  @Field("user[password_confirmation]") String password_conf,
+                                  @Field("user[role_id]") String role_id);
 
     @FormUrlEncoded
     @POST("areas")
-    Call<AreaData> postArea(@Header("Authorization") String auth, @Field("area[name]") String name);
+    Call<AreaData> postArea(@Header("Authorization") String auth,
+                            @Field("area[name]") String name);
 
     @GET("areas")
     Call<AreaResponse> getArea(@Header("Authorization") String auth);
 
     @GET("areas/{id}/items")
-    Call<AreaResponse> getAreaItems(@Header("Authorization") String auth, @Path("id") int id);
+    Call<AreaResponse> getAreaItems(@Header("Authorization") String auth,
+                                    @Path("id") int id);
 
     @GET("areas/{id}")
-    Call<AreaItemResponse> getAreaItemsDate(@Header("Authorization") String auth, @Path("id") int id, @Query("date") String date);
+    Call<AreaItemResponse> getAreaItemsDate(@Header("Authorization") String auth,
+                                            @Path("id") int id,
+                                            @Query("date") String date);
 
     @FormUrlEncoded
     @PUT("areas/{id}")
-    Call<AreaItemResponse> putArea(@Header("Authorization") String auth, @Path("id") int id, @Field("area[name]") String area_name);
+    Call<AreaItemResponse> putArea(@Header("Authorization") String auth,
+                                   @Path("id") int id,
+                                   @Field("area[name]") String area_name);
 
     @FormUrlEncoded
     @POST("areas/{id}/items")
-    Call<AreaData> postAreaItems(@Header("Authorization") String auth, @Path("id") int id, @Field("item[name]") String name, @Field("item[item_times_attributes][][time]") List<String> time_attributes);
+    Call<AreaData> postAreaItems(@Header("Authorization") String auth,
+                                 @Path("id") int id,
+                                 @Field("item[name]") String name,
+                                 @Field("item[item_times_attributes][][time]") List<String> time_attributes);
 
     @FormUrlEncoded
     @POST("appraisals")
-    Call<AppraisalsResponse> postAppraisals(@Header("Authorization") String auth, @Field("appraisal[item_time_id]") int time_id);
-
-    @POST("areas/{id_areas}/items/{id_item}")
-    Call<AppraisalsResponse> putItemAreas(@Header("Authorization") String auth, @Path("id_areas") int id_areas, @Path("id_item") int id_item, @Body JSONObject jsonObject);
-
+    Call<AppraisalsResponse> postAppraisals(@Header("Authorization") String auth,
+                                            @Field("appraisal[item_time_id]") int time_id);
 
     @FormUrlEncoded
     @PUT("appraisals/{id}")
-    Call<AppraisalsResponse> putAppraisals(@Header("Authorization") String auth, @Path("id") int time_id, @Field("appraisal[indicator_id]") String indicator_id);
+    Call<AppraisalsResponse> putAppraisals(@Header("Authorization") String auth,
+                                           @Path("id") int time_id,
+                                           @Field("appraisal[indicator_id]") String indicator_id);
 
-//    @FormUrlEncoded
-//    @POST("appraisals")
-//    Call<AppraisalsResponse> postAppraisals(@Header("Authorization") String auth, @Field("appraisal[item_time_id]") String time_id, @Field("appraisal[indicator_id]") String indicator_id);
+    @FormUrlEncoded
+    @PUT("appraisals/{id}")
+    Call<AppraisalsResponse> putAppraisalsDescription(@Header("Authorization") String auth,
+                                                      @Path("id") int time_id,
+                                                      @Field("appraisal[description]") String description);
 
     @FormUrlEncoded
     @POST("auth_user")
@@ -87,9 +102,30 @@ public interface ApiInterface {
     @GET("roles")
     Call<Roles> getRoles();
 
+    @GET("users")
+    Call<UserListResponse> getUsers(@Header("Authorization") String auth);
+
     @GET("areas/{id}")
     Call<AreaDetailResponse> getAreaDetail(@Header("Authorization") String auth,
                                            @Path("id") int id);
+
+    @DELETE("areas/{id}")
+    Call<String> deleteArea(@Header("Authorization") String auth,
+                            @Path("id") int id);
+
+    @DELETE("areas/{id}/items/{items_id}")
+    Call<String> deleteItemArea(@Header("Authorization") String auth,
+                                @Path("id") int id, @Path("items_id") int items_id);
+
+    @PUT("areas/{id_areas}/items/{items_id}")
+    Call<AreaDetailResponse> putItemsArea(@Header("Authorization") String auth,
+                                          @Path("id_areas") int id, @Path("items_id") int items_id,
+                                          @Body ItemAreaRequest itemAreaRequest);
+
+
+//    @FormUrlEncoded
+//    @POST("appraisals")
+//    Call<AppraisalsResponse> postAppraisals(@Header("Authorization") String auth, @Field("appraisal[item_time_id]") String time_id, @Field("appraisal[indicator_id]") String indicator_id);
 
 
 }

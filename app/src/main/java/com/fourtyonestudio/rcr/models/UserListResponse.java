@@ -3,24 +3,22 @@ package com.fourtyonestudio.rcr.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by Riris.
  */
 
-public class AreaItemResponse implements Serializable {
-
-    private static final long serialVersionUID = -1142220622268210133L;
+public class UserListResponse {
     @SerializedName("data")
     @Expose
-    private AreaItemData data;
+    private List<UserData> data = null;
 
-    public AreaItemData getData() {
+    public List<UserData> getData() {
         return data;
     }
 
-    public void setData(AreaItemData data) {
+    public void setData(List<UserData> data) {
         this.data = data;
     }
 

@@ -3,11 +3,15 @@ package com.fourtyonestudio.rcr.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by Riris.
  */
 
-public class AreaItemAppraisal {
+public class AreaItemAppraisal implements Serializable {
+
+    private static final long serialVersionUID = 665020009311941998L;
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -16,16 +20,16 @@ public class AreaItemAppraisal {
     private Integer itemTimeId;
     @SerializedName("indicator-id")
     @Expose
-    private Object indicatorId;
+    private Integer indicatorId;
     @SerializedName("description")
     @Expose
-    private Object description;
+    private String description;
     @SerializedName("checked")
     @Expose
     private Boolean checked;
     @SerializedName("manager-id")
     @Expose
-    private Object managerId;
+    private Integer managerId;
     @SerializedName("helper-id")
     @Expose
     private Integer helperId;
@@ -55,19 +59,19 @@ public class AreaItemAppraisal {
         this.itemTimeId = itemTimeId;
     }
 
-    public Object getIndicatorId() {
+    public Integer getIndicatorId() {
         return indicatorId;
     }
 
-    public void setIndicatorId(Object indicatorId) {
+    public void setIndicatorId(Integer indicatorId) {
         this.indicatorId = indicatorId;
     }
 
-    public Object getDescription() {
+    public String getDescription() {
         return description;
     }
 
-    public void setDescription(Object description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
@@ -79,11 +83,11 @@ public class AreaItemAppraisal {
         this.checked = checked;
     }
 
-    public Object getManagerId() {
+    public Integer getManagerId() {
         return managerId;
     }
 
-    public void setManagerId(Object managerId) {
+    public void setManagerId(Integer managerId) {
         this.managerId = managerId;
     }
 

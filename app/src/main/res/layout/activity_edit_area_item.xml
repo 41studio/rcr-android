@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:windowSoftInputMode="adjustPan"
     android:id="@+id/activity_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -19,14 +20,13 @@
         android:gravity="center"
         android:orientation="vertical">
 
-
         <EditText
             android:id="@+id/etNameArea"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/_6dp"
             android:background="@drawable/layer_edittext"
-            android:hint="Name Area"
+            android:hint="Name Item Area"
             android:inputType="textCapCharacters"
             android:padding="@dimen/_10dp"
             android:singleLine="true"
@@ -43,7 +43,8 @@
             android:padding="@dimen/_10dp"
             android:singleLine="true"
             android:textColor="@color/black"
-            android:textSize="@dimen/f_16sp" />
+            android:textSize="@dimen/f_16sp"
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/addBtn"
@@ -52,26 +53,38 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10dp"
             android:onClick="addItems"
-            android:text="ADD TIME" />
+            android:text="ADD TIME"
+            android:visibility="gone" />
 
     </LinearLayout>
 
-    <ListView
-        android:id="@android:id/list"
-        android:layout_width="wrap_content"
+
+    <LinearLayout
+        android:id="@+id/bottom"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btnAddItem"
-        android:layout_below="@+id/top"
-        android:drawSelectorOnTop="false" />
-
-
-    <Button
-        android:id="@+id/btnAddItem"
-        style="@style/ButtonStyle.Ok"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="@dimen/_10dp"
-        android:gravity="center"
-        android:text="EDIT AREA ITEM" />
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btnAddItem"
+            style="@style/ButtonStyle.Ok"
+            android:gravity="center"
+            android:text="UPDATE ITEM AREA" />
+
+        <Button
+            android:id="@+id/btnDelete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10dp"
+            android:background="@drawable/btn_red"
+            android:gravity="center"
+            android:text="DELETE ITEM AREA"
+            android:textColor="@color/white"
+            android:textSize="@dimen/f_16sp" />
+
+    </LinearLayout>
 
 
 </RelativeLayout>

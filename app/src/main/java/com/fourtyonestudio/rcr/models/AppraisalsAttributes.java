@@ -3,11 +3,15 @@ package com.fourtyonestudio.rcr.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by Riris.
  */
 
-public class AppraisalsAttributes {
+public class AppraisalsAttributes implements Serializable {
+
+    private static final long serialVersionUID = 8948294145542608148L;
     @SerializedName("checked")
     @Expose
     private Boolean checked;

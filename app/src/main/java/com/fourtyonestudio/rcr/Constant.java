@@ -21,5 +21,6 @@ public class Constant {
         public static final String NAME_AREA = "name_area";
         public static final String MANAGER= "manager";
         public static final String HELPER= "helper";
+        public static final String RESUMEDATA= "resume";
     }
 }

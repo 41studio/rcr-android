@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.fourtyonestudio.rcr.Constant;
@@ -55,6 +56,13 @@ public class EditAreaActivity extends AppCompatActivity {
         }
     }
 
+    @OnClick(R.id.btnDelete)
+    public void delete(View view) {
+        KeyboardUtils.hideSoftKeyboard(this, view);
+        deleteArea();
+
+    }
+
     @OnClick(R.id.btnAdd)
     public void onClick(View view) {
         KeyboardUtils.hideSoftKeyboard(this, view);
@@ -93,13 +101,35 @@ public class EditAreaActivity extends AppCompatActivity {
     }
 
 
-//    private void getAreaDetails() {
-//        if (getIntent().hasExtra(Constant.EXTRAS.AREA)) {
-//            area = (Area) getIntent().getExtras().get(Constant.EXTRAS.AREA);
-//            itemList.addAll(area.getAttributes().getItemList());
-//            adapter.notifyDataSetChanged();
-//        }
-//    }
+    private void deleteArea() {
+        new DataPreferences(this).setLoadArea(true);
+        if (CommonUtils.isNetworkAvailable(this)) {
+            final ProgressDialog pDialog = UIHelper.showProgressDialog(this);
+            DataPreferences dataPreferences = new DataPreferences(this);
+            LoginSession loginSession = dataPreferences.getLoginSession();
+            new RestApi().getApi().deleteArea(loginSession.getAuthToken(), id).enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    UIHelper.dismissDialog(pDialog);
+                    if (response.isSuccessful()) {
+
+                        finish();
+
+                    } else {
+                        UIHelper.showSnackbar(getCurrentFocus(), Retrofit2Utils.getMessageError(response));
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    UIHelper.dismissDialog(pDialog);
+                    UIHelper.showSnackbar(getCurrentFocus(), Constant.MESSAGE.ERROR_POST);
+                }
+            });
+        } else {
+            UIHelper.showSnackbar(getCurrentFocus(), Constant.MESSAGE.NO_INET);
+        }
+    }
 
 
 }
