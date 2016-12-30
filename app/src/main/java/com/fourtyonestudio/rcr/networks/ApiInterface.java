@@ -40,6 +40,7 @@ public interface ApiInterface {
     @POST("users")
     Call<UserResponse> createUser(@Header("Authorization") String auth,
                                   @Field("user[email]") String email,
+                                  @Field("user[name]") String name,
                                   @Field("user[password]") String password,
                                   @Field("user[password_confirmation]") String password_conf,
                                   @Field("user[role_id]") String role_id);
@@ -104,6 +105,18 @@ public interface ApiInterface {
 
     @GET("users")
     Call<UserListResponse> getUsers(@Header("Authorization") String auth);
+
+    @FormUrlEncoded
+    @PUT("users/{id}")
+    Call<UserResponse> putUsers(@Header("Authorization") String auth,
+                                @Path("id") int id,
+                                @Field("user[email]") String email,
+                                @Field("user[name]") String name,
+                                @Field("user[role_id]") String role_id);
+
+    @DELETE("users/{id}")
+    Call<String> deleteUsers(@Header("Authorization") String auth,
+                             @Path("id") int id);
 
     @GET("areas/{id}")
     Call<AreaDetailResponse> getAreaDetail(@Header("Authorization") String auth,

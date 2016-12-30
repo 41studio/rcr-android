@@ -51,6 +51,8 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     EditText etCompany;
     @Bind(R.id.spRole)
     Spinner spRole;
+    @Bind(R.id.etName)
+    EditText etName;
 
     private String idRole = "";
 
@@ -62,7 +64,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
 
-        getRoles();
+        //getRoles();
 
 
     }
@@ -99,8 +101,11 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
             Log.d("response", "Please input correct password confirmation");
             UIHelper.showSnackbar(getCurrentFocus(), "Please input correct password confirmation");
             etPasswordConfirmation.requestFocus();
-        } else if (idRole.equals("")) {
-            UIHelper.showSnackbar(getCurrentFocus(), "Please input role id");
+        } else if (TextUtils.isEmpty(etName.getText().toString())) {
+            UIHelper.showSnackbar(getCurrentFocus(), "Please input name");
+            etName.requestFocus();
+//        } else if (idRole.equals("")) {
+//            UIHelper.showSnackbar(getCurrentFocus(), "Please input role id");
         } else if (TextUtils.isEmpty(etCompany.getText().toString())) {
             UIHelper.showSnackbar(getCurrentFocus(), "Please input company");
             etCompany.requestFocus();
@@ -114,7 +119,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         if (CommonUtils.isNetworkAvailable(RegisterActivity.this)) {
             final ProgressDialog pDialog = UIHelper.showProgressDialog(RegisterActivity.this);
 
-            new RestApi().getApi().register(new RegisterUserRequest(etCompany.getText().toString(), new UserRequest(etUsername.getText().toString(), etPassword.getText().toString(), etPasswordConfirmation.getText().toString(), idRole))).enqueue(new Callback<LoginSession>() {
+            new RestApi().getApi().register(new RegisterUserRequest(etCompany.getText().toString(), new UserRequest(etUsername.getText().toString(), etName.getText().toString(), etPassword.getText().toString(), etPasswordConfirmation.getText().toString()))).enqueue(new Callback<LoginSession>() {
                 @Override
                 public void onResponse(Call<LoginSession> call, Response<LoginSession> response) {
                     UIHelper.dismissDialog(pDialog);
@@ -123,6 +128,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                         Intent intent = new Intent(RegisterActivity.this, MenuActivity.class);
                         startActivity(intent);
                         etUsername.setText("");
+                        etName.setText("");
                         etPassword.setText("");
                         etPasswordConfirmation.setText("");
                         spRole.setSelection(0);

@@ -18,7 +18,10 @@ public class Constant {
     public static abstract class EXTRAS {
         public static final String AREA = "area";
         public static final String ID_AREA = "id_area";
+        public static final String ID_USER = "id_user";
+        public static final String ROLE_USER = "role_user";
         public static final String NAME_AREA = "name_area";
+        public static final String EMAIL_AREA = "email_area";
         public static final String MANAGER= "manager";
         public static final String HELPER= "helper";
         public static final String RESUMEDATA= "resume";

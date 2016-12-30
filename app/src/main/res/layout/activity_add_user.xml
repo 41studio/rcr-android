@@ -25,7 +25,7 @@
 
 
             <EditText
-                android:id="@+id/etUsername"
+                android:id="@+id/etEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/layer_edittext"
@@ -35,6 +35,20 @@
                 android:singleLine="true"
                 android:textColor="@color/black"
                 android:textSize="@dimen/f_16sp" />
+
+            <EditText
+                android:id="@+id/etName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10dp"
+                android:background="@drawable/layer_edittext"
+                android:hint="Name"
+                android:inputType="text"
+                android:padding="@dimen/_10dp"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textSize="@dimen/f_16sp" />
+
 
             <EditText
                 android:id="@+id/etPassword"
@@ -65,7 +79,6 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10dp" />
-
 
 
             <Button

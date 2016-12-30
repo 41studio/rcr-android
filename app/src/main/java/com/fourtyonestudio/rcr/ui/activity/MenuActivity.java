@@ -52,7 +52,7 @@ public class MenuActivity extends AppCompatActivity {
 
     @OnClick(R.id.btnAddUser)
     public void clickAddUser(View view) {
-        Intent intent = new Intent(this, AddUserActivity.class);
+        Intent intent = new Intent(this, UserListingActivity.class);
         startActivity(intent);
     }
 

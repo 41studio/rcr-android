@@ -12,22 +12,26 @@ public class UserRequest {
     @SerializedName("email")
     @Expose
     private String email;
+    @SerializedName("name")
+    @Expose
+    private String name;
     @SerializedName("password")
     @Expose
     private String password;
     @SerializedName("password_confirmation")
     @Expose
     private String passwordConfirmation;
-    @SerializedName("role_id")
-    @Expose
-    private String roleId;
+//    @SerializedName("role_id")
+//    @Expose
+//    private String roleId;
 
 
-    public UserRequest(String email, String password, String passwordConfirmation, String roleId) {
+    public UserRequest(String email, String name, String password, String passwordConfirmation) {
         this.email = email;
+        this.name = name;
         this.password = password;
         this.passwordConfirmation = passwordConfirmation;
-        this.roleId = roleId;
+//        this.roleId = roleId;
     }
 
     public String getEmail() {
@@ -54,12 +58,12 @@ public class UserRequest {
         this.passwordConfirmation = passwordConfirmation;
     }
 
-    public String getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(String roleId) {
-        this.roleId = roleId;
-    }
+//    public String getRoleId() {
+//        return roleId;
+//    }
+//
+//    public void setRoleId(String roleId) {
+//        this.roleId = roleId;
+//    }
 
 }

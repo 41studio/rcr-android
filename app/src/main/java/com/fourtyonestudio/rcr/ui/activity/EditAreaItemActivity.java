@@ -54,6 +54,7 @@ public class EditAreaItemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_area_item);
         ButterKnife.bind(this);
+
         id = getIntent().getIntExtra(Constant.EXTRAS.ID_AREA, 0);
 
         getAreaDetails();

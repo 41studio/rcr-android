@@ -58,7 +58,9 @@
         <activity android:name=".ui.activity.MenuActivity" />
         <activity android:name=".ui.activity.AddUserActivity" />
         <activity android:name=".ui.activity.EditAreaActivity" />
-        <activity android:name=".ui.activity.EditAreaItemActivity"></activity>
+        <activity android:name=".ui.activity.EditAreaItemActivity" />
+        <activity android:name=".ui.activity.UserListingActivity" />
+        <activity android:name=".ui.activity.EditUserActivity"></activity>
     </application>
 
 </manifest>

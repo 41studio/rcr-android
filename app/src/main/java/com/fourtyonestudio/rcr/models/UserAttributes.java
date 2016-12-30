@@ -18,6 +18,9 @@ public class UserAttributes implements Serializable {
     @SerializedName("email")
     @Expose
     private String email;
+    @SerializedName("name")
+    @Expose
+    private String name;
     @SerializedName("role-id")
     @Expose
     private Integer roleId;
@@ -56,6 +59,15 @@ public class UserAttributes implements Serializable {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
 }

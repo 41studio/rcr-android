@@ -18,7 +18,7 @@
         android:background="@color/colorPrimary"
         android:gravity="center"
         android:padding="@dimen/_16dp"
-        android:text="AREA"
+        android:text="USER"
         android:textColor="@color/colorWhite"
         android:textSize="@dimen/f_24sp" />
 
