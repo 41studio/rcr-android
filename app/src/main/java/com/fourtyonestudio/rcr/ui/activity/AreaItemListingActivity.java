@@ -54,11 +54,11 @@ public class AreaItemListingActivity extends AppCompatActivity {
     FloatingActionButton fabAdd;
 
     //private Area area;
-//    private List<Item> itemList;
-    private List<Area> itemList;
-    private List<AreaItemList> itemsList;
+//    private List<Item> areaList;
+    private List<Area> areaList;
+    private List<AreaItemList> areaItemLists;
     //    private ItemAdapter adapter;
-    private ItemsAdapter adapters;
+    private ItemsAdapter itemsAdapter;
 
     private int idArea;
 
@@ -85,10 +85,10 @@ public class AreaItemListingActivity extends AppCompatActivity {
         rvItem.setLayoutManager(layoutManager);
         rvItem.setHasFixedSize(true);
 
-        itemsList = new ArrayList<>();
-        adapters = new ItemsAdapter(AreaItemListingActivity.this, itemsList);
-        adapters.notifyDataSetChanged();
-        rvItem.setAdapter(adapters);
+        areaItemLists = new ArrayList<>();
+        itemsAdapter = new ItemsAdapter(AreaItemListingActivity.this, areaItemLists);
+        itemsAdapter.notifyDataSetChanged();
+        rvItem.setAdapter(itemsAdapter);
 
         getAreasItemDate(DateUtils.getDateNow1());
 
@@ -181,9 +181,9 @@ public class AreaItemListingActivity extends AppCompatActivity {
 //                        }
 
 
-                        itemsList.clear();
-                        itemsList.addAll(areaList);
-                        adapters.notifyDataSetChanged();
+                        areaItemLists.clear();
+                        areaItemLists.addAll(areaList);
+                        itemsAdapter.notifyDataSetChanged();
 
                         Indicators indicators = dataPreferences.getIndicator();
                         if (indicators == null) {
@@ -239,8 +239,8 @@ public class AreaItemListingActivity extends AppCompatActivity {
 ////                        }
 //
 //
-//                        itemList.clear();
-//                        itemList.addAll(areaList);
+//                        areaList.clear();
+//                        areaList.addAll(areaList);
 //                        adapter.notifyDataSetChanged();
 //
 //                        Indicators indicators = dataPreferences.getIndicator();

@@ -46,7 +46,7 @@
             android:textSize="@dimen/f_16sp" />
 
         <Button
-            android:id="@+id/addBtn"
+            android:id="@+id/addTime"
             style="@style/ButtonStyle.Ok"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

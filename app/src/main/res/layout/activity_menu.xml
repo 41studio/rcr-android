@@ -53,6 +53,19 @@
             android:textSize="@dimen/f_24sp" />
 
         <Button
+            android:id="@+id/btnSetting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/_4dp"
+            android:background="@color/colorPrimary"
+            android:padding="@dimen/_16dp"
+            android:text="ACCOUNT SETTING"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/f_24sp" />
+
+        <Button
             android:id="@+id/btnLogout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

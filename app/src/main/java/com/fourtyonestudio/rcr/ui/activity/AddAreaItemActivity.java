@@ -14,7 +14,6 @@ import android.widget.ListView;
 import com.fourtyonestudio.rcr.Constant;
 import com.fourtyonestudio.rcr.R;
 import com.fourtyonestudio.rcr.models.AreaData;
-import com.fourtyonestudio.rcr.models.Indicators;
 import com.fourtyonestudio.rcr.models.LoginSession;
 import com.fourtyonestudio.rcr.networks.RestApi;
 import com.fourtyonestudio.rcr.preferences.DataPreferences;
@@ -45,46 +44,41 @@ public class AddAreaItemActivity extends AppCompatActivity {
     @Bind(R.id.etTime)
     EditText etTime;
 
-    private int id;
+    private int idArea;
 
-    ArrayList<String> listItems = new ArrayList<String>();
-    ArrayAdapter<String> adapter;
+    private ArrayList<String> listItems = new ArrayList<String>();
+    private ArrayAdapter<String> adapterArea;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_area_item);
         ButterKnife.bind(this);
-        id = getIntent().getIntExtra(Constant.EXTRAS.ID_AREA, 0);
+        idArea = getIntent().getIntExtra(Constant.EXTRAS.ID_AREA, 0);
 
-
-        adapter = new ArrayAdapter<String>(this,
+        adapterArea = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1,
                 listItems);
-        adapter.notifyDataSetChanged();
-        list.setAdapter(adapter);
+        adapterArea.notifyDataSetChanged();
+        list.setAdapter(adapterArea);
 
         etTime.setFilters(new InputFilter[]{new InputFilterMinMax("0", "23")});
 
-
-
-
     }
 
-    //METHOD WHICH WILL HANDLE DYNAMIC INSERTION
-    public void addItems(View v) {
-        KeyboardUtils.hideSoftKeyboard(this, v);
-
+    @OnClick(R.id.addTime)
+    public void clickTime(View view) {
+        KeyboardUtils.hideSoftKeyboard(this, view);
         if (!TextUtils.isEmpty(etTime.getText().toString())) {
             listItems.add(etTime.getText().toString());
-            adapter.notifyDataSetChanged();
+            adapterArea.notifyDataSetChanged();
             etTime.setText("");
         } else {
             UIHelper.showSnackbar(getCurrentFocus(), "Please input time");
             etTime.requestFocus();
         }
-
     }
+
 
     private void attemptAdd() {
 
@@ -111,7 +105,7 @@ public class AddAreaItemActivity extends AppCompatActivity {
             DataPreferences dataPreferences = new DataPreferences(this);
             LoginSession loginSession = dataPreferences.getLoginSession();
 
-            new RestApi().getApi().postAreaItems(loginSession.getAuthToken(), id, etNameArea.getText().toString(), listItems).enqueue(new Callback<AreaData>() {
+            new RestApi().getApi().postAreaItems(loginSession.getAuthToken(), idArea, etNameArea.getText().toString(), listItems).enqueue(new Callback<AreaData>() {
                 @Override
                 public void onResponse(Call<AreaData> call, Response<AreaData> response) {
                     UIHelper.dismissDialog(pDialog);

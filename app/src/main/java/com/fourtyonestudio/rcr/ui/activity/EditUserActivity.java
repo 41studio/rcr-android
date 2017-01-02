@@ -11,6 +11,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -47,15 +48,20 @@ public class EditUserActivity extends AppCompatActivity implements AdapterView.O
     Spinner spRole;
     @Bind(R.id.etName)
     EditText etName;
+    @Bind(R.id.btnDelete)
+    Button btnDelete;
 
     private String idRole = "";
-    private UserData area;
+    private UserData userData;
     private List<RolesDatum> listRole = new ArrayList<>();
 
     private String id;
     private String name;
     private String email;
     private String role;
+
+    private LoginSession loginSession;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +76,16 @@ public class EditUserActivity extends AppCompatActivity implements AdapterView.O
 
         etUsername.setText(email);
         etName.setText(name);
+
+        DataPreferences dataPreferences = new DataPreferences(this);
+        loginSession = dataPreferences.getLoginSession();
+
+
+        if (loginSession.getUser().getId() == Integer.parseInt(id)) {
+            btnDelete.setVisibility(View.GONE);
+        } else {
+            btnDelete.setVisibility(View.VISIBLE);
+        }
 
         getRoles();
 
@@ -91,32 +107,55 @@ public class EditUserActivity extends AppCompatActivity implements AdapterView.O
     @OnClick(R.id.btnDelete)
     public void delete(View view) {
         KeyboardUtils.hideSoftKeyboard(this, view);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setTitle("Confirm");
-        builder.setMessage("Are you sure?");
 
-        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+        if (loginSession.getUser().getRole().equals(Constant.EXTRAS.MANAGER)) {
+            if (role.equals(Constant.EXTRAS.HELPER)) {
 
-            public void onClick(DialogInterface dialog, int which) {
-                // Do nothing but close the dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Confirm");
+                builder.setMessage("Are you sure?");
+                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
 
-                deleteUser();
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteUser();
+                    }
+                });
+
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog alert = builder.create();
+                alert.show();
             }
-        });
 
-        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+        } else if (loginSession.getUser().getRole().equals(Constant.EXTRAS.OWNER)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Confirm");
+            builder.setMessage("Are you sure?");
+            builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
 
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+                public void onClick(DialogInterface dialog, int which) {
+                    deleteUser();
+                }
+            });
 
-                // Do nothing
-                dialog.dismiss();
-            }
-        });
+            builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
 
-        AlertDialog alert = builder.create();
-        alert.show();
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
 
 
     }
@@ -125,7 +164,20 @@ public class EditUserActivity extends AppCompatActivity implements AdapterView.O
     @OnClick(R.id.btnRegisterNow)
     public void onClick(View view) {
         KeyboardUtils.hideSoftKeyboard(this, view);
-        attemptRegister();
+        if (loginSession.getUser().getRole().equals(Constant.EXTRAS.MANAGER)) {
+            if (role.equals(Constant.EXTRAS.HELPER)) {
+                attemptRegister();
+            }
+
+            if (loginSession.getUser().getId() == Integer.parseInt(id)) {
+                attemptRegister();
+            }
+
+        } else if (loginSession.getUser().getRole().equals(Constant.EXTRAS.OWNER)) {
+            attemptRegister();
+        }
+
+
     }
 
     private void attemptRegister() {
@@ -262,8 +314,8 @@ public class EditUserActivity extends AppCompatActivity implements AdapterView.O
 
     private void getUserDetails() {
         if (getIntent().hasExtra(Constant.EXTRAS.AREA)) {
-            area = (UserData) getIntent().getExtras().get(Constant.EXTRAS.AREA);
-            etUsername.setText(area.getAttributes().getEmail());
+            userData = (UserData) getIntent().getExtras().get(Constant.EXTRAS.AREA);
+            etUsername.setText(userData.getAttributes().getEmail());
 
 
         }

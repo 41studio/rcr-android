@@ -18,12 +18,10 @@ import com.fourtyonestudio.rcr.models.AreaResponse;
 import com.fourtyonestudio.rcr.models.LoginSession;
 import com.fourtyonestudio.rcr.networks.RestApi;
 import com.fourtyonestudio.rcr.preferences.DataPreferences;
-import com.fourtyonestudio.rcr.tables.ItemAreaTable;
 import com.fourtyonestudio.rcr.ui.adapter.AreaAdapter;
 import com.fourtyonestudio.rcr.utils.CommonUtils;
 import com.fourtyonestudio.rcr.utils.Retrofit2Utils;
 import com.fourtyonestudio.rcr.utils.UIHelper;
-import com.orm.SugarRecord;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +42,8 @@ public class AreaListingActivity extends AppCompatActivity {
     RecyclerView rvArea;
     @Bind(R.id.fab_add)
     FloatingActionButton fabAdd;
-    private List<Area> areas;
-    private AreaAdapter adapter;
+    private List<Area> areaList;
+    private AreaAdapter areaAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,18 +58,18 @@ public class AreaListingActivity extends AppCompatActivity {
         rvArea.setLayoutManager(layoutManager);
         rvArea.setHasFixedSize(true);
 
-        areas = new ArrayList<>();
-        adapter = new AreaAdapter(AreaListingActivity.this, areas);
-        adapter.notifyDataSetChanged();
-        rvArea.setAdapter(adapter);
+        areaList = new ArrayList<>();
+        areaAdapter = new AreaAdapter(AreaListingActivity.this, areaList);
+        areaAdapter.notifyDataSetChanged();
+        rvArea.setAdapter(areaAdapter);
 
         getAreas();
 
         String role = new DataPreferences(this).getLoginSession().getUser().getRole();
-        if(role.equals(Constant.EXTRAS.MANAGER)){
-            fabAdd.setVisibility(View.VISIBLE);
-        }else if(role.equals(Constant.EXTRAS.HELPER)){
+        if (role.equals(Constant.EXTRAS.HELPER)) {
             fabAdd.setVisibility(View.GONE);
+        } else {
+            fabAdd.setVisibility(View.VISIBLE);
         }
 
     }
@@ -94,7 +92,6 @@ public class AreaListingActivity extends AppCompatActivity {
     }
 
 
-
     private void getAreas() {
         if (CommonUtils.isNetworkAvailable(AreaListingActivity.this)) {
             final ProgressDialog pDialog = UIHelper.showProgressDialog(AreaListingActivity.this);
@@ -105,9 +102,9 @@ public class AreaListingActivity extends AppCompatActivity {
                 public void onResponse(Call<AreaResponse> call, Response<AreaResponse> response) {
                     UIHelper.dismissDialog(pDialog);
                     if (response.isSuccessful()) {
-                        areas.clear();
-                        areas.addAll(response.body().getAreas());
-                        adapter.notifyDataSetChanged();
+                        areaList.clear();
+                        areaList.addAll(response.body().getAreas());
+                        areaAdapter.notifyDataSetChanged();
 
 
                     } else {

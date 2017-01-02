@@ -45,6 +45,20 @@ public interface ApiInterface {
                                   @Field("user[password_confirmation]") String password_conf,
                                   @Field("user[role_id]") String role_id);
 
+    @GET("users/{id}")
+    Call<UserResponse> getUserDetail(@Header("Authorization") String auth,
+                                     @Path("id") int id);
+
+    @FormUrlEncoded
+    @PUT("users/{id}")
+    Call<UserResponse> updateUser(@Header("Authorization") String auth,
+                                  @Path("id") int id,
+                                  @Field("user[email]") String email,
+                                  @Field("user[role_id]") String role,
+                                  @Field("user[name]") String name,
+                                  @Field("user[password]") String pass,
+                                  @Field("user[password_confirmation]") String pass_conf);
+
     @FormUrlEncoded
     @POST("areas")
     Call<AreaData> postArea(@Header("Authorization") String auth,

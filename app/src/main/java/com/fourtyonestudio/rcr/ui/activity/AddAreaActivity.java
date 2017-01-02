@@ -18,9 +18,6 @@ import com.fourtyonestudio.rcr.utils.KeyboardUtils;
 import com.fourtyonestudio.rcr.utils.Retrofit2Utils;
 import com.fourtyonestudio.rcr.utils.UIHelper;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -40,12 +37,11 @@ public class AddAreaActivity extends AppCompatActivity {
         ButterKnife.bind(this);
     }
 
-    private void attemptAdd() {
+    private void attemptAddArea() {
 
         if (TextUtils.isEmpty(etNameArea.getText().toString())) {
             UIHelper.showSnackbar(getCurrentFocus(), "Please input name area");
             etNameArea.requestFocus();
-
         } else {
             addArea();
         }
@@ -54,7 +50,7 @@ public class AddAreaActivity extends AppCompatActivity {
     @OnClick(R.id.btnAdd)
     public void onClick(View view) {
         KeyboardUtils.hideSoftKeyboard(this, view);
-        attemptAdd();
+        attemptAddArea();
 
     }
 
@@ -87,8 +83,6 @@ public class AddAreaActivity extends AppCompatActivity {
             UIHelper.showSnackbar(getCurrentFocus(), Constant.MESSAGE.NO_INET);
         }
     }
-
-
 
 
 }

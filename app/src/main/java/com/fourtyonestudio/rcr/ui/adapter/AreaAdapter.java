@@ -26,12 +26,12 @@ import butterknife.ButterKnife;
 
 public class AreaAdapter extends RecyclerView.Adapter<AreaAdapter.ViewHolder> {
 
-    private List<Area> list = new ArrayList<>();
+    private List<Area> areaList = new ArrayList<>();
     private Context context;
 
     public AreaAdapter(Context context, List<Area> list) {
         this.context = context;
-        this.list = list;
+        this.areaList = list;
     }
 
     @Override
@@ -42,20 +42,14 @@ public class AreaAdapter extends RecyclerView.Adapter<AreaAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        final Area area = list.get(holder.getAdapterPosition());
+        final Area area = areaList.get(holder.getAdapterPosition());
         holder.tvName.setText(area.getAttributes().getName());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(context, ItemListingActivity.class);
-//                intent.putExtra(Constant.EXTRAS.AREA, area);
-//                context.startActivity(intent);
-
-                //getAreas(area.getId());
 
                 Intent intent = new Intent(context, AreaItemListingActivity.class);
                 intent.putExtra(Constant.EXTRAS.ID_AREA, area.getId());
-                //intent.putExtra(Constant.EXTRAS.AREA, response.body().getAreas());
                 context.startActivity(intent);
             }
         });
@@ -75,7 +69,7 @@ public class AreaAdapter extends RecyclerView.Adapter<AreaAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return list == null ? 0 : list.size();
+        return areaList == null ? 0 : areaList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -88,33 +82,4 @@ public class AreaAdapter extends RecyclerView.Adapter<AreaAdapter.ViewHolder> {
         }
     }
 
-//    private void getAreas(int id) {
-//        if (CommonUtils.isNetworkAvailable(context)) {
-//            final ProgressDialog pDialog = UIHelper.showProgressDialog((Activity) context);
-//            DataPreferences dataPreferences = new DataPreferences(context);
-//            LoginSession loginSession = dataPreferences.getLoginSession();
-//            new RestApi().getApi().getAreaDetail(loginSession.getAuth_token(), id).enqueue(new Callback<AreaDetailResponse>() {
-//                @Override
-//                public void onResponse(Call<AreaDetailResponse> call, Response<AreaDetailResponse> response) {
-//                    UIHelper.dismissDialog(pDialog);
-//                    if (response.isSuccessful()) {
-//                        Intent intent = new Intent(context, AreaItemListingActivity.class);
-//                        intent.putExtra(Constant.EXTRAS.ID_AREA, area.getId());
-//                        //intent.putExtra(Constant.EXTRAS.AREA, response.body().getAreas());
-//                        context.startActivity(intent);
-//                    } else {
-//                        UIHelper.showSnackbar(((Activity) context).getCurrentFocus(), Retrofit2Utils.getMessageError(response));
-//                    }
-//                }
-//
-//                @Override
-//                public void onFailure(Call<AreaDetailResponse> call, Throwable t) {
-//                    UIHelper.dismissDialog(pDialog);
-//                    UIHelper.showSnackbar(((Activity) context).getCurrentFocus(), Constant.MESSAGE.ERROR_GET);
-//                }
-//            });
-//        } else {
-//            UIHelper.showSnackbar(((Activity) context).getCurrentFocus(), Constant.MESSAGE.NO_INET);
-//        }
-//    }
 }

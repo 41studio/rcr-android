@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +35,7 @@ import com.fourtyonestudio.rcr.utils.UIHelper;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.Bind;
@@ -50,12 +50,12 @@ import retrofit2.Response;
 
 public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> {
 
-    private List<AreaItemList> list = new ArrayList<>();
+    private List<AreaItemList> areaItemLists = new ArrayList<>();
     private Context context;
 
     public ItemsAdapter(Context context, List<AreaItemList> list) {
         this.context = context;
-        this.list = list;
+        this.areaItemLists = list;
     }
 
     @Override
@@ -67,55 +67,98 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(final ItemsAdapter.ViewHolder holder, final int position) {
-        final AreaItemList area = list.get(holder.getAdapterPosition());
-        holder.tvName.setText(area.getName());
+        final AreaItemList itemList = areaItemLists.get(holder.getAdapterPosition());
+        holder.tvName.setText(itemList.getName());
 
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
                 Intent intent = new Intent(context, EditAreaItemActivity.class);
-                intent.putExtra(Constant.EXTRAS.AREA, (Serializable) area);
-                intent.putExtra(Constant.EXTRAS.ID_AREA, area.getId());
+                intent.putExtra(Constant.EXTRAS.AREA, (Serializable) itemList);
+                intent.putExtra(Constant.EXTRAS.ID_AREA, itemList.getId());
                 context.startActivity(intent);
                 return false;
             }
         });
 
         String role = new DataPreferences(context).getLoginSession().getUser().getRole();
-        if (role.equals(Constant.EXTRAS.MANAGER)) {
-            for (int j = 0; j < area.getTimes().size(); j++) {
+        if (role.equals(Constant.EXTRAS.HELPER)) {
+            for (int j = 0; j < itemList.getTimes().size(); j++) {
 
-                //final List<ItemAreaTable> itemAreaTables = SugarRecord.find(ItemAreaTable.class, "idtimes = ?", Integer.toString(area.getTimes().get(j).getId()));
+                LayoutInflater i = LayoutInflater.from(context);
+                View view = i.inflate(R.layout.child_helper, holder.parent, false);
+
+                TextView tvTime = (TextView) view.findViewById(R.id.tvTime);
+                tvTime.setText(itemList.getTimes().get(j).getTime());
+
+                int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+
+                CheckBox chxTime = (CheckBox) view.findViewById(R.id.chx_time);
+
+                if (itemList.getTimes().get(j).getAppraisals() != null) {
+                    chxTime.setChecked(itemList.getTimes().get(j).getAppraisals().getChecked());
+
+                } else {
+                    final int finalJ = j;
+
+                    if (Integer.parseInt(itemList.getTimes().get(j).getTime()) < hour) {
+                        chxTime.setEnabled(true);
+                        chxTime.setOnClickListener(new View.OnClickListener() {
+
+                            @Override
+                            public void onClick(View v) {
+                                if (((CheckBox) v).isChecked()) {
+                                    postAppraisals(itemList.getTimes().get(finalJ).getId());
+//                            Toast.makeText(context,
+//                                    "Checked" + itemList.getAttributes().getTimes().get(finalJ).getTime(), Toast.LENGTH_LONG).show();
+                                }
+
+                            }
+                        });
+                    } else {
+                        chxTime.setEnabled(false);
+                    }
+                }
+
+
+                holder.parent.addView(view);
+            }
+        } else {
+            for (int j = 0; j < itemList.getTimes().size(); j++) {
+
+                //final List<ItemAreaTable> itemAreaTables = SugarRecord.find(ItemAreaTable.class, "idtimes = ?", Integer.toString(itemList.getTimes().get(j).getId()));
                 LayoutInflater i = LayoutInflater.from(context);
                 View view = i.inflate(R.layout.child_manager, holder.parent, false);
 
                 CheckBox chx = (CheckBox) view.findViewById(R.id.chx);
                 chx.setChecked(false);
-
+                chx.setEnabled(false);
 
                 //Set time appriasals
                 TextView tvTime = (TextView) view.findViewById(R.id.tvTime);
-                tvTime.setText(area.getTimes().get(j).getTime());
+                tvTime.setText(itemList.getTimes().get(j).getTime());
 
                 final TextView tvRate = (TextView) view.findViewById(R.id.tvRate);
 
-                if (area.getTimes().get(j).getAppraisals() != null) {
+                if (itemList.getTimes().get(j).getAppraisals() != null) {
 
-                    if (area.getTimes().get(j).getAppraisals().getChecked() != null) {
-                        chx.setChecked(area.getTimes().get(j).getAppraisals().getChecked());
+                    if (itemList.getTimes().get(j).getAppraisals().getChecked() != null) {
+                        chx.setEnabled(true);
+                        chx.setChecked(itemList.getTimes().get(j).getAppraisals().getChecked());
                     } else {
+                        chx.setEnabled(false);
                         chx.setChecked(false);
                     }
 
                     //Set rate appriasals
-                    if (area.getTimes().get(j).getAppraisals().getIndicator() != null) {
-                        tvRate.setText(area.getTimes().get(j).getAppraisals().getIndicator());
+                    if (itemList.getTimes().get(j).getAppraisals().getIndicator() != null) {
+                        tvRate.setText(itemList.getTimes().get(j).getAppraisals().getIndicator());
                     }
 
                     ImageView imgAdd = (ImageView) view.findViewById(R.id.add);
                     ImageView imgCheck = (ImageView) view.findViewById(R.id.checkmark);
 
-                    if (area.getTimes().get(j).getAppraisals().getDescription() != null) {
+                    if (itemList.getTimes().get(j).getAppraisals().getDescription() != null) {
                         imgAdd.setVisibility(View.GONE);
                         imgCheck.setVisibility(View.VISIBLE);
                     } else {
@@ -138,8 +181,8 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
                             final EditText text = (EditText) dialog.findViewById(R.id.etDescription);
                             Button btnRate = (Button) dialog.findViewById(R.id.btnAddRate);
 
-                            if (area.getTimes().get(finalJ).getAppraisals().getDescription() != null) {
-                                text.setText(area.getTimes().get(finalJ).getAppraisals().getDescription());
+                            if (itemList.getTimes().get(finalJ).getAppraisals().getDescription() != null) {
+                                text.setText(itemList.getTimes().get(finalJ).getAppraisals().getDescription());
                             }
 
                             btnRate.setOnClickListener(new View.OnClickListener() {
@@ -147,13 +190,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
                                 public void onClick(View v) {
 
                                     if (!TextUtils.isEmpty(text.getText().toString())) {
-                                        Log.d("id appriasal" + area.getTimes().get(finalJ).getAppraisals().getId(), text.getText().toString());
-                                        putAppraisalsDesc(area.getTimes().get(finalJ).getAppraisals().getId(), text.getText().toString());
-//                                    if (area.getTimes().get(finalJ).getAppraisals().getDescription() != null) {
-//                                        //update
-//                                    } else {
-//                                        //create new
-//                                    }
+                                        putAppraisalsDesc(itemList.getTimes().get(finalJ).getAppraisals().getId(), text.getText().toString());
                                     } else {
                                         Toast.makeText(context, "Please fill the description first", Toast.LENGTH_SHORT).show();
                                     }
@@ -191,8 +228,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
                                         dialog.dismiss();
                                     } else {
 
-                                        Log.d("id appriasal" + area.getTimes().get(finalJ).getAppraisals().getId(), "id indicator" + indicators.getData().get(item).getId());
-                                        putAppraisals(area.getTimes().get(finalJ).getAppraisals().getId(), indicators.getData().get(item).getId());
+                                        putAppraisals(itemList.getTimes().get(finalJ).getAppraisals().getId(), indicators.getData().get(item).getId());
 
 //                                        itemAreaTables.get(0).setIndicator(indicators.getData().get(item).getAttributes().getCode());
 //                                        itemAreaTables.get(0).save();
@@ -212,39 +248,6 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
                 }
                 holder.parent.addView(view);
             }
-        } else if (role.equals(Constant.EXTRAS.HELPER)) {
-            for (int j = 0; j < area.getTimes().size(); j++) {
-
-                // final List<ItemAreaTable> itemAreaTables = SugarRecord.find(ItemAreaTable.class, "idtimes = ?", Integer.toString(area.getTimes().get(j).getId()));
-                LayoutInflater i = LayoutInflater.from(context);
-                View view = i.inflate(R.layout.child_helper, holder.parent, false);
-                TextView tvTime = (TextView) view.findViewById(R.id.tvTime);
-                tvTime.setText(area.getTimes().get(j).getTime());
-
-                CheckBox chxTime = (CheckBox) view.findViewById(R.id.chx_time);
-
-                if (area.getTimes().get(j).getAppraisals() != null) {
-                    chxTime.setChecked(area.getTimes().get(j).getAppraisals().getChecked());
-
-                } else {
-                    final int finalJ = j;
-                    chxTime.setOnClickListener(new View.OnClickListener() {
-
-                        @Override
-                        public void onClick(View v) {
-                            if (((CheckBox) v).isChecked()) {
-                                postAppraisals(area.getTimes().get(finalJ).getId());
-//                            Toast.makeText(context,
-//                                    "Checked" + area.getAttributes().getTimes().get(finalJ).getTime(), Toast.LENGTH_LONG).show();
-                            }
-
-                        }
-                    });
-                }
-
-
-                holder.parent.addView(view);
-            }
         }
 
 
@@ -255,7 +258,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return list == null ? 0 : list.size();
+        return areaItemLists == null ? 0 : areaItemLists.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

@@ -44,7 +44,7 @@ public class EditAreaItemActivity extends AppCompatActivity {
     @Bind(R.id.top)
     LinearLayout top;
 
-    private AreaItemList area;
+    private AreaItemList areaItemList;
     private int id;
     private List<EditText> etList = new ArrayList<>();
 
@@ -58,15 +58,13 @@ public class EditAreaItemActivity extends AppCompatActivity {
         id = getIntent().getIntExtra(Constant.EXTRAS.ID_AREA, 0);
 
         getAreaDetails();
-
-
     }
 
 
     private void attemptAdd() {
 
         if (TextUtils.isEmpty(etNameArea.getText().toString())) {
-            UIHelper.showSnackbar(getCurrentFocus(), "Please input name area");
+            UIHelper.showSnackbar(getCurrentFocus(), "Please input name areaItemList");
             etNameArea.requestFocus();
 
         } else {
@@ -75,7 +73,7 @@ public class EditAreaItemActivity extends AppCompatActivity {
 
             for (int x = 0; x < etList.size(); x++) {
                 if (etList.get(x).getText().toString().matches("")) {
-                    UIHelper.showSnackbar(getCurrentFocus(), "Please input time area");
+                    UIHelper.showSnackbar(getCurrentFocus(), "Please input time areaItemList");
                     startHit = false;
                     break;
                 }
@@ -93,8 +91,6 @@ public class EditAreaItemActivity extends AppCompatActivity {
     public void onClick(View view) {
         KeyboardUtils.hideSoftKeyboard(this, view);
         attemptAdd();
-
-
     }
 
     @OnClick(R.id.btnDelete)
@@ -109,8 +105,6 @@ public class EditAreaItemActivity extends AppCompatActivity {
         builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int which) {
-                // Do nothing but close the dialog
-
                 deleteItemArea();
             }
         });
@@ -119,8 +113,6 @@ public class EditAreaItemActivity extends AppCompatActivity {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
-                // Do nothing
                 dialog.dismiss();
             }
         });
@@ -134,15 +126,15 @@ public class EditAreaItemActivity extends AppCompatActivity {
 
     private void getAreaDetails() {
         if (getIntent().hasExtra(Constant.EXTRAS.AREA)) {
-            area = (AreaItemList) getIntent().getExtras().get(Constant.EXTRAS.AREA);
-            etNameArea.setText(area.getName());
+            areaItemList = (AreaItemList) getIntent().getExtras().get(Constant.EXTRAS.AREA);
+            etNameArea.setText(areaItemList.getName());
 
-            for (int j = 0; j < area.getTimes().size(); j++) {
+            for (int j = 0; j < areaItemList.getTimes().size(); j++) {
 
                 LayoutInflater i = LayoutInflater.from(this);
                 View view = i.inflate(R.layout.item_time, top, false);
                 EditText etTime = (EditText) view.findViewById(R.id.et_time);
-                etTime.setText(area.getTimes().get(j).getTime());
+                etTime.setText(areaItemList.getTimes().get(j).getTime());
                 etTime.setFilters(new InputFilter[]{new InputFilterMinMax("0", "23")});
                 top.addView(view);
 
@@ -160,7 +152,7 @@ public class EditAreaItemActivity extends AppCompatActivity {
             final ProgressDialog pDialog = UIHelper.showProgressDialog(this);
             DataPreferences dataPreferences = new DataPreferences(this);
             LoginSession loginSession = dataPreferences.getLoginSession();
-            new RestApi().getApi().deleteItemArea(loginSession.getAuthToken(), id, area.getId()).enqueue(new Callback<String>() {
+            new RestApi().getApi().deleteItemArea(loginSession.getAuthToken(), id, areaItemList.getId()).enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
                     UIHelper.dismissDialog(pDialog);
@@ -189,9 +181,9 @@ public class EditAreaItemActivity extends AppCompatActivity {
             final ProgressDialog pDialog = UIHelper.showProgressDialog(this);
 
             List<ItemTimeAttributesRequest> itemTimesAttributes = new ArrayList<>();
-            for (int i = 0; i < area.getTimes().size(); i++) {
+            for (int i = 0; i < areaItemList.getTimes().size(); i++) {
 
-                itemTimesAttributes.add(new ItemTimeAttributesRequest(Integer.toString(area.getTimes().get(i).getId()), etList.get(i).getText().toString()));
+                itemTimesAttributes.add(new ItemTimeAttributesRequest(Integer.toString(areaItemList.getTimes().get(i).getId()), etList.get(i).getText().toString()));
 
             }
 
@@ -202,7 +194,7 @@ public class EditAreaItemActivity extends AppCompatActivity {
 
             DataPreferences dataPreferences = new DataPreferences(this);
             LoginSession loginSession = dataPreferences.getLoginSession();
-            new RestApi().getApi().putItemsArea(loginSession.getAuthToken(), id, area.getId(), itemAreaRequest).enqueue(new Callback<AreaDetailResponse>() {
+            new RestApi().getApi().putItemsArea(loginSession.getAuthToken(), id, areaItemList.getId(), itemAreaRequest).enqueue(new Callback<AreaDetailResponse>() {
                 @Override
                 public void onResponse(Call<AreaDetailResponse> call, Response<AreaDetailResponse> response) {
                     UIHelper.dismissDialog(pDialog);

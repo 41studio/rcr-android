@@ -10,7 +10,9 @@ import android.widget.TextView;
 
 import com.fourtyonestudio.rcr.Constant;
 import com.fourtyonestudio.rcr.R;
+import com.fourtyonestudio.rcr.models.LoginSession;
 import com.fourtyonestudio.rcr.models.UserData;
+import com.fourtyonestudio.rcr.preferences.DataPreferences;
 import com.fourtyonestudio.rcr.ui.activity.EditUserActivity;
 
 import java.util.ArrayList;
@@ -41,40 +43,51 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final UserAdapter.ViewHolder holder, final int position) {
-        final UserData area = list.get(holder.getAdapterPosition());
+        final UserData userData = list.get(holder.getAdapterPosition());
 
-        holder.tvName.setText(area.getAttributes().getName());
-        holder.tvEmail.setText(area.getAttributes().getEmail());
-        holder.tvRole.setText(area.getAttributes().getRole());
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                Intent intent = new Intent(context, ItemListingActivity.class);
-//                intent.putExtra(Constant.EXTRAS.AREA, area);
-//                context.startActivity(intent);
-
-                //getAreas(area.getId());
-
-//                Intent intent = new Intent(context, AreaItemListingActivity.class);
-//                intent.putExtra(Constant.EXTRAS.ID_AREA, area.getId());
-//                //intent.putExtra(Constant.EXTRAS.AREA, response.body().getAreas());
-//                context.startActivity(intent);
-            }
-        });
+        holder.tvName.setText(userData.getAttributes().getName());
+        holder.tvEmail.setText(userData.getAttributes().getEmail());
+        holder.tvRole.setText(userData.getAttributes().getRole());
+//        holder.itemView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//            }
+//        });
 
 
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                if (!area.getAttributes().getRole().equals("owner")) {
-                    Intent intent = new Intent(context, EditUserActivity.class);
-                    intent.putExtra(Constant.EXTRAS.NAME_AREA, area.getAttributes().getName());
-                    intent.putExtra(Constant.EXTRAS.ID_USER, area.getId());
-                    intent.putExtra(Constant.EXTRAS.ROLE_USER, area.getAttributes().getRole());
-                    intent.putExtra(Constant.EXTRAS.EMAIL_AREA, area.getAttributes().getEmail());
 
-                    context.startActivity(intent);
+                DataPreferences dataPreferences = new DataPreferences(context);
+                LoginSession loginSession = dataPreferences.getLoginSession();
+
+                if (loginSession.getUser().getRole().equals(Constant.EXTRAS.MANAGER)) {
+
+                    if (userData.getAttributes().getRole().equals(Constant.EXTRAS.HELPER)) {
+                        Intent intent = new Intent(context, EditUserActivity.class);
+                        intent.putExtra(Constant.EXTRAS.NAME_AREA, userData.getAttributes().getName());
+                        intent.putExtra(Constant.EXTRAS.ID_USER, userData.getId());
+                        intent.putExtra(Constant.EXTRAS.ROLE_USER, userData.getAttributes().getRole());
+                        intent.putExtra(Constant.EXTRAS.EMAIL_AREA, userData.getAttributes().getEmail());
+                        context.startActivity(intent);
+
+                    }
+
+                } else if (loginSession.getUser().getRole().equals(Constant.EXTRAS.OWNER)) {
+                    if (loginSession.getUser().getId() != Integer.parseInt(userData.getId())) {
+                        Intent intent = new Intent(context, EditUserActivity.class);
+                        intent.putExtra(Constant.EXTRAS.NAME_AREA, userData.getAttributes().getName());
+                        intent.putExtra(Constant.EXTRAS.ID_USER, userData.getId());
+                        intent.putExtra(Constant.EXTRAS.ROLE_USER, userData.getAttributes().getRole());
+                        intent.putExtra(Constant.EXTRAS.EMAIL_AREA, userData.getAttributes().getEmail());
+                        context.startActivity(intent);
+                    }
+
+
                 }
+
                 return false;
             }
         });

@@ -8,7 +8,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -43,8 +42,8 @@ public class UserListingActivity extends AppCompatActivity {
     RecyclerView rvArea;
     @Bind(R.id.fab_add)
     FloatingActionButton fabAdd;
-    private List<UserData> areas;
-    private UserAdapter adapter;
+    private List<UserData> listUserData;
+    private UserAdapter userAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,18 +57,18 @@ public class UserListingActivity extends AppCompatActivity {
         rvArea.setLayoutManager(layoutManager);
         rvArea.setHasFixedSize(true);
 
-        areas = new ArrayList<>();
-        adapter = new UserAdapter(UserListingActivity.this, areas);
-        adapter.notifyDataSetChanged();
-        rvArea.setAdapter(adapter);
+        listUserData = new ArrayList<>();
+        userAdapter = new UserAdapter(UserListingActivity.this, listUserData);
+        userAdapter.notifyDataSetChanged();
+        rvArea.setAdapter(userAdapter);
 
         getUser();
 
         String role = new DataPreferences(this).getLoginSession().getUser().getRole();
-        if (role.equals(Constant.EXTRAS.MANAGER)) {
-            fabAdd.setVisibility(View.VISIBLE);
-        } else if (role.equals(Constant.EXTRAS.HELPER)) {
+        if (role.equals(Constant.EXTRAS.HELPER)) {
             fabAdd.setVisibility(View.GONE);
+        } else {
+            fabAdd.setVisibility(View.VISIBLE);
         }
 
     }
@@ -78,15 +77,12 @@ public class UserListingActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-
-
         boolean isLoadArea = new DataPreferences(this).isLoadArea();
-        Log.d("resume", "resume");
-        Log.d("resume", Boolean.toString(isLoadArea));
         if (isLoadArea) {
             getUser();
             new DataPreferences(this).setLoadArea(false);
         }
+
     }
 
     @OnClick(R.id.fab_add)
@@ -106,9 +102,9 @@ public class UserListingActivity extends AppCompatActivity {
                 public void onResponse(Call<UserListResponse> call, Response<UserListResponse> response) {
                     UIHelper.dismissDialog(pDialog);
                     if (response.isSuccessful()) {
-                        areas.clear();
-                        areas.addAll(response.body().getData());
-                        adapter.notifyDataSetChanged();
+                        listUserData.clear();
+                        listUserData.addAll(response.body().getData());
+                        userAdapter.notifyDataSetChanged();
 
 
                     } else {

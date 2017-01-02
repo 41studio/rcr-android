@@ -23,6 +23,7 @@ public class Constant {
         public static final String NAME_AREA = "name_area";
         public static final String EMAIL_AREA = "email_area";
         public static final String MANAGER= "manager";
+        public static final String OWNER= "owner";
         public static final String HELPER= "helper";
         public static final String RESUMEDATA= "resume";
     }

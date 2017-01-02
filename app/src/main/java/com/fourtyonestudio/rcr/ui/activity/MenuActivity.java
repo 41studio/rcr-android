@@ -10,8 +10,6 @@ import android.widget.Button;
 import com.fourtyonestudio.rcr.Constant;
 import com.fourtyonestudio.rcr.R;
 import com.fourtyonestudio.rcr.preferences.DataPreferences;
-import com.fourtyonestudio.rcr.tables.ItemAreaTable;
-import com.orm.SugarRecord;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -26,6 +24,8 @@ public class MenuActivity extends AppCompatActivity {
     Button btnAddUser;
     @Bind(R.id.btnLogout)
     Button btnLogout;
+    @Bind(R.id.btnSetting)
+    Button btnSetting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +34,10 @@ public class MenuActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         String role = new DataPreferences(this).getLoginSession().getUser().getRole();
-        if (role.equals(Constant.EXTRAS.MANAGER)) {
-            btnAddUser.setVisibility(View.VISIBLE);
-        } else if (role.equals(Constant.EXTRAS.HELPER)) {
+        if (role.equals(Constant.EXTRAS.HELPER)) {
             btnAddUser.setVisibility(View.GONE);
+        } else {
+            btnAddUser.setVisibility(View.VISIBLE);
         }
     }
 
@@ -59,6 +59,12 @@ public class MenuActivity extends AppCompatActivity {
     @OnClick(R.id.btnArea)
     public void clickArea(View view) {
         Intent intent = new Intent(this, AreaListingActivity.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.btnSetting)
+    public void clickSetting(View view) {
+        Intent intent = new Intent(this, SettingActivity.class);
         startActivity(intent);
     }
 
