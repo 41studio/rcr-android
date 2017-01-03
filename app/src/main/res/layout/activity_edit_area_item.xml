@@ -68,12 +68,14 @@
         android:orientation="vertical">
 
         <Button
+            android:textAppearance="@style/TextAppearance.FontPath"
             android:id="@+id/btnAddItem"
             style="@style/ButtonStyle.Ok"
             android:gravity="center"
             android:text="UPDATE ITEM AREA" />
 
         <Button
+            android:textAppearance="@style/TextAppearance.FontPath"
             android:id="@+id/btnDelete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

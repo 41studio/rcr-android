@@ -52,7 +52,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10dp"
             android:onClick="addItems"
-            android:text="ADD TIME" />
+            android:text="ADD TIME"
+            android:textAppearance="@style/TextAppearance.FontPath" />
 
 
     </LinearLayout>
@@ -72,7 +73,8 @@
         android:layout_alignParentBottom="true"
         android:layout_marginTop="@dimen/_10dp"
         android:gravity="center"
-        android:text="ADD AREA ITEM" />
+        android:text="ADD AREA ITEM"
+        android:textAppearance="@style/TextAppearance.FontPath" />
 
 
 </RelativeLayout>

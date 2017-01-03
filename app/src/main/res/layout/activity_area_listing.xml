@@ -8,7 +8,6 @@
     android:background="@color/bg_default"
     tools:context="com.fourtyonestudio.rcr.ui.activity.AreaListingActivity">
 
-
     <TextView
         android:id="@+id/tvCurrentDateArea"
         android:layout_width="match_parent"

@@ -97,6 +97,7 @@
             <Button
                 android:id="@+id/btnRegisterNow"
                 style="@style/ButtonStyle.Ok"
+                android:textAppearance="@style/TextAppearance.FontPath"
                 android:layout_marginTop="@dimen/_24dp"
                 android:gravity="center"
                 android:text="REGISTER NOW" />

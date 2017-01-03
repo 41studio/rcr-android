@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.fourtyonestudio.rcr.Constant;
 import com.fourtyonestudio.rcr.R;
+import com.fourtyonestudio.rcr.models.LoginSession;
 import com.fourtyonestudio.rcr.preferences.DataPreferences;
 
 import butterknife.Bind;
@@ -26,6 +28,8 @@ public class MenuActivity extends AppCompatActivity {
     Button btnLogout;
     @Bind(R.id.btnSetting)
     Button btnSetting;
+    @Bind(R.id.tv_welcome)
+    TextView tvWelcome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +43,15 @@ public class MenuActivity extends AppCompatActivity {
         } else {
             btnAddUser.setVisibility(View.VISIBLE);
         }
+
+        DataPreferences dataPreferences = new DataPreferences(this);
+        LoginSession loginSession = dataPreferences.getLoginSession();
+        if(loginSession.getUser().getName() != null){
+            tvWelcome.setText("Welcome "+loginSession.getUser().getName());
+        }else{
+            tvWelcome.setText("Welcome User");
+        }
+
     }
 
     @OnClick(R.id.btnLogout)

@@ -86,7 +86,8 @@
                 style="@style/ButtonStyle.Ok"
                 android:layout_marginTop="@dimen/_24dp"
                 android:gravity="center"
-                android:text="ADD USER" />
+                android:text="ADD USER"
+                android:textAppearance="@style/TextAppearance.FontPath" />
 
         </LinearLayout>
 

@@ -55,6 +55,7 @@
             android:textSize="@dimen/f_16sp" />
 
         <Button
+            android:textAppearance="@style/TextAppearance.FontPath"
             android:id="@+id/btnUpdate"
             style="@style/ButtonStyle.Ok"
             android:layout_marginTop="@dimen/_24dp"

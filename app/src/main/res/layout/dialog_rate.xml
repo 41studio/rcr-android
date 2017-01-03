@@ -28,6 +28,7 @@
         android:hint="Add description" />
 
     <Button
+        android:textAppearance="@style/TextAppearance.FontPath"
         android:id="@+id/btnAddRate"
         style="@style/ButtonStyle.Ok"
         android:layout_marginTop="@dimen/_10dp"

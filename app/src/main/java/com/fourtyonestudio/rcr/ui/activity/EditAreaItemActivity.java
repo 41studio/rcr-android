@@ -1,6 +1,7 @@
 package com.fourtyonestudio.rcr.ui.activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -37,6 +38,7 @@ import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class EditAreaItemActivity extends AppCompatActivity {
     @Bind(R.id.etNameArea)
@@ -215,6 +217,12 @@ public class EditAreaItemActivity extends AppCompatActivity {
         } else {
             UIHelper.showSnackbar(getCurrentFocus(), Constant.MESSAGE.NO_INET);
         }
+    }
+
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
 
