@@ -104,7 +104,8 @@ public interface ApiInterface {
     @PUT("appraisals/{id}")
     Call<AppraisalsResponse> putAppraisalsDescription(@Header("Authorization") String auth,
                                                       @Path("id") int time_id,
-                                                      @Field("appraisal[description]") String description);
+                                                      @Field("appraisal[description]") String description,
+                                                      @Field("appraisal[indicator_id]") String indicator_id);
 
     @FormUrlEncoded
     @POST("auth_user")

@@ -36,6 +36,9 @@ public class AreaItemAppraisal implements Serializable {
     @SerializedName("indicator-code")
     @Expose
     private String indicator;
+    @SerializedName("indicator-description")
+    @Expose
+    private String indicatorDescription;
     @SerializedName("checked-at")
     @Expose
     private String checkedAt;
@@ -122,5 +125,14 @@ public class AreaItemAppraisal implements Serializable {
     public void setReviewedAt(String reviewedAt) {
         this.reviewedAt = reviewedAt;
     }
+
+    public String getIndicatorDescription() {
+        return indicatorDescription;
+    }
+
+    public void setIndicatorDescription(String indicatorDescription) {
+        this.indicatorDescription = indicatorDescription;
+    }
+
 
 }
