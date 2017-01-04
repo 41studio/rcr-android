@@ -8,6 +8,7 @@ public class Constant {
     public static abstract class MESSAGE {
         public static final String TITLE_ERROR = "OOPS!";
         public static final String ERROR = "ERROR";
+        public static final String ERROR_BODY = "error";
         public static final String NO_INET = "No internet connection.";
         public static final String ERROR_GET = "Seems error when retrieve data. Please try again!";
         public static final String ERROR_POST = "Seems error when submit data. Please try again!";

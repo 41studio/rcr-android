@@ -19,6 +19,8 @@ import com.fourtyonestudio.rcr.utils.KeyboardUtils;
 import com.fourtyonestudio.rcr.utils.Retrofit2Utils;
 import com.fourtyonestudio.rcr.utils.UIHelper;
 
+import org.json.JSONObject;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -71,7 +73,12 @@ public class AddAreaActivity extends AppCompatActivity {
                         finish();
 
                     } else {
-                        UIHelper.showSnackbar(getCurrentFocus(), Retrofit2Utils.getMessageError(response));
+                        try {
+                            JSONObject jObjError = new JSONObject(response.errorBody().string());
+                            UIHelper.showSnackbar(getCurrentFocus(), jObjError.getString(Constant.MESSAGE.ERROR_BODY));
+                        } catch (Exception e) {
+                            UIHelper.showSnackbar(getCurrentFocus(), e.getMessage());
+                        }
                     }
                 }
 

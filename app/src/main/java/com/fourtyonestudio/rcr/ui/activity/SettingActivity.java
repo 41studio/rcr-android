@@ -17,8 +17,9 @@ import com.fourtyonestudio.rcr.models.UserResponse;
 import com.fourtyonestudio.rcr.networks.RestApi;
 import com.fourtyonestudio.rcr.preferences.DataPreferences;
 import com.fourtyonestudio.rcr.utils.CommonUtils;
-import com.fourtyonestudio.rcr.utils.Retrofit2Utils;
 import com.fourtyonestudio.rcr.utils.UIHelper;
+
+import org.json.JSONObject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -61,7 +62,7 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     private void attemptUpdate() {
-        if (TextUtils.isEmpty(etPassword.getText().toString())) {
+        if (TextUtils.isEmpty(etPassword.getText().toString()) || etPassword.length() < 6) {
             UIHelper.showSnackbar(getCurrentFocus(), "Please input password");
             etPassword.requestFocus();
         } else if (!etPassword.getText().toString().equals(etPasswordConfirmation.getText().toString())) {
@@ -91,7 +92,12 @@ public class SettingActivity extends AppCompatActivity {
                         etName.setText(userResponse.getData().getAttributes().getName());
 
                     } else {
-                        UIHelper.showSnackbar(getCurrentFocus(), Retrofit2Utils.getMessageError(response));
+                        try {
+                            JSONObject jObjError = new JSONObject(response.errorBody().string());
+                            UIHelper.showSnackbar(getCurrentFocus(), jObjError.getString(Constant.MESSAGE.ERROR_BODY));
+                        } catch (Exception e) {
+                            UIHelper.showSnackbar(getCurrentFocus(), e.getMessage());
+                        }
                     }
                 }
 
@@ -124,7 +130,12 @@ public class SettingActivity extends AppCompatActivity {
                         finish();
 
                     } else {
-                        UIHelper.showSnackbar(getCurrentFocus(), Retrofit2Utils.getMessageError(response));
+                        try {
+                            JSONObject jObjError = new JSONObject(response.errorBody().string());
+                            UIHelper.showSnackbar(getCurrentFocus(), jObjError.getString(Constant.MESSAGE.ERROR_BODY));
+                        } catch (Exception e) {
+                            UIHelper.showSnackbar(getCurrentFocus(), e.getMessage());
+                        }
                     }
                 }
 
