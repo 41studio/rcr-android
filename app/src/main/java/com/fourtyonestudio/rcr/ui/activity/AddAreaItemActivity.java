@@ -1,16 +1,17 @@
 package com.fourtyonestudio.rcr.ui.activity;
 
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.InputFilter;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TimePicker;
 
 import com.fourtyonestudio.rcr.Constant;
 import com.fourtyonestudio.rcr.R;
@@ -19,14 +20,13 @@ import com.fourtyonestudio.rcr.models.LoginSession;
 import com.fourtyonestudio.rcr.networks.RestApi;
 import com.fourtyonestudio.rcr.preferences.DataPreferences;
 import com.fourtyonestudio.rcr.utils.CommonUtils;
-import com.fourtyonestudio.rcr.utils.InputFilterMinMax;
 import com.fourtyonestudio.rcr.utils.KeyboardUtils;
-import com.fourtyonestudio.rcr.utils.Retrofit2Utils;
 import com.fourtyonestudio.rcr.utils.UIHelper;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -66,15 +66,51 @@ public class AddAreaItemActivity extends AppCompatActivity {
         adapterArea.notifyDataSetChanged();
         list.setAdapter(adapterArea);
 
-        etTime.setFilters(new InputFilter[]{new InputFilterMinMax("0", "23")});
+        //etTime.setFilters(new InputFilter[]{new InputFilterMinMax("0", "23")});
 
     }
+
+
+    @OnClick(R.id.etTime)
+    public void clickEtTime(View view) {
+        KeyboardUtils.hideSoftKeyboard(this, view);
+        Calendar mcurrentTime = Calendar.getInstance();
+        int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+        int minute = mcurrentTime.get(Calendar.MINUTE);
+        TimePickerDialog mTimePicker;
+        mTimePicker = new TimePickerDialog(AddAreaItemActivity.this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+
+                etTime.setText(selectedHour + ":" + selectedMinute);
+
+            }
+        }, hour, minute, true);//Yes 24 hour time
+        mTimePicker.setTitle("Select Time");
+        mTimePicker.show();
+    }
+
 
     @OnClick(R.id.addTime)
     public void clickTime(View view) {
         KeyboardUtils.hideSoftKeyboard(this, view);
         if (!TextUtils.isEmpty(etTime.getText().toString())) {
-            listItems.add(etTime.getText().toString());
+            if(listItems.size() == 0) {
+                listItems.add(etTime.getText().toString());
+
+            }else{
+                for (int i = 0; i < listItems.size(); i++) {
+                    if (!etTime.getText().toString().equals(listItems.get(i).toString())) {
+                        listItems.add(etTime.getText().toString());
+                    } else {
+                        UIHelper.showSnackbar(getCurrentFocus(), "Sorry, time have been added");
+                        break;
+
+                    }
+                }
+            }
+
+
             adapterArea.notifyDataSetChanged();
             etTime.setText("");
         } else {

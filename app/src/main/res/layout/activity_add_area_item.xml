@@ -39,6 +39,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/layer_edittext"
             android:hint="Time Item"
+            android:focusable="false"
             android:inputType="number"
             android:padding="@dimen/_10dp"
             android:singleLine="true"

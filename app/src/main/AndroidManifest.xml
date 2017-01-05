@@ -61,7 +61,8 @@
         <activity android:name=".ui.activity.EditAreaItemActivity" />
         <activity android:name=".ui.activity.UserListingActivity" />
         <activity android:name=".ui.activity.EditUserActivity" />
-        <activity android:name=".ui.activity.SettingActivity"></activity>
+        <activity android:name=".ui.activity.SettingActivity" />
+
     </application>
 
 </manifest>

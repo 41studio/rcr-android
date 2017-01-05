@@ -101,23 +101,33 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
                 } else {
                     final int finalJ = j;
 
-                    if (Integer.parseInt(itemList.getTimes().get(j).getTime()) < hour) {
-                        chxTime.setEnabled(true);
-                        chxTime.setOnClickListener(new View.OnClickListener() {
+                    String regexStr = "^[0-9]*$";
 
-                            @Override
-                            public void onClick(View v) {
-                                if (((CheckBox) v).isChecked()) {
-                                    postAppraisals(itemList.getTimes().get(finalJ).getId());
+                    if(itemList.getTimes().get(j).getTime().trim().matches(regexStr))
+                    {
+                        if (Integer.parseInt(itemList.getTimes().get(j).getTime()) < hour) {
+                            chxTime.setEnabled(true);
+                            chxTime.setOnClickListener(new View.OnClickListener() {
+
+                                @Override
+                                public void onClick(View v) {
+                                    if (((CheckBox) v).isChecked()) {
+                                        postAppraisals(itemList.getTimes().get(finalJ).getId());
 //                            Toast.makeText(context,
 //                                    "Checked" + itemList.getAttributes().getTimes().get(finalJ).getTime(), Toast.LENGTH_LONG).show();
-                                }
+                                    }
 
-                            }
-                        });
-                    } else {
+                                }
+                            });
+                        } else {
+                            chxTime.setEnabled(false);
+                        }
+                    }
+                    else{
                         chxTime.setEnabled(false);
                     }
+
+
                 }
 
 

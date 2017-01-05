@@ -46,9 +46,9 @@ public class MenuActivity extends AppCompatActivity {
 
         DataPreferences dataPreferences = new DataPreferences(this);
         LoginSession loginSession = dataPreferences.getLoginSession();
-        if(loginSession.getUser().getName() != null){
-            tvWelcome.setText("Welcome "+loginSession.getUser().getName());
-        }else{
+        if (loginSession.getUser().getName() != null) {
+            tvWelcome.setText("Welcome " + loginSession.getUser().getName());
+        } else {
             tvWelcome.setText("Welcome User");
         }
 
