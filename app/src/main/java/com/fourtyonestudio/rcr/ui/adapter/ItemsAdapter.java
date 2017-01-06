@@ -30,14 +30,18 @@ import com.fourtyonestudio.rcr.preferences.DataPreferences;
 import com.fourtyonestudio.rcr.ui.activity.EditAreaItemActivity;
 import com.fourtyonestudio.rcr.utils.CommonUtils;
 import com.fourtyonestudio.rcr.utils.KeyboardUtils;
-import com.fourtyonestudio.rcr.utils.Retrofit2Utils;
 import com.fourtyonestudio.rcr.utils.UIHelper;
 
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -92,7 +96,12 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
 
                 TextView tvTime = (TextView) view.findViewById(R.id.tvTime);
                 tvTime.setText(itemList.getTimes().get(j).getTime());
+
+
+                final NumberFormat formatter = new DecimalFormat("00");
                 int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+                int minute = Calendar.getInstance().get(Calendar.MINUTE);
+                String time = formatter.format(hour) + ":" + formatter.format(minute);
 
                 CheckBox chxTime = (CheckBox) view.findViewById(R.id.chx_time);
                 if (itemList.getTimes().get(j).getAppraisals() != null) {
@@ -101,11 +110,14 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
                 } else {
                     final int finalJ = j;
 
-                    String regexStr = "^[0-9]*$";
+                    String pattern = "HH:mm";
+                    SimpleDateFormat sdf = new SimpleDateFormat(pattern);
 
-                    if(itemList.getTimes().get(j).getTime().trim().matches(regexStr))
-                    {
-                        if (Integer.parseInt(itemList.getTimes().get(j).getTime()) < hour) {
+                    try {
+                        Date date1 = sdf.parse(itemList.getTimes().get(j).getTime());
+                        Date date2 = sdf.parse(time);
+
+                        if (date1.before(date2)) {
                             chxTime.setEnabled(true);
                             chxTime.setOnClickListener(new View.OnClickListener() {
 
@@ -120,12 +132,56 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
                                 }
                             });
                         } else {
+
                             chxTime.setEnabled(false);
                         }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                     }
-                    else{
-                        chxTime.setEnabled(false);
-                    }
+
+//                    if (Integer.parseInt(itemList.getTimes().get(j).getTime()) < hour) {
+//                        chxTime.setEnabled(true);
+//                        chxTime.setOnClickListener(new View.OnClickListener() {
+//
+//                            @Override
+//                            public void onClick(View v) {
+//                                if (((CheckBox) v).isChecked()) {
+//                                    postAppraisals(itemList.getTimes().get(finalJ).getId());
+////                            Toast.makeText(context,
+////                                    "Checked" + itemList.getAttributes().getTimes().get(finalJ).getTime(), Toast.LENGTH_LONG).show();
+//                                }
+//
+//                            }
+//                        });
+//                    } else {
+//                        chxTime.setEnabled(false);
+//                    }
+
+//                    String regexStr = "^[0-9]*$";
+//
+//                    if(itemList.getTimes().get(j).getTime().trim().matches(regexStr))
+//                    {
+//                        if (Integer.parseInt(itemList.getTimes().get(j).getTime()) < hour) {
+//                            chxTime.setEnabled(true);
+//                            chxTime.setOnClickListener(new View.OnClickListener() {
+//
+//                                @Override
+//                                public void onClick(View v) {
+//                                    if (((CheckBox) v).isChecked()) {
+//                                        postAppraisals(itemList.getTimes().get(finalJ).getId());
+////                            Toast.makeText(context,
+////                                    "Checked" + itemList.getAttributes().getTimes().get(finalJ).getTime(), Toast.LENGTH_LONG).show();
+//                                    }
+//
+//                                }
+//                            });
+//                        } else {
+//                            chxTime.setEnabled(false);
+//                        }
+//                    }
+//                    else{
+//                        chxTime.setEnabled(false);
+//                    }
 
 
                 }
