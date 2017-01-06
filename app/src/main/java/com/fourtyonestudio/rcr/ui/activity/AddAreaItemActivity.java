@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -95,19 +96,24 @@ public class AddAreaItemActivity extends AppCompatActivity {
     public void clickTime(View view) {
         KeyboardUtils.hideSoftKeyboard(this, view);
         if (!TextUtils.isEmpty(etTime.getText().toString())) {
-            if(listItems.size() == 0) {
+            if (listItems.size() == 0) {
                 listItems.add(etTime.getText().toString());
 
-            }else{
+            } else {
+                boolean isFound = false;
                 for (int i = 0; i < listItems.size(); i++) {
-                    if (!etTime.getText().toString().equals(listItems.get(i).toString())) {
-                        listItems.add(etTime.getText().toString());
-                    } else {
-                        UIHelper.showSnackbar(getCurrentFocus(), "Sorry, time have been added");
+                    if (etTime.getText().toString().equals(listItems.get(i).toString())) {
+                        isFound = true;
                         break;
-
                     }
                 }
+
+                if (isFound) {
+                    UIHelper.showSnackbar(getCurrentFocus(), "Sorry, time have been added");
+                } else {
+                    listItems.add(etTime.getText().toString());
+                }
+
             }
 
 

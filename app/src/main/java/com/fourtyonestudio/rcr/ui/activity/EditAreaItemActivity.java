@@ -154,16 +154,19 @@ public class EditAreaItemActivity extends AppCompatActivity {
                             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
 
                                 String time = selectedHour + ":" + selectedMinute;
+
+                                boolean isFound = false;
                                 for (int i = 0; i < etList.size(); i++) {
-
-                                    if (!time.equals(etList.get(i).getText().toString())) {
-                                        etTime.setText(selectedHour + ":" + selectedMinute);
+                                    if (time.equals(etList.get(i).getText().toString())) {
+                                        isFound = true;
                                         break;
-                                    } else {
-                                        UIHelper.showSnackbar(getCurrentFocus(), "Sorry, time have been added");
-                                        break;
-
                                     }
+                                }
+
+                                if (isFound) {
+                                    UIHelper.showSnackbar(getCurrentFocus(), "Sorry, time have been added");
+                                } else {
+                                    etTime.setText(selectedHour + ":" + selectedMinute);
                                 }
 
                             }
