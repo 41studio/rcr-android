@@ -135,6 +135,7 @@ public class EditAreaItemActivity extends AppCompatActivity {
             areaItemList = (AreaItemList) getIntent().getExtras().get(Constant.EXTRAS.AREA);
             etNameArea.setText(areaItemList.getName());
 
+
             for (int j = 0; j < areaItemList.getTimes().size(); j++) {
 
                 LayoutInflater i = LayoutInflater.from(this);
@@ -156,7 +157,7 @@ public class EditAreaItemActivity extends AppCompatActivity {
                             @Override
                             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
 
-                                String time = selectedHour + ":" + selectedMinute;
+                                String time = formatter.format(selectedHour) + ":" + formatter.format(selectedMinute);
 
                                 boolean isFound = false;
                                 for (int i = 0; i < etList.size(); i++) {
