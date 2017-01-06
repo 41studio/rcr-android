@@ -170,7 +170,7 @@ public class EditAreaItemActivity extends AppCompatActivity {
                                 }
 
                             }
-                        }, hour, minute, true);//Yes 24 hour time
+                        }, hour, minute, true);
                         mTimePicker.setTitle("Select Time");
                         mTimePicker.show();
                     }
