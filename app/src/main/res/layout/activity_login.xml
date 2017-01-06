@@ -30,6 +30,7 @@
                 android:layout_marginBottom="@dimen/_16dp"
                 android:gravity="center"
                 android:text="Room Cleanliness Ratings"
+                android:textAppearance="@style/TextAppearance.FontPath"
                 android:textColor="@color/colorWhite"
                 android:textSize="@dimen/f_24sp" />
 
@@ -62,14 +63,16 @@
                 style="@style/ButtonStyle.Ok"
                 android:layout_marginTop="@dimen/_24dp"
                 android:gravity="center"
-                android:text="LOGIN" />
+                android:text="LOGIN"
+                android:textAppearance="@style/TextAppearance.FontPath" />
 
             <Button
                 android:id="@+id/btnRegister"
                 style="@style/ButtonStyle.Ok"
                 android:layout_marginTop="@dimen/_10dp"
                 android:gravity="center"
-                android:text="REGISTER" />
+                android:text="REGISTER"
+                android:textAppearance="@style/TextAppearance.FontPath" />
 
             <TextView
                 android:layout_width="wrap_content"

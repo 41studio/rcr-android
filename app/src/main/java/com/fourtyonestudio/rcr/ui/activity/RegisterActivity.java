@@ -25,8 +25,9 @@ import com.fourtyonestudio.rcr.networks.RestApi;
 import com.fourtyonestudio.rcr.preferences.DataPreferences;
 import com.fourtyonestudio.rcr.utils.CommonUtils;
 import com.fourtyonestudio.rcr.utils.KeyboardUtils;
-import com.fourtyonestudio.rcr.utils.Retrofit2Utils;
 import com.fourtyonestudio.rcr.utils.UIHelper;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,8 +95,8 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         if (!Patterns.EMAIL_ADDRESS.matcher(etUsername.getText().toString()).matches()) {
             UIHelper.showSnackbar(getCurrentFocus(), "Please input valid email");
             etUsername.requestFocus();
-        } else if (TextUtils.isEmpty(etPassword.getText().toString())) {
-            UIHelper.showSnackbar(getCurrentFocus(), "Please input password");
+        } else if (TextUtils.isEmpty(etPassword.getText().toString()) || etPassword.length() < 6) {
+            UIHelper.showSnackbar(getCurrentFocus(), "Please input password with minimum length 6 characters");
             etPassword.requestFocus();
         } else if (!etPassword.getText().toString().equals(etPasswordConfirmation.getText().toString())) {
             Log.d("response", "Please input correct password confirmation");
@@ -135,7 +136,12 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                         etCompany.setText("");
                         finish();
                     } else {
-                        UIHelper.showSnackbar(getCurrentFocus(), Retrofit2Utils.getMessageError(response));
+                        try {
+                            JSONObject jObjError = new JSONObject(response.errorBody().string());
+                            UIHelper.showSnackbar(getCurrentFocus(), jObjError.getString(Constant.MESSAGE.ERROR_BODY));
+                        } catch (Exception e) {
+                            UIHelper.showSnackbar(getCurrentFocus(), e.getMessage());
+                        }
                     }
                 }
 
@@ -179,7 +185,12 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
 
                     } else {
-                        UIHelper.showSnackbar(getCurrentFocus(), Retrofit2Utils.getMessageError(response));
+                        try {
+                            JSONObject jObjError = new JSONObject(response.errorBody().string());
+                            UIHelper.showSnackbar(getCurrentFocus(), jObjError.getString(Constant.MESSAGE.ERROR_BODY));
+                        } catch (Exception e) {
+                            UIHelper.showSnackbar(getCurrentFocus(), e.getMessage());
+                        }
                     }
                 }
 

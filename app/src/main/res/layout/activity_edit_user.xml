@@ -56,6 +56,7 @@
                 android:layout_marginTop="@dimen/_10dp" />
 
             <Button
+                android:textAppearance="@style/TextAppearance.FontPath"
                 android:id="@+id/btnRegisterNow"
                 style="@style/ButtonStyle.Ok"
                 android:layout_marginTop="@dimen/_24dp"
@@ -63,6 +64,7 @@
                 android:text="UPDATE USER" />
 
             <Button
+                android:textAppearance="@style/TextAppearance.FontPath"
                 android:id="@+id/btnDelete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

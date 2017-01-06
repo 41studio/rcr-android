@@ -1,16 +1,18 @@
 package com.fourtyonestudio.rcr.ui.activity;
 
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.InputFilter;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TimePicker;
 
 import com.fourtyonestudio.rcr.Constant;
 import com.fourtyonestudio.rcr.R;
@@ -23,12 +25,13 @@ import com.fourtyonestudio.rcr.models.request.ItemTimeAttributesRequest;
 import com.fourtyonestudio.rcr.networks.RestApi;
 import com.fourtyonestudio.rcr.preferences.DataPreferences;
 import com.fourtyonestudio.rcr.utils.CommonUtils;
-import com.fourtyonestudio.rcr.utils.InputFilterMinMax;
 import com.fourtyonestudio.rcr.utils.KeyboardUtils;
-import com.fourtyonestudio.rcr.utils.Retrofit2Utils;
 import com.fourtyonestudio.rcr.utils.UIHelper;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.Bind;
@@ -37,6 +40,7 @@ import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class EditAreaItemActivity extends AppCompatActivity {
     @Bind(R.id.etNameArea)
@@ -133,11 +137,46 @@ public class EditAreaItemActivity extends AppCompatActivity {
 
                 LayoutInflater i = LayoutInflater.from(this);
                 View view = i.inflate(R.layout.item_time, top, false);
-                EditText etTime = (EditText) view.findViewById(R.id.et_time);
+                final EditText etTime = (EditText) view.findViewById(R.id.et_time);
                 etTime.setText(areaItemList.getTimes().get(j).getTime());
-                etTime.setFilters(new InputFilter[]{new InputFilterMinMax("0", "23")});
-                top.addView(view);
+//                etTime.setFilters(new InputFilter[]{new InputFilterMinMax("0", "23")});
 
+                etTime.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //KeyboardUtils.hideSoftKeyboard(this, view);
+                        Calendar mcurrentTime = Calendar.getInstance();
+                        int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                        int minute = mcurrentTime.get(Calendar.MINUTE);
+                        TimePickerDialog mTimePicker;
+                        mTimePicker = new TimePickerDialog(EditAreaItemActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+
+                                String time = selectedHour + ":" + selectedMinute;
+
+                                boolean isFound = false;
+                                for (int i = 0; i < etList.size(); i++) {
+                                    if (time.equals(etList.get(i).getText().toString())) {
+                                        isFound = true;
+                                        break;
+                                    }
+                                }
+
+                                if (isFound) {
+                                    UIHelper.showSnackbar(getCurrentFocus(), "Sorry, time have been added");
+                                } else {
+                                    etTime.setText(selectedHour + ":" + selectedMinute);
+                                }
+
+                            }
+                        }, hour, minute, true); 
+                        mTimePicker.setTitle("Select Time");
+                        mTimePicker.show();
+                    }
+                });
+
+                top.addView(view);
                 etList.add(etTime);
             }
 
@@ -160,7 +199,12 @@ public class EditAreaItemActivity extends AppCompatActivity {
                         finish();
 
                     } else {
-                        UIHelper.showSnackbar(getCurrentFocus(), Retrofit2Utils.getMessageError(response));
+                        try {
+                            JSONObject jObjError = new JSONObject(response.errorBody().string());
+                            UIHelper.showSnackbar(getCurrentFocus(), jObjError.getString(Constant.MESSAGE.ERROR_BODY));
+                        } catch (Exception e) {
+                            UIHelper.showSnackbar(getCurrentFocus(), e.getMessage());
+                        }
                     }
                 }
 
@@ -202,7 +246,12 @@ public class EditAreaItemActivity extends AppCompatActivity {
                         finish();
 
                     } else {
-                        UIHelper.showSnackbar(getCurrentFocus(), Retrofit2Utils.getMessageError(response));
+                        try {
+                            JSONObject jObjError = new JSONObject(response.errorBody().string());
+                            UIHelper.showSnackbar(getCurrentFocus(), jObjError.getString(Constant.MESSAGE.ERROR_BODY));
+                        } catch (Exception e) {
+                            UIHelper.showSnackbar(getCurrentFocus(), e.getMessage());
+                        }
                     }
                 }
 
@@ -215,6 +264,12 @@ public class EditAreaItemActivity extends AppCompatActivity {
         } else {
             UIHelper.showSnackbar(getCurrentFocus(), Constant.MESSAGE.NO_INET);
         }
+    }
+
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
 

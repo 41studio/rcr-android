@@ -26,6 +26,8 @@ import com.fourtyonestudio.rcr.utils.KeyboardUtils;
 import com.fourtyonestudio.rcr.utils.Retrofit2Utils;
 import com.fourtyonestudio.rcr.utils.UIHelper;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +62,9 @@ public class AddUserActivity extends AppCompatActivity implements AdapterView.On
         setContentView(R.layout.activity_add_user);
         ButterKnife.bind(this);
 
+        etPassword.setVisibility(View.GONE);
+        etPasswordConfirmation.setVisibility(View.GONE);
+
         getRoles();
 
     }
@@ -92,13 +97,13 @@ public class AddUserActivity extends AppCompatActivity implements AdapterView.On
         } else if (TextUtils.isEmpty(etName.getText().toString())) {
             UIHelper.showSnackbar(getCurrentFocus(), "Please input name");
             etName.requestFocus();
-        } else if (TextUtils.isEmpty(etPassword.getText().toString())) {
-            UIHelper.showSnackbar(getCurrentFocus(), "Please input password");
-            etPassword.requestFocus();
-        } else if (!etPassword.getText().toString().equals(etPasswordConfirmation.getText().toString())) {
-            Log.d("response", "Please input correct password confirmation");
-            UIHelper.showSnackbar(getCurrentFocus(), "Please input correct password confirmation");
-            etPasswordConfirmation.requestFocus();
+//        } else if (TextUtils.isEmpty(etPassword.getText().toString())) {
+//            UIHelper.showSnackbar(getCurrentFocus(), "Please input password");
+//            etPassword.requestFocus();
+//        } else if (!etPassword.getText().toString().equals(etPasswordConfirmation.getText().toString())) {
+//            Log.d("response", "Please input correct password confirmation");
+//            UIHelper.showSnackbar(getCurrentFocus(), "Please input correct password confirmation");
+//            etPasswordConfirmation.requestFocus();
         } else if (idRole.equals("")) {
             UIHelper.showSnackbar(getCurrentFocus(), "Please input role id");
         } else {
@@ -160,7 +165,12 @@ public class AddUserActivity extends AppCompatActivity implements AdapterView.On
                         finish();
 
                     } else {
-                        UIHelper.showSnackbar(getCurrentFocus(), Retrofit2Utils.getMessageError(response));
+                        try {
+                            JSONObject jObjError = new JSONObject(response.errorBody().string());
+                            UIHelper.showSnackbar(getCurrentFocus(), jObjError.getString(Constant.MESSAGE.ERROR_BODY));
+                        } catch (Exception e) {
+                            UIHelper.showSnackbar(getCurrentFocus(), e.getMessage());
+                        }
                     }
                 }
 
@@ -205,7 +215,12 @@ public class AddUserActivity extends AppCompatActivity implements AdapterView.On
 
 
                     } else {
-                        UIHelper.showSnackbar(getCurrentFocus(), Retrofit2Utils.getMessageError(response));
+                        try {
+                            JSONObject jObjError = new JSONObject(response.errorBody().string());
+                            UIHelper.showSnackbar(getCurrentFocus(), jObjError.getString(Constant.MESSAGE.ERROR_BODY));
+                        } catch (Exception e) {
+                            UIHelper.showSnackbar(getCurrentFocus(), e.getMessage());
+                        }
                     }
                 }
 

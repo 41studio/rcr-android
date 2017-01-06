@@ -42,7 +42,8 @@
                 style="@style/ButtonStyle.Ok"
                 android:layout_marginTop="@dimen/_24dp"
                 android:gravity="center"
-                android:text="ADD AREA" />
+                android:text="ADD AREA"
+                android:textAppearance="@style/TextAppearance.FontPath" />
 
         </LinearLayout>
 

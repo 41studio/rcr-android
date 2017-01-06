@@ -5,15 +5,30 @@
     android:orientation="vertical"
     android:padding="@dimen/_10dp">
 
+    <TextView
+        android:layout_marginLeft="@dimen/_4dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/f_16sp"
+        android:layout_marginBottom="@dimen/_6dp"
+        android:text="Add rate"/>
+
+    <Spinner
+        android:id="@+id/spRate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_10dp" />
 
     <EditText
         android:id="@+id/etDescription"
-        android:gravity="top"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_120dp"
+        android:textSize="@dimen/f_16sp"
+        android:gravity="top"
         android:hint="Add description" />
 
     <Button
+        android:textAppearance="@style/TextAppearance.FontPath"
         android:id="@+id/btnAddRate"
         style="@style/ButtonStyle.Ok"
         android:layout_marginTop="@dimen/_10dp"

@@ -11,6 +11,15 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.fourtyonestudio.rcr.ui.activity.MenuActivity">
 
+    <TextView
+        android:id="@+id/tv_welcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:textSize="@dimen/_16dp"
+        android:textAllCaps="true"
+        android:text="Welcome, User!" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -37,7 +46,7 @@
             android:padding="@dimen/_16dp"
             android:text="AREA"
             android:textColor="@color/colorWhite"
-            android:textSize="@dimen/f_24sp" />
+            android:textSize="@dimen/f_20sp" />
 
         <Button
             android:id="@+id/btnAddUser"
@@ -50,7 +59,7 @@
             android:padding="@dimen/_16dp"
             android:text="USER"
             android:textColor="@color/colorWhite"
-            android:textSize="@dimen/f_24sp" />
+            android:textSize="@dimen/f_20sp" />
 
         <Button
             android:id="@+id/btnSetting"
@@ -63,7 +72,7 @@
             android:padding="@dimen/_16dp"
             android:text="ACCOUNT SETTING"
             android:textColor="@color/colorWhite"
-            android:textSize="@dimen/f_24sp" />
+            android:textSize="@dimen/f_20sp" />
 
         <Button
             android:id="@+id/btnLogout"
@@ -76,7 +85,7 @@
             android:padding="@dimen/_16dp"
             android:text="LOGOUT"
             android:textColor="@color/colorWhite"
-            android:textSize="@dimen/f_24sp" />
+            android:textSize="@dimen/f_20sp" />
 
     </LinearLayout>
 
