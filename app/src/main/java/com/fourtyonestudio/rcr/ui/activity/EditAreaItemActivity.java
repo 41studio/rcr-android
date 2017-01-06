@@ -30,6 +30,8 @@ import com.fourtyonestudio.rcr.utils.UIHelper;
 
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -145,6 +147,7 @@ public class EditAreaItemActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         //KeyboardUtils.hideSoftKeyboard(this, view);
+                        final NumberFormat formatter = new DecimalFormat("00");
                         Calendar mcurrentTime = Calendar.getInstance();
                         int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
                         int minute = mcurrentTime.get(Calendar.MINUTE);
@@ -166,11 +169,11 @@ public class EditAreaItemActivity extends AppCompatActivity {
                                 if (isFound) {
                                     UIHelper.showSnackbar(getCurrentFocus(), "Sorry, time have been added");
                                 } else {
-                                    etTime.setText(selectedHour + ":" + selectedMinute);
+                                    etTime.setText(formatter.format(selectedHour) + ":" + formatter.format(selectedMinute));
                                 }
 
                             }
-                        }, hour, minute, true); 
+                        }, hour, minute, true);
                         mTimePicker.setTitle("Select Time");
                         mTimePicker.show();
                     }
