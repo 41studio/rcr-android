@@ -6,7 +6,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -26,6 +25,8 @@ import com.fourtyonestudio.rcr.utils.UIHelper;
 
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -75,6 +76,7 @@ public class AddAreaItemActivity extends AppCompatActivity {
     @OnClick(R.id.etTime)
     public void clickEtTime(View view) {
         KeyboardUtils.hideSoftKeyboard(this, view);
+        final NumberFormat formatter = new DecimalFormat("00");
         Calendar mcurrentTime = Calendar.getInstance();
         int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
         int minute = mcurrentTime.get(Calendar.MINUTE);
@@ -83,7 +85,7 @@ public class AddAreaItemActivity extends AppCompatActivity {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
 
-                etTime.setText(selectedHour + ":" + selectedMinute);
+                etTime.setText(formatter.format(selectedHour) + ":" + formatter.format(selectedMinute));
 
             }
         }, hour, minute, true);//Yes 24 hour time
