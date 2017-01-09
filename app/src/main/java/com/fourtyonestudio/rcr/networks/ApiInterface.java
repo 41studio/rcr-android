@@ -61,6 +61,12 @@ public interface ApiInterface {
                                   @Field("user[password_confirmation]") String pass_conf);
 
     @FormUrlEncoded
+    @PUT("users/accept_invitation")
+    Call<LoginSession> acceptInvitation(@Field("invitation_token") String token,
+                                      @Field("user[password]") String pass,
+                                      @Field("user[password_confirmation]") String pass_conf);
+
+    @FormUrlEncoded
     @POST("areas")
     Call<AreaData> postArea(@Header("Authorization") String auth,
                             @Field("area[name]") String name);
