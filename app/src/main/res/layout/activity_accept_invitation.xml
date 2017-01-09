@@ -12,23 +12,10 @@
     tools:context="com.fourtyonestudio.rcr.ui.activity.SettingActivity">
 
     <LinearLayout
-        android:layout_centerInParent="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:orientation="vertical">
-
-        <EditText
-            android:id="@+id/etName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10dp"
-            android:background="@drawable/layer_edittext"
-            android:hint="Name"
-            android:inputType="text"
-            android:padding="@dimen/_10dp"
-            android:singleLine="true"
-            android:textColor="@color/black"
-            android:textSize="@dimen/f_16sp" />
 
         <EditText
             android:id="@+id/etPassword"
@@ -55,12 +42,12 @@
             android:textSize="@dimen/f_16sp" />
 
         <Button
-            android:textAppearance="@style/TextAppearance.FontPath"
             android:id="@+id/btnUpdate"
             style="@style/ButtonStyle.Ok"
             android:layout_marginTop="@dimen/_24dp"
             android:gravity="center"
-            android:text="UPDATE" />
+            android:text="SET MY PASSWORD"
+            android:textAppearance="@style/TextAppearance.FontPath" />
 
     </LinearLayout>
 

@@ -62,7 +62,19 @@
         <activity android:name=".ui.activity.UserListingActivity" />
         <activity android:name=".ui.activity.EditUserActivity" />
         <activity android:name=".ui.activity.SettingActivity" />
-        <activity android:name=".ui.activity.AcceptInvitationActivity"></activity>
+        <activity android:name=".ui.activity.AcceptInvitationActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="room-cleanliness-ratings.herokuapp.com"
+                    android:pathPattern="..*/invitation/..*"
+                    android:scheme="http" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
