@@ -6,6 +6,7 @@ import com.fourtyonestudio.rcr.models.AreaDetailResponse;
 import com.fourtyonestudio.rcr.models.AreaItemResponse;
 import com.fourtyonestudio.rcr.models.AreaResponse;
 import com.fourtyonestudio.rcr.models.Indicators;
+import com.fourtyonestudio.rcr.models.InviteUser;
 import com.fourtyonestudio.rcr.models.LoginSession;
 import com.fourtyonestudio.rcr.models.Roles;
 import com.fourtyonestudio.rcr.models.UserListResponse;
@@ -93,6 +94,13 @@ public interface ApiInterface {
     @POST("appraisals")
     Call<AppraisalsResponse> postAppraisals(@Header("Authorization") String auth,
                                             @Field("appraisal[item_time_id]") int time_id);
+
+    @FormUrlEncoded
+    @POST("users/invite ")
+    Call<InviteUser> inviteUser(@Header("Authorization") String auth,
+                                @Field("user[email]") String email,
+                                @Field("user[name]") String name,
+                                @Field("user[role_id]") String role_id);
 
     @FormUrlEncoded
     @PUT("appraisals/{id}")

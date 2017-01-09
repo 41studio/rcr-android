@@ -360,6 +360,12 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
         }
     }
 
+    /**
+     *
+     * @param time_id
+     * @param description
+     * @param indicator_id
+     */
     private void putAppraisalsDesc(int time_id, String description, String indicator_id) {
         if (CommonUtils.isNetworkAvailable(context)) {
             final ProgressDialog pDialog = UIHelper.showProgressDialog(context);

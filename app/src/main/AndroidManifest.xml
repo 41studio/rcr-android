@@ -62,7 +62,7 @@
         <activity android:name=".ui.activity.UserListingActivity" />
         <activity android:name=".ui.activity.EditUserActivity" />
         <activity android:name=".ui.activity.SettingActivity" />
-
+        <activity android:name=".ui.activity.AcceptInvitationActivity"></activity>
     </application>
 
 </manifest>
