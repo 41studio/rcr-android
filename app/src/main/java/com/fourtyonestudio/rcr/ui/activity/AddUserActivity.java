@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,6 +14,7 @@ import android.widget.Spinner;
 
 import com.fourtyonestudio.rcr.Constant;
 import com.fourtyonestudio.rcr.R;
+import com.fourtyonestudio.rcr.models.InviteUser;
 import com.fourtyonestudio.rcr.models.LoginSession;
 import com.fourtyonestudio.rcr.models.Roles;
 import com.fourtyonestudio.rcr.models.RolesDatum;
@@ -23,7 +23,6 @@ import com.fourtyonestudio.rcr.networks.RestApi;
 import com.fourtyonestudio.rcr.preferences.DataPreferences;
 import com.fourtyonestudio.rcr.utils.CommonUtils;
 import com.fourtyonestudio.rcr.utils.KeyboardUtils;
-import com.fourtyonestudio.rcr.utils.Retrofit2Utils;
 import com.fourtyonestudio.rcr.utils.UIHelper;
 
 import org.json.JSONObject;
@@ -107,7 +106,8 @@ public class AddUserActivity extends AppCompatActivity implements AdapterView.On
         } else if (idRole.equals("")) {
             UIHelper.showSnackbar(getCurrentFocus(), "Please input role id");
         } else {
-            createUser();
+//            createUser();
+            inviteUser();
         }
     }
 
@@ -148,6 +148,42 @@ public class AddUserActivity extends AppCompatActivity implements AdapterView.On
 //            UIHelper.showSnackbar(getCurrentFocus(), Constant.MESSAGE.NO_INET);
 //        }
 //    }
+
+    private void inviteUser() {
+        new DataPreferences(this).setLoadArea(true);
+        if (CommonUtils.isNetworkAvailable(this)) {
+            final ProgressDialog pDialog = UIHelper.showProgressDialog(this);
+            DataPreferences dataPreferences = new DataPreferences(this);
+            LoginSession loginSession = dataPreferences.getLoginSession();
+            new RestApi().getApi().inviteUser(loginSession.getAuthToken(), etUsername.getText().toString(), etName.getText().toString(), idRole).enqueue(new Callback<InviteUser>() {
+                @Override
+                public void onResponse(Call<InviteUser> call, Response<InviteUser> response) {
+                    UIHelper.dismissDialog(pDialog);
+                    if (response.isSuccessful()) {
+
+                        finish();
+
+                    } else {
+                        try {
+                            JSONObject jObjError = new JSONObject(response.errorBody().string());
+                            UIHelper.showSnackbar(getCurrentFocus(), jObjError.getString(Constant.MESSAGE.ERROR_BODY));
+                        } catch (Exception e) {
+                            UIHelper.showSnackbar(getCurrentFocus(), e.getMessage());
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<InviteUser> call, Throwable t) {
+                    UIHelper.dismissDialog(pDialog);
+                    UIHelper.showSnackbar(getCurrentFocus(), Constant.MESSAGE.ERROR_POST);
+                }
+            });
+        } else {
+            UIHelper.showSnackbar(getCurrentFocus(), Constant.MESSAGE.NO_INET);
+        }
+    }
+
 
     private void createUser() {
         new DataPreferences(this).setLoadArea(true);
