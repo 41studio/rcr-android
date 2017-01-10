@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.fourtyonestudio.rcr.Constant;
@@ -44,6 +46,10 @@ public class AreaListingActivity extends AppCompatActivity {
     RecyclerView rvArea;
     @Bind(R.id.fab_add)
     FloatingActionButton fabAdd;
+    @Bind(R.id.etSearch)
+    EditText etSearch;
+    @Bind(R.id.btnSearch)
+    Button btnSearch;
     private List<Area> areaList;
     private AreaAdapter areaAdapter;
 
@@ -59,6 +65,8 @@ public class AreaListingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_area_listing);
         ButterKnife.bind(this);
 //        tvCurrentDate.setText(DateUtils.getDateNow());
+
+        etSearch.clearFocus();
 
         layoutManager = new LinearLayoutManager(getBaseContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -123,6 +131,55 @@ public class AreaListingActivity extends AppCompatActivity {
             DataPreferences dataPreferences = new DataPreferences(AreaListingActivity.this);
             LoginSession loginSession = dataPreferences.getLoginSession();
             new RestApi().getApi().getArea(loginSession.getAuthToken(), page).enqueue(new Callback<AreaResponse>() {
+                @Override
+                public void onResponse(Call<AreaResponse> call, final Response<AreaResponse> response) {
+                    UIHelper.dismissDialog(pDialog);
+                    if (response.isSuccessful()) {
+
+                        final AreaResponse areaResponse = response.body();
+
+                        currentTotal = areaResponse.getMeta().getCurrentPage();
+                        totalCount = areaResponse.getMeta().getTotalPages();
+
+                        if (currentTotal == 1) {
+                            areaList.clear();
+                        }
+
+                        areaList.addAll(areaResponse.getAreas());
+                        areaAdapter.notifyDataSetChanged();
+
+
+                    } else {
+                        try {
+                            JSONObject jObjError = new JSONObject(response.errorBody().string());
+                            UIHelper.showSnackbar(getCurrentFocus(), jObjError.getString(Constant.MESSAGE.ERROR_BODY));
+                        } catch (Exception e) {
+                            UIHelper.showSnackbar(getCurrentFocus(), e.getMessage());
+                        }
+                    }
+
+                    loading = false;
+                }
+
+                @Override
+                public void onFailure(Call<AreaResponse> call, Throwable t) {
+                    loading = false;
+                    UIHelper.dismissDialog(pDialog);
+                    UIHelper.showSnackbar(getCurrentFocus(), Constant.MESSAGE.ERROR_GET);
+                }
+            });
+        } else {
+            UIHelper.showSnackbar(getCurrentFocus(), Constant.MESSAGE.NO_INET);
+        }
+    }
+
+    private void searchAreas(String name) {
+        if (CommonUtils.isNetworkAvailable(AreaListingActivity.this)) {
+            loading = true;
+            final ProgressDialog pDialog = UIHelper.showProgressDialog(AreaListingActivity.this);
+            DataPreferences dataPreferences = new DataPreferences(AreaListingActivity.this);
+            LoginSession loginSession = dataPreferences.getLoginSession();
+            new RestApi().getApi().searchArea(loginSession.getAuthToken(), name).enqueue(new Callback<AreaResponse>() {
                 @Override
                 public void onResponse(Call<AreaResponse> call, final Response<AreaResponse> response) {
                     UIHelper.dismissDialog(pDialog);

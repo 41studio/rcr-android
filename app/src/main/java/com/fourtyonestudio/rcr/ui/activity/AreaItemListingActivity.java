@@ -229,63 +229,64 @@ public class AreaItemListingActivity extends AppCompatActivity {
         }
     }
 
-//    private void getAreas() {
-//        if (CommonUtils.isNetworkAvailable(this)) {
-//            final ProgressDialog pDialog = UIHelper.showProgressDialog(this);
-//            final DataPreferences dataPreferences = new DataPreferences(this);
-//            final LoginSession loginSession = dataPreferences.getLoginSession();
-//
-//            new RestApi().getApi().getAreaItems(loginSession.getAuthToken(), idArea).enqueue(new Callback<AreaResponse>() {
-//                @Override
-//                public void onResponse(Call<AreaResponse> call, Response<AreaResponse> response) {
-//                    UIHelper.dismissDialog(pDialog);
-//                    if (response.isSuccessful()) {
-//
-//                        List<Area> areaList = response.body().getAreas();
-//
-////                        for (int i = 0; i < areaList.size(); i++) {
-////                            for (int j = 0; j < areaList.get(i).getAttributes().getTimes().size(); j++) {
-////
-////                                List<ItemAreaTable> itemAreaTables = SugarRecord.find(ItemAreaTable.class, "idtimes = ?", Integer.toString(areaList.get(i).getAttributes().getTimes().get(j).getId()));
-////                                if (itemAreaTables.size() == 0) {
-////                                    ItemAreaTable itemAreaTable = new ItemAreaTable();
-////                                    itemAreaTable.setId_area(areaList.get(i).getId());
-////                                    itemAreaTable.setId_times(areaList.get(i).getAttributes().getTimes().get(j).getId());
-////                                    itemAreaTable.setTime(areaList.get(i).getAttributes().getTimes().get(j).getTime());
-////                                    itemAreaTable.save();
-////                                }
-////                            }
-////                        }
-//
-//
-//                        areaList.clear();
-//                        areaList.addAll(areaList);
-//                        adapter.notifyDataSetChanged();
-//
-//                        Indicators indicators = dataPreferences.getIndicator();
-//                        if (indicators == null) {
-//                            getIndicator();
-//                        } else {
-//                            UIHelper.dismissDialog(pDialog);
-//                        }
-//
-//
-//                    } else {
-//                        UIHelper.dismissDialog(pDialog);
-//                        UIHelper.showSnackbar(getCurrentFocus(), Retrofit2Utils.getMessageError(response));
-//                    }
-//                }
-//
-//                @Override
-//                public void onFailure(Call<AreaResponse> call, Throwable t) {
-//                    UIHelper.dismissDialog(pDialog);
-//                    UIHelper.showSnackbar(getCurrentFocus(), Constant.MESSAGE.ERROR_GET);
-//                }
-//            });
-//        } else {
-//            UIHelper.showSnackbar(getCurrentFocus(), Constant.MESSAGE.NO_INET);
-//        }
-//    }
+    private void searchAreasItem(String time, String name) {
+        if (CommonUtils.isNetworkAvailable(this)) {
+            loading = true;
+            final ProgressDialog pDialog = UIHelper.showProgressDialog(this);
+            final DataPreferences dataPreferences = new DataPreferences(this);
+            final LoginSession loginSession = dataPreferences.getLoginSession();
+
+
+            new RestApi().getApi().searchAreaItems(loginSession.getAuthToken(), idArea, time, name).enqueue(new Callback<AreaItemResponse>() {
+                @Override
+                public void onResponse(Call<AreaItemResponse> call, Response<AreaItemResponse> response) {
+                    UIHelper.dismissDialog(pDialog);
+                    if (response.isSuccessful()) {
+
+                        List<AreaItemList> areaList = response.body().getData().getAttributes().getItemList();
+
+                        currentTotal = response.body().getMeta().getCurrentPage();
+                        totalCount = response.body().getMeta().getTotalPages();
+
+                        if (currentTotal == 1) {
+                            areaItemLists.clear();
+                        }
+
+                        areaItemLists.addAll(areaList);
+                        itemsAdapter.notifyDataSetChanged();
+
+                        Indicators indicators = dataPreferences.getIndicator();
+                        if (indicators == null) {
+                            getIndicator();
+                        } else {
+                            UIHelper.dismissDialog(pDialog);
+                        }
+
+
+                    } else {
+                        UIHelper.dismissDialog(pDialog);
+                        try {
+                            JSONObject jObjError = new JSONObject(response.errorBody().string());
+                            UIHelper.showSnackbar(getCurrentFocus(), jObjError.getString(Constant.MESSAGE.ERROR_BODY));
+                        } catch (Exception e) {
+                            UIHelper.showSnackbar(getCurrentFocus(), e.getMessage());
+                        }
+                    }
+
+                    loading = false;
+                }
+
+                @Override
+                public void onFailure(Call<AreaItemResponse> call, Throwable t) {
+                    loading = false;
+                    UIHelper.dismissDialog(pDialog);
+                    UIHelper.showSnackbar(getCurrentFocus(), Constant.MESSAGE.ERROR_GET);
+                }
+            });
+        } else {
+            UIHelper.showSnackbar(getCurrentFocus(), Constant.MESSAGE.NO_INET);
+        }
+    }
 
     private void getIndicator() {
         if (CommonUtils.isNetworkAvailable(this)) {

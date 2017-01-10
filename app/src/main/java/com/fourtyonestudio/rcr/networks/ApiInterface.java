@@ -66,6 +66,11 @@ public interface ApiInterface {
                                         @Field("user[password]") String pass,
                                         @Field("user[password_confirmation]") String pass_conf);
 
+    @GET("areas/{id}/items")
+    Call<AreaResponse> getAreaItems(@Header("Authorization") String auth,
+                                    @Path("id") int id);
+
+
     @FormUrlEncoded
     @POST("areas")
     Call<AreaData> postArea(@Header("Authorization") String auth,
@@ -74,22 +79,27 @@ public interface ApiInterface {
     @GET("areas")
     Call<AreaResponse> getArea(@Header("Authorization") String auth, @Query("page") int page);
 
-    @GET("areas/{id}/items")
-    Call<AreaResponse> getAreaItems(@Header("Authorization") String auth,
-                                    @Path("id") int id);
-
-
-    @FormUrlEncoded
-    @POST("areas/{id}/clone")
-    Call<AreaItemResponse> cloneArea(@Header("Authorization") String auth,
-                                     @Path("id") int id,
-                                     @Field("area[name]") String area_name);
+    @GET("areas")
+    Call<AreaResponse> searchArea(@Header("Authorization") String auth, @Query("name") String name);
 
     @GET("areas/{id}")
     Call<AreaItemResponse> getAreaItemsDate(@Header("Authorization") String auth,
                                             @Path("id") int id,
                                             @Query("date") String date,
                                             @Query("page") int page);
+
+
+    @GET("areas/{id}")
+    Call<AreaItemResponse> searchAreaItems(@Header("Authorization") String auth,
+                                           @Path("id") int id,
+                                           @Query("date") String date,
+                                           @Query("name") String name);
+
+    @FormUrlEncoded
+    @POST("areas/{id}/clone")
+    Call<AreaItemResponse> cloneArea(@Header("Authorization") String auth,
+                                     @Path("id") int id,
+                                     @Field("area[name]") String area_name);
 
     @FormUrlEncoded
     @PUT("areas/{id}")
