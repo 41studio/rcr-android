@@ -38,15 +38,23 @@
 
 
             <Button
-                android:textAppearance="@style/TextAppearance.FontPath"
                 android:id="@+id/btnAdd"
                 style="@style/ButtonStyle.Ok"
                 android:layout_marginTop="@dimen/_24dp"
                 android:gravity="center"
-                android:text="UPDATE AREA" />
+                android:text="UPDATE AREA"
+                android:textAppearance="@style/TextAppearance.FontPath" />
+
 
             <Button
-                android:textAppearance="@style/TextAppearance.FontPath"
+                android:id="@+id/btnClone"
+                style="@style/ButtonStyle.Ok"
+                android:layout_marginTop="@dimen/_10dp"
+                android:gravity="center"
+                android:text="CLONE AREA"
+                android:textAppearance="@style/TextAppearance.FontPath" />
+
+            <Button
                 android:id="@+id/btnDelete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -54,6 +62,7 @@
                 android:background="@drawable/btn_red"
                 android:gravity="center"
                 android:text="DELETE AREA"
+                android:textAppearance="@style/TextAppearance.FontPath"
                 android:textColor="@color/white"
                 android:textSize="@dimen/f_16sp" />
 
