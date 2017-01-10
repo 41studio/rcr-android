@@ -78,6 +78,13 @@ public interface ApiInterface {
     Call<AreaResponse> getAreaItems(@Header("Authorization") String auth,
                                     @Path("id") int id);
 
+
+    @FormUrlEncoded
+    @POST("areas/{id}/clone")
+    Call<AreaItemResponse> cloneArea(@Header("Authorization") String auth,
+                                     @Path("id") int id,
+                                     @Field("area[name]") String area_name);
+
     @GET("areas/{id}")
     Call<AreaItemResponse> getAreaItemsDate(@Header("Authorization") String auth,
                                             @Path("id") int id,
