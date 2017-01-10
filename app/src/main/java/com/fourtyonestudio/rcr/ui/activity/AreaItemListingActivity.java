@@ -11,6 +11,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
@@ -26,6 +27,7 @@ import com.fourtyonestudio.rcr.preferences.DataPreferences;
 import com.fourtyonestudio.rcr.ui.adapter.ItemsAdapter;
 import com.fourtyonestudio.rcr.utils.CommonUtils;
 import com.fourtyonestudio.rcr.utils.DateUtils;
+import com.fourtyonestudio.rcr.utils.EndlessOnScrollListener;
 import com.fourtyonestudio.rcr.utils.UIHelper;
 
 import org.json.JSONObject;
@@ -57,11 +59,13 @@ public class AreaItemListingActivity extends AppCompatActivity {
     private ItemsAdapter itemsAdapter;
 
     private int idArea;
-
-
     private DatePickerDialog fromDatePickerDialog;
     private SimpleDateFormat dateFormatter;
     private SimpleDateFormat dateFormatter1;
+
+    private int currentTotal = 1;
+    private int totalCount = 0;
+    private boolean loading = false;
 
 
     @Override
@@ -85,7 +89,7 @@ public class AreaItemListingActivity extends AppCompatActivity {
         itemsAdapter.notifyDataSetChanged();
         rvItem.setAdapter(itemsAdapter);
 
-        getAreasItemDate(DateUtils.getDateNow1());
+        getAreasItemDate(DateUtils.getDateNow1(), 1);
 
         String role = new DataPreferences(this).getLoginSession().getUser().getRole();
         if (role.equals(Constant.EXTRAS.MANAGER)) {
@@ -93,6 +97,26 @@ public class AreaItemListingActivity extends AppCompatActivity {
         } else if (role.equals(Constant.EXTRAS.HELPER)) {
             fabAdd.setVisibility(View.GONE);
         }
+
+        rvItem.addOnScrollListener(new EndlessOnScrollListener() {
+
+            @Override
+            public void onScrolledToEnd() {
+                Log.d("cek", "cek");
+                Log.d("cek", Boolean.toString(loading));
+                if (!loading) {
+                    currentTotal = currentTotal + 1;
+                    Log.d("cek currentTotal ", currentTotal + " " + "totalCount " + totalCount);
+                    if (currentTotal <= totalCount) {
+                        Log.d("cek currentTotal1 ", currentTotal + " " + "totalCount " + totalCount);
+                        getAreasItemDate(DateUtils.getDateNow1(), currentTotal);
+                    }
+
+                }
+
+            }
+        });
+
 
         //Calendar
         dateFormatter = new SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH);
@@ -104,7 +128,7 @@ public class AreaItemListingActivity extends AppCompatActivity {
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(year, monthOfYear, dayOfMonth);
                 tvCurrentDate.setText(dateFormatter.format(newDate.getTime()));
-                getAreasItemDate(dateFormatter1.format(newDate.getTime()));
+                getAreasItemDate(dateFormatter1.format(newDate.getTime()), 1);
             }
 
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
@@ -128,7 +152,7 @@ public class AreaItemListingActivity extends AppCompatActivity {
 
         boolean isLoadAreaItem = new DataPreferences(this).isLoadAreaItem();
         if (isLoadAreaItem) {
-            getAreasItemDate(DateUtils.getDateNow1());
+            getAreasItemDate(DateUtils.getDateNow1(), 1);
             new DataPreferences(this).setLoadAreaItem(false);
         }
     }
@@ -146,14 +170,15 @@ public class AreaItemListingActivity extends AppCompatActivity {
     }
 
 
-    private void getAreasItemDate(String time) {
+    private void getAreasItemDate(String time, int page) {
         if (CommonUtils.isNetworkAvailable(this)) {
+            loading = true;
             final ProgressDialog pDialog = UIHelper.showProgressDialog(this);
             final DataPreferences dataPreferences = new DataPreferences(this);
             final LoginSession loginSession = dataPreferences.getLoginSession();
 
 
-            new RestApi().getApi().getAreaItemsDate(loginSession.getAuthToken(), idArea, time).enqueue(new Callback<AreaItemResponse>() {
+            new RestApi().getApi().getAreaItemsDate(loginSession.getAuthToken(), idArea, time, page).enqueue(new Callback<AreaItemResponse>() {
                 @Override
                 public void onResponse(Call<AreaItemResponse> call, Response<AreaItemResponse> response) {
                     UIHelper.dismissDialog(pDialog);
@@ -161,22 +186,13 @@ public class AreaItemListingActivity extends AppCompatActivity {
 
                         List<AreaItemList> areaList = response.body().getData().getAttributes().getItemList();
 
-//                        for (int i = 0; i < areaList.size(); i++) {
-//                            for (int j = 0; j < areaList.get(i).getTimes().size(); j++) {
-//
-//                                List<ItemAreaTable> itemAreaTables = SugarRecord.find(ItemAreaTable.class, "idtimes = ?", Integer.toString(areaList.get(i).getTimes().get(j).getId()));
-//                                if (itemAreaTables.size() == 0) {
-//                                    ItemAreaTable itemAreaTable = new ItemAreaTable();
-//                                    itemAreaTable.setId_area(areaList.get(i).getId());
-//                                    itemAreaTable.setId_times(areaList.get(i).getTimes().get(j).getId());
-//                                    itemAreaTable.setTime(areaList.get(i).getTimes().get(j).getTime());
-//                                    itemAreaTable.save();
-//                                }
-//                            }
-//                        }
+                        currentTotal = response.body().getMeta().getCurrentPage();
+                        totalCount = response.body().getMeta().getTotalPages();
 
+                        if (currentTotal == 1) {
+                            areaItemLists.clear();
+                        }
 
-                        areaItemLists.clear();
                         areaItemLists.addAll(areaList);
                         itemsAdapter.notifyDataSetChanged();
 
@@ -197,10 +213,13 @@ public class AreaItemListingActivity extends AppCompatActivity {
                             UIHelper.showSnackbar(getCurrentFocus(), e.getMessage());
                         }
                     }
+
+                    loading = false;
                 }
 
                 @Override
                 public void onFailure(Call<AreaItemResponse> call, Throwable t) {
+                    loading = false;
                     UIHelper.dismissDialog(pDialog);
                     UIHelper.showSnackbar(getCurrentFocus(), Constant.MESSAGE.ERROR_GET);
                 }
@@ -315,7 +334,7 @@ public class AreaItemListingActivity extends AppCompatActivity {
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            getAreasItemDate(DateUtils.getDateNow1());
+            getAreasItemDate(DateUtils.getDateNow1(), 1);
             new DataPreferences(AreaItemListingActivity.this).setLoadAreaItem(false);
         }
     };

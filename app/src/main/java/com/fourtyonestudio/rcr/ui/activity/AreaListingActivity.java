@@ -140,41 +140,6 @@ public class AreaListingActivity extends AppCompatActivity {
                         areaList.addAll(areaResponse.getAreas());
                         areaAdapter.notifyDataSetChanged();
 
-//                        rvArea.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//
-//                            @Override
-//                            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                                super.onScrolled(recyclerView, dx, dy);
-//
-//                                visibleItemCount = areaResponse.getMeta().getCurrentPage();
-//                                totalCount = areaResponse.getMeta().getTotalPages();
-//                                firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
-//
-//                                if (loading) {
-//                                    if (totalCount > currentTotal) {
-//                                        loading = false;
-//                                        currentTotal = totalCount;
-//                                    }
-//                                }
-//                                if (!loading && (totalCount - visibleItemCount)
-//                                        <= (firstVisibleItem + visibleThreshold)) {
-//                                    // End has been reached
-//
-//                                    Log.i("Yaeye!", "end called");
-//                                    Log.i("Yaeye!totalCount", totalCount + "");
-//                                    Log.i("Yaeye!visibleItemCount", visibleItemCount + "");
-//                                    Log.i("Yaeye!firstVisibleItem", firstVisibleItem + "");
-//                                    Log.i("Yaeye!visibleThreshold", visibleThreshold + "");
-//
-//                                    // Do something
-//
-//                                    getAreas(2);
-//
-//                                    loading = true;
-//                                }
-//                            }
-//                        });
-
 
                     } else {
                         try {

@@ -81,7 +81,8 @@ public interface ApiInterface {
     @GET("areas/{id}")
     Call<AreaItemResponse> getAreaItemsDate(@Header("Authorization") String auth,
                                             @Path("id") int id,
-                                            @Query("date") String date);
+                                            @Query("date") String date,
+                                            @Query("page") int page);
 
     @FormUrlEncoded
     @PUT("areas/{id}")
