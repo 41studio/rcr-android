@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import com.fourtyonestudio.rcr.Constant;
 import com.fourtyonestudio.rcr.R;
-import com.fourtyonestudio.rcr.models.Area;
 import com.fourtyonestudio.rcr.models.AreaItemList;
 import com.fourtyonestudio.rcr.models.AreaItemResponse;
 import com.fourtyonestudio.rcr.models.Indicators;
@@ -27,7 +26,6 @@ import com.fourtyonestudio.rcr.preferences.DataPreferences;
 import com.fourtyonestudio.rcr.ui.adapter.ItemsAdapter;
 import com.fourtyonestudio.rcr.utils.CommonUtils;
 import com.fourtyonestudio.rcr.utils.DateUtils;
-import com.fourtyonestudio.rcr.utils.Retrofit2Utils;
 import com.fourtyonestudio.rcr.utils.UIHelper;
 
 import org.json.JSONObject;
@@ -55,11 +53,7 @@ public class AreaItemListingActivity extends AppCompatActivity {
     @Bind(R.id.fab_add)
     FloatingActionButton fabAdd;
 
-    //private Area area;
-//    private List<Item> areaList;
-    private List<Area> areaList;
     private List<AreaItemList> areaItemLists;
-    //    private ItemAdapter adapter;
     private ItemsAdapter itemsAdapter;
 
     private int idArea;
@@ -69,7 +63,6 @@ public class AreaItemListingActivity extends AppCompatActivity {
     private SimpleDateFormat dateFormatter;
     private SimpleDateFormat dateFormatter1;
 
-    private String time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

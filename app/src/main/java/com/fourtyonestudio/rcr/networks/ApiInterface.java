@@ -63,8 +63,8 @@ public interface ApiInterface {
     @FormUrlEncoded
     @PUT("users/accept_invitation")
     Call<LoginSession> acceptInvitation(@Field("invitation_token") String token,
-                                      @Field("user[password]") String pass,
-                                      @Field("user[password_confirmation]") String pass_conf);
+                                        @Field("user[password]") String pass,
+                                        @Field("user[password_confirmation]") String pass_conf);
 
     @FormUrlEncoded
     @POST("areas")
@@ -72,7 +72,7 @@ public interface ApiInterface {
                             @Field("area[name]") String name);
 
     @GET("areas")
-    Call<AreaResponse> getArea(@Header("Authorization") String auth);
+    Call<AreaResponse> getArea(@Header("Authorization") String auth, @Query("page") int page);
 
     @GET("areas/{id}/items")
     Call<AreaResponse> getAreaItems(@Header("Authorization") String auth,
