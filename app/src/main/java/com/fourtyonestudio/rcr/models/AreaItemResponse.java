@@ -16,6 +16,19 @@ public class AreaItemResponse implements Serializable {
     @Expose
     private AreaItemData data;
 
+    @SerializedName("meta")
+    @Expose
+    private Meta meta;
+
+    public Meta getMeta() {
+        return meta;
+    }
+
+    public void setMeta(Meta meta) {
+        this.meta = meta;
+    }
+
+
     public AreaItemData getData() {
         return data;
     }

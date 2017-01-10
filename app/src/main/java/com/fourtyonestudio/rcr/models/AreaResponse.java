@@ -16,8 +16,23 @@ public class AreaResponse implements Serializable {
     @SerializedName("data")
     @Expose
     private List<Area> areas;
+    @SerializedName("meta")
+    @Expose
+    private Meta meta;
 
     public List<Area> getAreas() {
         return areas;
+    }
+
+    public void setData(List<Area> data) {
+        this.areas = data;
+    }
+
+    public Meta getMeta() {
+        return meta;
+    }
+
+    public void setMeta(Meta meta) {
+        this.meta = meta;
     }
 }

@@ -20,7 +20,7 @@ import com.fourtyonestudio.rcr.networks.RestApi;
 import com.fourtyonestudio.rcr.preferences.DataPreferences;
 import com.fourtyonestudio.rcr.ui.adapter.AreaAdapter;
 import com.fourtyonestudio.rcr.utils.CommonUtils;
-import com.fourtyonestudio.rcr.utils.Retrofit2Utils;
+import com.fourtyonestudio.rcr.utils.EndlessOnScrollListener;
 import com.fourtyonestudio.rcr.utils.UIHelper;
 
 import org.json.JSONObject;
@@ -47,6 +47,12 @@ public class AreaListingActivity extends AppCompatActivity {
     private List<Area> areaList;
     private AreaAdapter areaAdapter;
 
+    private LinearLayoutManager layoutManager;
+
+    private int currentTotal = 1;
+    private int totalCount = 0;
+    private boolean loading = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +60,7 @@ public class AreaListingActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 //        tvCurrentDate.setText(DateUtils.getDateNow());
 
-        final LinearLayoutManager layoutManager = new LinearLayoutManager(getBaseContext());
+        layoutManager = new LinearLayoutManager(getBaseContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
         rvArea.setLayoutManager(layoutManager);
@@ -65,14 +71,30 @@ public class AreaListingActivity extends AppCompatActivity {
         areaAdapter.notifyDataSetChanged();
         rvArea.setAdapter(areaAdapter);
 
-        getAreas();
-
+        getAreas(1);
         String role = new DataPreferences(this).getLoginSession().getUser().getRole();
         if (role.equals(Constant.EXTRAS.HELPER)) {
             fabAdd.setVisibility(View.GONE);
         } else {
             fabAdd.setVisibility(View.VISIBLE);
         }
+
+
+        rvArea.addOnScrollListener(new EndlessOnScrollListener() {
+
+            @Override
+            public void onScrolledToEnd() {
+                if (!loading) {
+                    currentTotal = currentTotal + 1;
+                    if (currentTotal <= totalCount) {
+                        getAreas(currentTotal);
+                    }
+
+                }
+
+            }
+        });
+
 
     }
 
@@ -82,7 +104,7 @@ public class AreaListingActivity extends AppCompatActivity {
 
         boolean isLoadArea = new DataPreferences(this).isLoadArea();
         if (isLoadArea) {
-            getAreas();
+            getAreas(1);
             new DataPreferences(this).setLoadArea(false);
         }
     }
@@ -94,18 +116,28 @@ public class AreaListingActivity extends AppCompatActivity {
     }
 
 
-    private void getAreas() {
+    private void getAreas(int page) {
         if (CommonUtils.isNetworkAvailable(AreaListingActivity.this)) {
+            loading = true;
             final ProgressDialog pDialog = UIHelper.showProgressDialog(AreaListingActivity.this);
             DataPreferences dataPreferences = new DataPreferences(AreaListingActivity.this);
             LoginSession loginSession = dataPreferences.getLoginSession();
-            new RestApi().getApi().getArea(loginSession.getAuthToken()).enqueue(new Callback<AreaResponse>() {
+            new RestApi().getApi().getArea(loginSession.getAuthToken(), page).enqueue(new Callback<AreaResponse>() {
                 @Override
-                public void onResponse(Call<AreaResponse> call, Response<AreaResponse> response) {
+                public void onResponse(Call<AreaResponse> call, final Response<AreaResponse> response) {
                     UIHelper.dismissDialog(pDialog);
                     if (response.isSuccessful()) {
-                        areaList.clear();
-                        areaList.addAll(response.body().getAreas());
+
+                        final AreaResponse areaResponse = response.body();
+
+                        currentTotal = areaResponse.getMeta().getCurrentPage();
+                        totalCount = areaResponse.getMeta().getTotalPages();
+
+                        if (currentTotal == 1) {
+                            areaList.clear();
+                        }
+
+                        areaList.addAll(areaResponse.getAreas());
                         areaAdapter.notifyDataSetChanged();
 
 
@@ -117,10 +149,13 @@ public class AreaListingActivity extends AppCompatActivity {
                             UIHelper.showSnackbar(getCurrentFocus(), e.getMessage());
                         }
                     }
+
+                    loading = false;
                 }
 
                 @Override
                 public void onFailure(Call<AreaResponse> call, Throwable t) {
+                    loading = false;
                     UIHelper.dismissDialog(pDialog);
                     UIHelper.showSnackbar(getCurrentFocus(), Constant.MESSAGE.ERROR_GET);
                 }
