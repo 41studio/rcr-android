@@ -7,6 +7,7 @@ import com.fourtyonestudio.rcr.models.AreaItemResponse;
 import com.fourtyonestudio.rcr.models.AreaResponse;
 import com.fourtyonestudio.rcr.models.Indicators;
 import com.fourtyonestudio.rcr.models.InviteUser;
+import com.fourtyonestudio.rcr.models.LogDataResponse;
 import com.fourtyonestudio.rcr.models.LoginSession;
 import com.fourtyonestudio.rcr.models.Roles;
 import com.fourtyonestudio.rcr.models.UserListResponse;
@@ -100,6 +101,12 @@ public interface ApiInterface {
     Call<AreaItemResponse> cloneArea(@Header("Authorization") String auth,
                                      @Path("id") int id,
                                      @Field("area[name]") String area_name);
+
+    @GET("activities")
+    Call<LogDataResponse> getLogActivity(@Header("Authorization") String auth,
+                                         @Query("date") String date,
+                                         @Query("timezone") String timezone,
+                                         @Query("page") int page);
 
     @FormUrlEncoded
     @PUT("areas/{id}")

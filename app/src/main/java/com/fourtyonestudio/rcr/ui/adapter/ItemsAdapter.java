@@ -125,8 +125,6 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
                                 public void onClick(View v) {
                                     if (((CheckBox) v).isChecked()) {
                                         postAppraisals(itemList.getTimes().get(finalJ).getId());
-//                            Toast.makeText(context,
-//                                    "Checked" + itemList.getAttributes().getTimes().get(finalJ).getTime(), Toast.LENGTH_LONG).show();
                                     }
 
                                 }
@@ -138,51 +136,6 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-
-//                    if (Integer.parseInt(itemList.getTimes().get(j).getTime()) < hour) {
-//                        chxTime.setEnabled(true);
-//                        chxTime.setOnClickListener(new View.OnClickListener() {
-//
-//                            @Override
-//                            public void onClick(View v) {
-//                                if (((CheckBox) v).isChecked()) {
-//                                    postAppraisals(itemList.getTimes().get(finalJ).getId());
-////                            Toast.makeText(context,
-////                                    "Checked" + itemList.getAttributes().getTimes().get(finalJ).getTime(), Toast.LENGTH_LONG).show();
-//                                }
-//
-//                            }
-//                        });
-//                    } else {
-//                        chxTime.setEnabled(false);
-//                    }
-
-//                    String regexStr = "^[0-9]*$";
-//
-//                    if(itemList.getTimes().get(j).getTime().trim().matches(regexStr))
-//                    {
-//                        if (Integer.parseInt(itemList.getTimes().get(j).getTime()) < hour) {
-//                            chxTime.setEnabled(true);
-//                            chxTime.setOnClickListener(new View.OnClickListener() {
-//
-//                                @Override
-//                                public void onClick(View v) {
-//                                    if (((CheckBox) v).isChecked()) {
-//                                        postAppraisals(itemList.getTimes().get(finalJ).getId());
-////                            Toast.makeText(context,
-////                                    "Checked" + itemList.getAttributes().getTimes().get(finalJ).getTime(), Toast.LENGTH_LONG).show();
-//                                    }
-//
-//                                }
-//                            });
-//                        } else {
-//                            chxTime.setEnabled(false);
-//                        }
-//                    }
-//                    else{
-//                        chxTime.setEnabled(false);
-//                    }
-
 
                 }
 
@@ -324,6 +277,10 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
         }
     }
 
+    /**
+     * @param time_id
+     * @param indicator_id
+     */
     private void putAppraisals(int time_id, String indicator_id) {
         if (CommonUtils.isNetworkAvailable(context)) {
             final ProgressDialog pDialog = UIHelper.showProgressDialog(context);
@@ -361,7 +318,6 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
     }
 
     /**
-     *
      * @param time_id
      * @param description
      * @param indicator_id
@@ -405,6 +361,9 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
         }
     }
 
+    /**
+     * @param time_id
+     */
     private void postAppraisals(int time_id) {
         if (CommonUtils.isNetworkAvailable(context)) {
             final ProgressDialog pDialog = UIHelper.showProgressDialog(context);
