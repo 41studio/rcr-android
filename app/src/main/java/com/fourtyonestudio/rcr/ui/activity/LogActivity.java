@@ -113,7 +113,7 @@ public class LogActivity extends AppCompatActivity {
                 newDate.set(year, monthOfYear, dayOfMonth);
                 tvCurrentDate.setText(dateFormatter.format(newDate.getTime()));
                 getLogActivity(dateFormatter1.format(newDate.getTime()), 1);
-            }
+            } 
 
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
 
