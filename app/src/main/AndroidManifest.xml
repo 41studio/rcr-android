@@ -43,10 +43,12 @@
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".ui.activity.AreaListingActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ui.activity.AreaItemListingActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".ui.activity.RegisterActivity" />
         <activity android:name=".ui.activity.AddAreaActivity" />
         <activity android:name=".ui.activity.AddAreaItemActivity" />

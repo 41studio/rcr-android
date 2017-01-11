@@ -8,7 +8,10 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fourtyonestudio.rcr.Constant;
@@ -21,6 +24,7 @@ import com.fourtyonestudio.rcr.preferences.DataPreferences;
 import com.fourtyonestudio.rcr.ui.adapter.AreaAdapter;
 import com.fourtyonestudio.rcr.utils.CommonUtils;
 import com.fourtyonestudio.rcr.utils.EndlessOnScrollListener;
+import com.fourtyonestudio.rcr.utils.KeyboardUtils;
 import com.fourtyonestudio.rcr.utils.UIHelper;
 
 import org.json.JSONObject;
@@ -44,6 +48,13 @@ public class AreaListingActivity extends AppCompatActivity {
     RecyclerView rvArea;
     @Bind(R.id.fab_add)
     FloatingActionButton fabAdd;
+    @Bind(R.id.etSearch)
+    EditText etSearch;
+    @Bind(R.id.btnSearch)
+    RelativeLayout btnSearch;
+    @Bind(R.id.tvEmpty)
+    TextView tvEmpty;
+
     private List<Area> areaList;
     private AreaAdapter areaAdapter;
 
@@ -59,6 +70,8 @@ public class AreaListingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_area_listing);
         ButterKnife.bind(this);
 //        tvCurrentDate.setText(DateUtils.getDateNow());
+
+        etSearch.clearFocus();
 
         layoutManager = new LinearLayoutManager(getBaseContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -109,6 +122,23 @@ public class AreaListingActivity extends AppCompatActivity {
         }
     }
 
+    @OnClick(R.id.btnSearch)
+    public void clickSearch(View view) {
+        KeyboardUtils.hideSoftKeyboard(this, view);
+        attemptSearch();
+
+    }
+
+    private void attemptSearch() {
+
+        if (TextUtils.isEmpty(etSearch.getText().toString())) {
+            getAreas(1);
+
+        } else {
+            searchAreas(etSearch.getText().toString());
+        }
+    }
+
     @OnClick(R.id.fab_add)
     public void onClick(View view) {
         Intent intent = new Intent(AreaListingActivity.this, AddAreaActivity.class);
@@ -130,15 +160,80 @@ public class AreaListingActivity extends AppCompatActivity {
 
                         final AreaResponse areaResponse = response.body();
 
-                        currentTotal = areaResponse.getMeta().getCurrentPage();
-                        totalCount = areaResponse.getMeta().getTotalPages();
+                        if (areaResponse.getAreas().size() != 0) {
+                            tvEmpty.setVisibility(View.GONE);
+                            rvArea.setVisibility(View.VISIBLE);
 
-                        if (currentTotal == 1) {
-                            areaList.clear();
+                            currentTotal = areaResponse.getMeta().getCurrentPage();
+                            totalCount = areaResponse.getMeta().getTotalPages();
+
+                            if (currentTotal == 1) {
+                                areaList.clear();
+                            }
+
+                            areaList.addAll(areaResponse.getAreas());
+                            areaAdapter.notifyDataSetChanged();
+                        } else {
+                            tvEmpty.setVisibility(View.VISIBLE);
+                            rvArea.setVisibility(View.GONE);
                         }
 
-                        areaList.addAll(areaResponse.getAreas());
-                        areaAdapter.notifyDataSetChanged();
+
+                    } else {
+                        try {
+                            JSONObject jObjError = new JSONObject(response.errorBody().string());
+                            UIHelper.showSnackbar(getCurrentFocus(), jObjError.getString(Constant.MESSAGE.ERROR_BODY));
+                        } catch (Exception e) {
+                            UIHelper.showSnackbar(getCurrentFocus(), e.getMessage());
+                        }
+                    }
+
+                    loading = false;
+                }
+
+                @Override
+                public void onFailure(Call<AreaResponse> call, Throwable t) {
+                    loading = false;
+                    UIHelper.dismissDialog(pDialog);
+                    UIHelper.showSnackbar(getCurrentFocus(), Constant.MESSAGE.ERROR_GET);
+                }
+            });
+        } else {
+            UIHelper.showSnackbar(getCurrentFocus(), Constant.MESSAGE.NO_INET);
+        }
+    }
+
+    private void searchAreas(String name) {
+        if (CommonUtils.isNetworkAvailable(AreaListingActivity.this)) {
+            loading = true;
+            final ProgressDialog pDialog = UIHelper.showProgressDialog(AreaListingActivity.this);
+            DataPreferences dataPreferences = new DataPreferences(AreaListingActivity.this);
+            LoginSession loginSession = dataPreferences.getLoginSession();
+            new RestApi().getApi().searchArea(loginSession.getAuthToken(), name).enqueue(new Callback<AreaResponse>() {
+                @Override
+                public void onResponse(Call<AreaResponse> call, final Response<AreaResponse> response) {
+                    UIHelper.dismissDialog(pDialog);
+                    if (response.isSuccessful()) {
+
+                        final AreaResponse areaResponse = response.body();
+
+                        if (areaResponse.getAreas().size() != 0) {
+                            tvEmpty.setVisibility(View.GONE);
+                            rvArea.setVisibility(View.VISIBLE);
+
+                            currentTotal = areaResponse.getMeta().getCurrentPage();
+                            totalCount = areaResponse.getMeta().getTotalPages();
+
+                            if (currentTotal == 1) {
+                                areaList.clear();
+                            }
+
+                            areaList.addAll(areaResponse.getAreas());
+                            areaAdapter.notifyDataSetChanged();
+                        } else {
+                            tvEmpty.setVisibility(View.VISIBLE);
+                            rvArea.setVisibility(View.GONE);
+                        }
 
 
                     } else {
