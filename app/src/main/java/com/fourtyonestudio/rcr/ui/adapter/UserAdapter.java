@@ -48,13 +48,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         holder.tvName.setText(userData.getAttributes().getName());
         holder.tvEmail.setText(userData.getAttributes().getEmail());
         holder.tvRole.setText(userData.getAttributes().getRole());
-//        holder.itemView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//            }
-//        });
-
 
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override

@@ -30,6 +30,8 @@ public class MenuActivity extends AppCompatActivity {
     Button btnSetting;
     @Bind(R.id.tv_welcome)
     TextView tvWelcome;
+    @Bind(R.id.btnLog)
+    Button btnLog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,12 @@ public class MenuActivity extends AppCompatActivity {
             tvWelcome.setText("Welcome User");
         }
 
+    }
+
+    @OnClick(R.id.btnLog)
+    public void clickLog(){
+        Intent intent = new Intent(this, LogActivity.class);
+        startActivity(intent);
     }
 
     @OnClick(R.id.btnLogout)
