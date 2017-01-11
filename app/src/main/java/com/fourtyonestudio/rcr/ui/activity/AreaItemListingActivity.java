@@ -11,9 +11,10 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.fourtyonestudio.rcr.Constant;
@@ -28,6 +29,7 @@ import com.fourtyonestudio.rcr.ui.adapter.ItemsAdapter;
 import com.fourtyonestudio.rcr.utils.CommonUtils;
 import com.fourtyonestudio.rcr.utils.DateUtils;
 import com.fourtyonestudio.rcr.utils.EndlessOnScrollListener;
+import com.fourtyonestudio.rcr.utils.KeyboardUtils;
 import com.fourtyonestudio.rcr.utils.UIHelper;
 
 import org.json.JSONObject;
@@ -54,6 +56,8 @@ public class AreaItemListingActivity extends AppCompatActivity {
     RecyclerView rvItem;
     @Bind(R.id.fab_add)
     FloatingActionButton fabAdd;
+    @Bind(R.id.etSearch)
+    EditText etSearch;
 
     private List<AreaItemList> areaItemLists;
     private ItemsAdapter itemsAdapter;
@@ -102,13 +106,9 @@ public class AreaItemListingActivity extends AppCompatActivity {
 
             @Override
             public void onScrolledToEnd() {
-                Log.d("cek", "cek");
-                Log.d("cek", Boolean.toString(loading));
                 if (!loading) {
                     currentTotal = currentTotal + 1;
-                    Log.d("cek currentTotal ", currentTotal + " " + "totalCount " + totalCount);
                     if (currentTotal <= totalCount) {
-                        Log.d("cek currentTotal1 ", currentTotal + " " + "totalCount " + totalCount);
                         getAreasItemDate(DateUtils.getDateNow1(), currentTotal);
                     }
 
@@ -167,6 +167,22 @@ public class AreaItemListingActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AddAreaItemActivity.class);
         intent.putExtra(Constant.EXTRAS.ID_AREA, idArea);
         startActivity(intent);
+    }
+
+    @OnClick(R.id.btnSearch)
+    public void clickSearch(View view) {
+        KeyboardUtils.hideSoftKeyboard(this, view);
+        attemptSearch();
+    }
+
+    private void attemptSearch() {
+
+        if (TextUtils.isEmpty(etSearch.getText().toString())) {
+            getAreasItemDate(DateUtils.getDateNow1(), 1);
+
+        } else {
+            searchAreasItem(DateUtils.getDateNow1(), etSearch.getText().toString());
+        }
     }
 
 

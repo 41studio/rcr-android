@@ -43,16 +43,21 @@
             android:textColor="@color/black"
             android:textSize="@dimen/f_16sp" />
 
-        <Button
+        <RelativeLayout
             android:id="@+id/btnSearch"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/_40dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/_6dp"
-            android:background="@color/colorPrimary"
-            android:text="SEARCH"
-            android:textColor="@color/white" />
+            android:background="@drawable/btn_green">
+
+            <ImageView
+                android:layout_width="@dimen/_30dp"
+                android:layout_height="@dimen/_30dp"
+                android:layout_margin="@dimen/_6dp"
+                android:src="@drawable/search" />
+        </RelativeLayout>
 
     </RelativeLayout>
 

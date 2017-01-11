@@ -8,9 +8,10 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fourtyonestudio.rcr.Constant;
@@ -23,6 +24,7 @@ import com.fourtyonestudio.rcr.preferences.DataPreferences;
 import com.fourtyonestudio.rcr.ui.adapter.AreaAdapter;
 import com.fourtyonestudio.rcr.utils.CommonUtils;
 import com.fourtyonestudio.rcr.utils.EndlessOnScrollListener;
+import com.fourtyonestudio.rcr.utils.KeyboardUtils;
 import com.fourtyonestudio.rcr.utils.UIHelper;
 
 import org.json.JSONObject;
@@ -49,7 +51,8 @@ public class AreaListingActivity extends AppCompatActivity {
     @Bind(R.id.etSearch)
     EditText etSearch;
     @Bind(R.id.btnSearch)
-    Button btnSearch;
+    RelativeLayout btnSearch;
+
     private List<Area> areaList;
     private AreaAdapter areaAdapter;
 
@@ -114,6 +117,23 @@ public class AreaListingActivity extends AppCompatActivity {
         if (isLoadArea) {
             getAreas(1);
             new DataPreferences(this).setLoadArea(false);
+        }
+    }
+
+    @OnClick(R.id.btnSearch)
+    public void clickSearch(View view) {
+        KeyboardUtils.hideSoftKeyboard(this, view);
+        attemptSearch();
+
+    }
+
+    private void attemptSearch() {
+
+        if (TextUtils.isEmpty(etSearch.getText().toString())) {
+            getAreas(1);
+
+        } else {
+            searchAreas(etSearch.getText().toString());
         }
     }
 
