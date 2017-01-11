@@ -58,6 +58,8 @@ public class AreaItemListingActivity extends AppCompatActivity {
     FloatingActionButton fabAdd;
     @Bind(R.id.etSearch)
     EditText etSearch;
+    @Bind(R.id.tvEmpty)
+    TextView tvEmpty;
 
     private List<AreaItemList> areaItemLists;
     private ItemsAdapter itemsAdapter;
@@ -202,15 +204,23 @@ public class AreaItemListingActivity extends AppCompatActivity {
 
                         List<AreaItemList> areaList = response.body().getData().getAttributes().getItemList();
 
-                        currentTotal = response.body().getMeta().getCurrentPage();
-                        totalCount = response.body().getMeta().getTotalPages();
+                        if (areaList.size() != 0) {
+                            tvEmpty.setVisibility(View.GONE);
+                            rvItem.setVisibility(View.VISIBLE);
 
-                        if (currentTotal == 1) {
-                            areaItemLists.clear();
+                            currentTotal = response.body().getMeta().getCurrentPage();
+                            totalCount = response.body().getMeta().getTotalPages();
+
+                            if (currentTotal == 1) {
+                                areaItemLists.clear();
+                            }
+
+                            areaItemLists.addAll(areaList);
+                            itemsAdapter.notifyDataSetChanged();
+                        } else {
+                            tvEmpty.setVisibility(View.VISIBLE);
+                            rvItem.setVisibility(View.GONE);
                         }
-
-                        areaItemLists.addAll(areaList);
-                        itemsAdapter.notifyDataSetChanged();
 
                         Indicators indicators = dataPreferences.getIndicator();
                         if (indicators == null) {

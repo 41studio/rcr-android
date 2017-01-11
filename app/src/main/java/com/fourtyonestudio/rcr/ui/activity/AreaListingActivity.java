@@ -52,6 +52,8 @@ public class AreaListingActivity extends AppCompatActivity {
     EditText etSearch;
     @Bind(R.id.btnSearch)
     RelativeLayout btnSearch;
+    @Bind(R.id.tvEmpty)
+    TextView tvEmpty;
 
     private List<Area> areaList;
     private AreaAdapter areaAdapter;
@@ -158,15 +160,23 @@ public class AreaListingActivity extends AppCompatActivity {
 
                         final AreaResponse areaResponse = response.body();
 
-                        currentTotal = areaResponse.getMeta().getCurrentPage();
-                        totalCount = areaResponse.getMeta().getTotalPages();
+                        if (areaResponse.getAreas().size() != 0) {
+                            tvEmpty.setVisibility(View.GONE);
+                            rvArea.setVisibility(View.VISIBLE);
 
-                        if (currentTotal == 1) {
-                            areaList.clear();
+                            currentTotal = areaResponse.getMeta().getCurrentPage();
+                            totalCount = areaResponse.getMeta().getTotalPages();
+
+                            if (currentTotal == 1) {
+                                areaList.clear();
+                            }
+
+                            areaList.addAll(areaResponse.getAreas());
+                            areaAdapter.notifyDataSetChanged();
+                        } else {
+                            tvEmpty.setVisibility(View.VISIBLE);
+                            rvArea.setVisibility(View.GONE);
                         }
-
-                        areaList.addAll(areaResponse.getAreas());
-                        areaAdapter.notifyDataSetChanged();
 
 
                     } else {
@@ -207,15 +217,23 @@ public class AreaListingActivity extends AppCompatActivity {
 
                         final AreaResponse areaResponse = response.body();
 
-                        currentTotal = areaResponse.getMeta().getCurrentPage();
-                        totalCount = areaResponse.getMeta().getTotalPages();
+                        if (areaResponse.getAreas().size() != 0) {
+                            tvEmpty.setVisibility(View.GONE);
+                            rvArea.setVisibility(View.VISIBLE);
 
-                        if (currentTotal == 1) {
-                            areaList.clear();
+                            currentTotal = areaResponse.getMeta().getCurrentPage();
+                            totalCount = areaResponse.getMeta().getTotalPages();
+
+                            if (currentTotal == 1) {
+                                areaList.clear();
+                            }
+
+                            areaList.addAll(areaResponse.getAreas());
+                            areaAdapter.notifyDataSetChanged();
+                        } else {
+                            tvEmpty.setVisibility(View.VISIBLE);
+                            rvArea.setVisibility(View.GONE);
                         }
-
-                        areaList.addAll(areaResponse.getAreas());
-                        areaAdapter.notifyDataSetChanged();
 
 
                     } else {
