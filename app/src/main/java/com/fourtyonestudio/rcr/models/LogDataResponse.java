@@ -14,6 +14,14 @@ public class LogDataResponse {
     @Expose
     private List<LogDataDatum> data = null;
 
+    @SerializedName("meta")
+    @Expose
+    private Meta meta;
+
+    public Meta getMeta() {
+        return meta;
+    }
+
     public List<LogDataDatum> getData() {
         return data;
     }

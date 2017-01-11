@@ -104,8 +104,9 @@ public interface ApiInterface {
 
     @GET("activities")
     Call<LogDataResponse> getLogActivity(@Header("Authorization") String auth,
-                                      @Query("date") String date,
-                                      @Query("timezone") String timezone);
+                                         @Query("date") String date,
+                                         @Query("timezone") String timezone,
+                                         @Query("page") int page);
 
     @FormUrlEncoded
     @PUT("areas/{id}")
